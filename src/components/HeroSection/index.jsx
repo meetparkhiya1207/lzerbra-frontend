@@ -30,7 +30,8 @@ const HeroSection = () => {
     <Box
       sx={{
         width: "100%",
-        minHeight: { xs: "96vh",sm: "80vh" },
+        py: 4,
+        minHeight: { xs: "auto",sm: "80vh" },
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -64,13 +65,13 @@ const HeroSection = () => {
           sx={{ width: "100%" }}
         >
           {/* Left Side - Text */}
-          <Box sx={{ flex: 1, textAlign: { xs: "center", lg: "left" }, px: { xs: 2, md: 4 } }} >
+          <Box sx={{ flex: 1, textAlign: { xs: "center", lg: "left" }, px: { xs: 0, lg: 4 } }} >
             <Typography
               variant="h2"
               sx={{
                 fontWeight: "bold",
                 mb: 2,
-                fontSize: { xs: "2rem", md: "3.5rem" },
+                fontSize: { xs: "2.1rem", md: "3.5rem" },
               }}
             >
               Premium Men’s Fabrics
@@ -80,7 +81,7 @@ const HeroSection = () => {
               sx={{
                 fontWeight: "bold",
                 mb: 2,
-                fontSize: { xs: "1.5rem", md: "2.5rem" },
+                fontSize: { xs: "1.6rem", md: "2.5rem" },
               }}
             >
               New Arrival Collection 2025
@@ -89,7 +90,7 @@ const HeroSection = () => {
               variant="body1"
               sx={{
                 mb: {xs:2,sm:4},
-                fontSize: { xs: "1rem", md: "1.2rem" },
+                fontSize: { xs: "0.8rem", md: "1.2rem" },
                 color: "#e0dcdc",
                 maxWidth: "500px",
               }}
