@@ -30,7 +30,7 @@ const HeroSection = () => {
     <Box
       sx={{
         width: "100%",
-        minHeight: { xs: "80vh" },
+        minHeight: { xs: "96vh",sm: "80vh" },
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -64,7 +64,7 @@ const HeroSection = () => {
           sx={{ width: "100%" }}
         >
           {/* Left Side - Text */}
-          <Box sx={{ flex: 1, textAlign: { xs: "center", lg: "left" }, px: { xs: 2, md: 4 } }}>
+          <Box sx={{ flex: 1, textAlign: { xs: "center", lg: "left" }, px: { xs: 2, md: 4 } }} >
             <Typography
               variant="h2"
               sx={{
@@ -88,7 +88,7 @@ const HeroSection = () => {
             <Typography
               variant="body1"
               sx={{
-                mb: 4,
+                mb: {xs:2,sm:4},
                 fontSize: { xs: "1rem", md: "1.2rem" },
                 color: "#e0dcdc",
                 maxWidth: "500px",
@@ -100,7 +100,7 @@ const HeroSection = () => {
               variant="body2"
               sx={{
                 mb: 4,
-                fontSize: { xs: "1rem" },
+                fontSize: { xs: "0.8rem" },
                 color: "#e0dcdc",
                 maxWidth: "500px",
               }}
@@ -134,7 +134,6 @@ const HeroSection = () => {
               minHeight: { xs: "260px", md: "420px" },
               width: "100%",
               maxWidth: { xs: "100%", sm: "500px", md: "720px", lg: "620px" },
-              mx: 0,
             }}
           >
             <Slider {...settings} style={{ width: "100%" }}>
