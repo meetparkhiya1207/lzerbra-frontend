@@ -71,7 +71,9 @@ const HeroSection = () => {
               sx={{
                 fontWeight: "bold",
                 mb: 2,
-                fontSize: { xs: "2.1rem", md: "3.5rem" },
+                fontSize: { xs: "1.7rem", md: "3.5rem" },
+                fontFamily: theme.palette.typography.fontFamily,
+
               }}
             >
               Premium Men’s Fabrics
@@ -81,7 +83,8 @@ const HeroSection = () => {
               sx={{
                 fontWeight: "bold",
                 mb: 2,
-                fontSize: { xs: "1.6rem", md: "2.5rem" },
+                fontSize: { xs: "1.2rem", md: "2.5rem" },
+                fontFamily: theme.palette.typography.fontFamily,
               }}
             >
               New Arrival Collection 2025
@@ -93,6 +96,7 @@ const HeroSection = () => {
                 fontSize: { xs: "0.8rem", md: "1.2rem" },
                 color: "#e0dcdc",
                 maxWidth: "500px",
+                fontFamily: theme.palette.typography.fontFamily,
               }}
             >
               Discover our exclusive collection of fabrics crafted for men’s wear – from elegant suits to casual shirts. Tradition meets modern style.
@@ -104,6 +108,7 @@ const HeroSection = () => {
                 fontSize: { xs: "0.8rem" },
                 color: "#e0dcdc",
                 maxWidth: "500px",
+                fontFamily: theme.palette.typography.fontFamily,
               }}
             >
               Free shipping on orders above ₹999 | 100% Quality Guarantee
@@ -112,8 +117,9 @@ const HeroSection = () => {
               size="large"
               sx={{
                 backgroundColor: theme.palette.backgroundcolor.main,
+                fontFamily: theme.palette.typography.fontFamily,
                 color: theme.palette.primary.main,
-                fontWeight: "bold",
+                fontWeight: "normal",
                 px: 5,
                 py: 1.5,
                 borderRadius: "10px",

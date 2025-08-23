@@ -68,7 +68,7 @@ export default function Header() {
                                         position: "relative",
                                         "&:hover": { color: theme.palette.primary.main },
                                         fontFamily: theme.palette.typography.fontFamily,
-                                        fontWeight: "normal",
+                                        fontWeight: "500",
                                         "&::after": {
                                             content: '""',
                                             display: "block",
