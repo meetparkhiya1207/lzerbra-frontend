@@ -12,13 +12,17 @@ import {
     ListItemText,
     useTheme,
     Badge,
-    Container, // Import Container
+    Container,
+    Menu,
+    MenuItem,
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
+import { useAuth } from "../../context/AuthContext";
+import UserMenu from "../UserMenu";
 
 const menuItems = ["Home", "About", "Contact", "Shop", "Blog"];
 
@@ -26,15 +30,32 @@ export default function Header() {
     const theme = useTheme();
     const [drawerOpen, setDrawerOpen] = useState(false);
 
+    // Profile menu state
+    const [anchorEl, setAnchorEl] = useState(null);
+    const { isAuthenticated, user, logout } = useAuth();
+
+    const handleMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <>
             <AppBar
                 position="static"
                 elevation={0}
-                sx={{ backgroundColor: theme.palette.backgroundcolor.main, color: "black", px: 0 }}
+                sx={{
+                    backgroundColor: theme.palette.backgroundcolor.main,
+                    color: "black",
+                    px: 0,
+                }}
             >
                 <Container maxWidth="xl">
-                    <Toolbar sx={{ display: "flex", justifyContent: "space-between", px: 0 }}>
+                    <Toolbar
+                        sx={{ display: "flex", justifyContent: "space-between", px: 0 }}
+                    >
                         {/* Left: Logo */}
                         <Box sx={{ display: "flex", alignItems: "center" }}>
                             <Box
@@ -95,22 +116,39 @@ export default function Header() {
                             <IconButton sx={{ color: theme.palette.primary.main }}>
                                 <SearchIcon />
                             </IconButton>
-                            <IconButton sx={{ color: theme.palette.primary.main }}>
+
+                            {/* Profile Icon */}
+                            <IconButton
+                                sx={{ color: theme.palette.primary.main }}
+                                onClick={handleMenuOpen}
+                            >
                                 <AccountCircleIcon />
                             </IconButton>
+
+                            <UserMenu
+                                anchorEl={anchorEl}
+                                open={Boolean(anchorEl)}
+                                handleMenuClose={handleMenuClose}
+                                isAuthenticated={isAuthenticated}
+                                user={user}
+                                logout={logout}
+                            />
+
+                            {/* Cart */}
                             <Badge
                                 badgeContent={2}
                                 color="error"
                                 overlap="circular"
                                 anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
+                                    vertical: "top",
+                                    horizontal: "right",
                                 }}
                             >
                                 <IconButton sx={{ color: theme.palette.primary.main }}>
                                     <ShoppingBagOutlinedIcon />
                                 </IconButton>
                             </Badge>
+
                             {/* Mobile Menu (hamburger) */}
                             <Box sx={{ display: { xs: "block", md: "none" } }}>
                                 <IconButton onClick={() => setDrawerOpen(true)}>
@@ -123,11 +161,7 @@ export default function Header() {
             </AppBar>
 
             {/* Drawer for Mobile */}
-            <Drawer
-                anchor="left"
-                open={drawerOpen}
-                onClose={() => setDrawerOpen(false)}
-            >
+            <Drawer anchor="left" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
                 <Box sx={{ width: 250 }} role="presentation">
                     <List>
                         {menuItems.map((text, index) => (
@@ -144,4 +178,5 @@ export default function Header() {
                 </Box>
             </Drawer>
         </>
-    );}
+    );
+}
