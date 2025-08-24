@@ -30,7 +30,6 @@ export default function LoginModal({ open, onClose, onSwitch }) {
     e.preventDefault();
     login(formData.username, formData.password, () => {
         toast("Login successful!");
-      // Only close modal if login successful
       onClose();
     });
   };

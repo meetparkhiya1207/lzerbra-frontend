@@ -7,16 +7,28 @@ import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Rating from '@mui/material/Rating';   // <-- ADD
 import { useTheme } from '@emotion/react';
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { use, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
 export function ProductItem({ product }) {
   const theme = useTheme();
+  const dispatch  = useDispatch();
+  const [liked, setLiked] = useState(false);
+
+  const discountPercentage =
+    product.price && product.discountprice
+      ? Math.round(((product.price - product.discountprice) / product.price) * 100)
+      : 0;
 
   // Discount label
-  const renderDiscount = product.offer ? (
+  const renderDiscount = discountPercentage ? (
     <Chip
-      label={product.offer}
+      label={discountPercentage + "% OFF"}
       color="error"
       size="small"
       sx={{
@@ -27,12 +39,79 @@ export function ProductItem({ product }) {
         fontWeight: 600,
         fontSize: 12,
         px: 0.5,
-        height: 24,
+        height: 28,
         borderRadius: "6px",
         letterSpacing: 0.5,
+        fontFamily: theme.palette.typography.fontFamily,
       }}
     />
   ) : null;
+
+  // View label
+  const renderView = (
+    <Chip
+      icon={<VisibilityIcon sx={{ fontSize: 18, color: "white" }} />}
+      color="primary"
+      size="small"
+      sx={{
+        position: "absolute",
+        top: 12,
+        right: 12,
+        zIndex: 10,
+        height: 44,
+        width: 44,
+        borderRadius: "50%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        bgcolor: "rgba(255, 255, 255, 0.93)",
+        color: theme.palette.primary.main,
+        border: `1px solid ${theme.palette.primary.main}`,
+        "& .MuiChip-label": {
+          display: "none" // label remove kariye to only icon center ma
+        },
+        "& .MuiChip-icon": {
+          margin: 0 // default margin remove
+        }
+      }}
+    />
+  );
+
+  // Heart
+  const renderHeart = (
+    <Chip
+      onClick={() => setLiked(!liked)}
+      icon={
+        liked ? (
+          <FavoriteIcon sx={{ fontSize: 22, color: "#d32f2f !important" }} />
+        ) : (
+          <FavoriteBorderIcon sx={{ fontSize: 22 }} />
+        )
+      }
+      size="small"
+      sx={{
+        position: "absolute",
+        top: 60,
+        right: 12,
+        zIndex: 10,
+        height: 44,
+        width: 44,
+        borderRadius: "50%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        bgcolor: "rgba(255, 255, 255, 0.93)",
+        border: liked ? `1px solid #d32f2f` : `1px solid ${theme.palette.primary.main}`,
+        cursor: "pointer",
+        "& .MuiChip-label": { display: "none" },
+        "& .MuiChip-icon": { margin: 0 },
+        "&:hover": { backgroundColor: "rgba(255,255,255,0.93)" },
+      }}
+    />
+  );
+
+
+
 
   // Product Image
   const renderImg = (
@@ -57,15 +136,16 @@ export function ProductItem({ product }) {
         component="span"
         variant="body2"
         sx={{
-          color: 'text.disabled',
+          color: theme.palette.primary.maindark,
           textDecoration: 'line-through',
-          mr: 0.5,
+          mr: 1.2,
+          fontFamily: theme.palette.typography.fontFamily
         }}
       >
-        {product.price ? `$${product.discountprice}` : ''}
-      </Typography>
-      <span style={{ color: theme.palette.primary.main, fontWeight: 600 }}>
-        ${product.price || product.discountprice}
+        {product.price ? `₹${product.discountprice}` : ''}
+      </Typography>{""}
+      <span style={{ color: theme.palette.primary.main, fontWeight: 600, fontSize: '1.5rem', fontFamily: theme.palette.typography.fontFamily }}>
+        ₹{product.price || product.discountprice}
       </span>
     </Typography>
   );
@@ -81,7 +161,9 @@ export function ProductItem({ product }) {
         fontWeight: 600,
         fontSize: 12,
         borderRadius: "6px",
+        py: 1.8,
         height: 22,
+        fontFamily: theme.palette.typography.fontFamily,
       }}
     />
   );
@@ -107,6 +189,8 @@ export function ProductItem({ product }) {
       }}
     >
       <Box sx={{ pt: '100%', position: 'relative' }}>
+        {renderView}
+        {renderHeart}
         {renderDiscount}
         {renderImg}
       </Box>
@@ -120,14 +204,14 @@ export function ProductItem({ product }) {
             fontFamily: theme.palette.typography.fontFamily,
             fontWeight: 600,
             color: theme.palette.primary.main,
-            fontSize: { xs: "1rem", md: "1.4rem" },
+            fontSize: { xs: "1.2rem", md: "1.4rem" },
             textDecoration: 'none',
           }}
         >
           {product.productname}
         </Link>
 
-    
+
 
         {/* Stock + Price row */}
         <Box
@@ -140,7 +224,7 @@ export function ProductItem({ product }) {
           {renderPrice}
           {renderStock}
         </Box>
-    {/* Rating row */}
+        {/* Rating row */}
         {renderRating}
         {/* Buttons */}
         <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
@@ -163,6 +247,7 @@ export function ProductItem({ product }) {
             Buy Now
           </Button>
           <Button
+            onClick={() => { dispatch({ type: 'cart/addToCart', payload: product }); }}
             variant="outlined"
             sx={{
               mt: 2,

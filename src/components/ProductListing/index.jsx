@@ -13,161 +13,14 @@ import {
 import { ProductFilters } from "./product-filters";
 import { ProductSort } from "./product-sort";
 import { ProductItem } from "./product-item";
-
-const GENDER_OPTIONS = [
-  { value: 'men', label: 'Men' },
-  { value: 'women', label: 'Women' },
-  { value: 'kids', label: 'Kids' },
-];
+import { products } from "../../Data/product";
 
 const PRICE_OPTIONS = [
   { value: '250', label: 'Below ₹250' },
   { value: '250-750', label: 'Between ₹250 - ₹750' },
   { value: '750', label: 'Above ₹750' },
 ];
-const products = [
-  {
-    id: 1,
-    productid: "P001",
-    productname: "Striped Line Cotton Fabric",
-    category: "Cotton Fabric",
-    subcategory: "Line Cotton",
-    price: 1200,
-    discountprice: 900,
-    pantmeter: 2.2,
-    shirtmeter: 1.6,
-    rating: 4.5,
-    instock: true,
-    image: "/images/Slider1.jpg"
-  },
-  {
-    id: 2,
-    productid: "P002",
-    productname: "Classic Plain Cotton Fabric",
-    category: "Cotton Fabric",
-    subcategory: "Plain Cotton",
-    price: 1400,
-    discountprice: 1000,
-    pantmeter: 2.3,
-    shirtmeter: 1.7,
-    rating: 4.2,
-    instock: true,
-    image: "/images/Slider2.jpg"
-  },
-  {
-    id: 3,
-    productid: "P003",
-    productname: "Soft Touch Linen Fabric",
-    category: "Linen Fabric",
-    subcategory: "Soft Linen",
-    price: 1800,
-    discountprice: 1350,
-    pantmeter: 2.4,
-    shirtmeter: 1.8,
-    rating: 4.7,
-    instock: true,
-    image: "/images/Slider1.jpg"
-  },
-  {
-    id: 4,
-    productid: "P004",
-    productname: "Elegant Pure Silk Fabric",
-    category: "Silk Fabric",
-    subcategory: "Pure Silk",
-    price: 249,
-    discountprice: 2000,
-    pantmeter: 2.0,
-    shirtmeter: 1.5,
-    rating: 4.8,
-    instock: false,
-    image: "/images/Slider2.jpg"
-  },
-  {
-    id: 5,
-    productid: "P005",
-    productname: "Printed Cotton Dress Fabric",
-    category: "Cotton Fabric",
-    subcategory: "Printed Cotton",
-    price: 500,
-    discountprice: 1200,
-    pantmeter: 2.1,
-    shirtmeter: 1.6,
-    rating: 4.1,
-    instock: true,
-    image: "/images/Slider1.jpg"
-  },
-  {
-    id: 6,
-    productid: "P006",
-    productname: "Premium Linen Suit Fabric",
-    category: "Linen Fabric",
-    subcategory: "Premium Linen",
-    price: 240,
-    discountprice: 1500,
-    pantmeter: 2.2,
-    shirtmeter: 1.7,
-    rating: 4.4,
-    instock: true,
-    image: "/images/Slider2.jpg"
-  },
-  {
-    id: 7,
-    productid: "P007",
-    productname: "Traditional Khadi Cotton Fabric",
-    category: "Cotton Fabric",
-    subcategory: "Khadi Cotton",
-    price: 450,
-    discountprice: 950,
-    pantmeter: 2.3,
-    shirtmeter: 1.5,
-    rating: 3.9,
-    instock: false,
-    image: "/images/Slider1.jpg"
-  },
-  {
-    id: 8,
-    productid: "P008",
-    productname: "Royal Banarasi Silk Fabric",
-    category: "Silk Fabric",
-    subcategory: "Banarasi Silk",
-    price: 3000,
-    discountprice: 2400,
-    pantmeter: 2.0,
-    shirtmeter: 1.4,
-    rating: 4.9,
-    instock: true,
-    image: "/images/Slider2.jpg"
-  },
-  {
-    id: 9,
-    productid: "P009",
-    productname: "Organic Cotton Fabric",
-    category: "Cotton Fabric",
-    subcategory: "Organic Cotton",
-    price: 1500,
-    discountprice: 1100,
-    pantmeter: 2.1,
-    shirtmeter: 1.6,
-    rating: 4.3,
-    instock: true,
-    image: "/images/Slider1.jpg"
-  },
-  {
-    id: 10,
-    productid: "P010",
-    productname: "Casual Wear Linen Fabric",
-    category: "Linen Fabric",
-    subcategory: "Casual Linen",
-    price: 1700,
-    discountprice: 1300,
-    pantmeter: 2.4,
-    shirtmeter: 1.8,
-    rating: 4.0,
-    instock: true,
-    image: "/images/Slider2.jpg"
-  }
-]
-  ;
+
 
 const getUniqueValues = (array, key) => {
   return [...new Set(array.map((item) => item[key]))];
@@ -192,7 +45,7 @@ const defaultFilters = {
   subcategory: [],
 };
 
-const PRODUCTS_PER_PAGE = 4;
+const PRODUCTS_PER_PAGE = 12;
 
 const ProductListing = () => {
   const theme = useTheme();
@@ -201,7 +54,6 @@ const ProductListing = () => {
   const [openFilter, setOpenFilter] = useState(false);
 
   const [filters, setFilters] = useState(defaultFilters);
-  console.log("filtersfilters", filters);
 
   const [page, setPage] = useState(1);
 
@@ -355,7 +207,18 @@ const ProductListing = () => {
             page={page}
             onChange={handlePageChange}
             color="primary"
-            sx={{ mt: 8, mx: 'auto', display: 'flex', justifyContent: 'center' }}
+            sx={{
+              mt: { xs: 4, sm: 6, md: 8 }, // spacing responsive
+              mx: "auto",
+              display: "flex",
+              justifyContent: "center",
+              "& .MuiPaginationItem-root": {
+                fontSize: { xs: "1rem", sm: "0.875rem", md: "1rem" },
+                minWidth: { xs: 30, sm: 32, md: 36 },
+                height: { xs: 30, sm: 32, md: 36 },
+                fontFamily: theme.palette.typography.fontFamily,
+              },
+            }}
           />
         </Box>
       </Container>

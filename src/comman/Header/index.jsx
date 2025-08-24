@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import {
     AppBar,
     Toolbar,
@@ -15,6 +15,9 @@ import {
     Container,
     Menu,
     MenuItem,
+    Popover,
+    Divider,
+    Button,
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
@@ -23,12 +26,28 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import { useAuth } from "../../context/AuthContext";
 import UserMenu from "../UserMenu";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import DeleteIcon from "@mui/icons-material/Delete"
+import { useSelector } from "react-redux";
+import { useDispatch } from 'react-redux';
 
 const menuItems = ["Home", "About", "Contact", "Shop", "Blog"];
 
+const likedProductsExample = [
+    { id: 1, name: "Striped Line Cotton Fabric", price: 1200, discountprice: 900, image: "/images/Product1.jpg" },
+    { id: 2, name: "Classic Plain Cotton Fabric", price: 1400, discountprice: 1000, image: "/images/Product2.jpg" },
+    { id: 3, name: "Soft Touch Linen Fabric", price: 1800, discountprice: 1350, image: "/images/Product3.jpg" },
+    { id: 4, name: "Elegant Pure Silk Fabric", price: 2490, discountprice: 2000, image: "/images/Product4.jpg" },
+];
+
 export default function Header() {
     const theme = useTheme();
+    const dispatch = useDispatch();
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const [favProduct, setFavProduct] = useState(null);
+    const [cartProductPopover, setCartProductPopover] = useState(null);
+    // const [cartProduct, setCartProduct] = useState(null);
+    const cartProduct = useSelector((state) => state.cart.cartItems);
 
     // Profile menu state
     const [anchorEl, setAnchorEl] = useState(null);
@@ -36,10 +55,39 @@ export default function Header() {
 
     const handleMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
+        setFavProduct(null);
+        setCartProductPopover(null);
     };
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
+
+
+    // Hanndle Favorites Popover
+    const handleFavClick = (event) => {
+        setFavProduct(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setFavProduct(null);
+        setAnchorEl(null);
+        setCartProductPopover(null);
+    };
+
+    // Hanndle Cart Popover
+    const handleCartClick = (event) => {
+        setCartProductPopover(event.currentTarget);
+        setFavProduct(null);
+        setAnchorEl(null);
+    };
+
+    const handleCartClose = () => {
+        setCartProductPopover(null);
+    };
+
+    const open = Boolean(favProduct);
+    const cartPopoverOpen = Boolean(cartProductPopover);
+    const id = open ? "simple-popover" : undefined;
 
     return (
         <>
@@ -113,9 +161,132 @@ export default function Header() {
 
                         {/* Right: Icons + Mobile Menu */}
                         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                            <IconButton sx={{ color: theme.palette.primary.main }}>
-                                <SearchIcon />
+                            <IconButton sx={{ color: theme.palette.primary.main }} onClick={handleFavClick} >
+                                <FavoriteBorderIcon />
                             </IconButton>
+                            <Popover
+                                id={id}
+                                open={open}
+                                anchorEl={favProduct}
+                                onClose={handleClose}
+                                anchorOrigin={{
+                                    vertical: "bottom",
+                                    horizontal: "right",
+                                }}
+                                transformOrigin={{
+                                    vertical: "top",
+                                    horizontal: "right",
+                                }}
+                                PaperProps={{
+                                    sx: {
+                                        width: { xs: 300, sm: 350 },
+                                        p: 2,
+                                        bgcolor: "background.paper",
+                                        boxShadow: 3,
+                                        borderRadius: 2,
+                                    },
+                                }}
+                            >
+                                <Typography
+                                    variant="subtitle1"
+                                    fontWeight="bold"
+                                    sx={{ fontFamily: theme.palette.typography.fontFamily }}
+                                >
+                                    Liked Products
+                                </Typography>
+                                <Divider sx={{ my: 1 }} />
+
+                                {likedProductsExample.length > 0 ? (
+                                    <>
+
+                                        <Box
+                                            sx={{
+                                                maxHeight: 210,
+                                                overflowY: "auto",
+                                                scrollbarWidth: "none",
+                                                "&::-webkit-scrollbar": {
+                                                    display: "none",
+                                                },
+                                            }}
+                                        >
+                                            {likedProductsExample.map((product) => (
+                                                <>
+                                                    <Box
+                                                        key={product.id}
+                                                        sx={{
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            gap: 1,
+                                                            my: 1,
+                                                        }}
+                                                    >
+                                                        {/* Product Image */}
+                                                        <Box
+                                                            component="img"
+                                                            src={product.image}
+                                                            alt={product.name}
+                                                            sx={{ width: 60, height: 60, objectFit: "cover", borderRadius: 1 }}
+                                                        />
+
+                                                        {/* Product Details */}
+                                                        <Box sx={{ flex: 1 }}>
+                                                            <Typography
+                                                                variant="body2"
+                                                                sx={{
+                                                                    fontFamily: theme.palette.typography.fontFamily,
+                                                                    fontWeight: 500,
+                                                                }}
+                                                            >
+                                                                {product.name}
+                                                            </Typography>
+                                                            <Typography
+                                                                variant="body2"
+                                                                sx={{
+                                                                    fontFamily: theme.palette.typography.fontFamily,
+                                                                    fontWeight: 400,
+                                                                    fontSize: 13,
+                                                                }}
+                                                            >
+                                                                ₹{product.price} &nbsp; <del>₹{product.discountprice}</del>
+                                                            </Typography>
+                                                        </Box>
+
+                                                        {/* Delete Icon */}
+                                                        <IconButton
+                                                            size="small"
+                                                            onClick={() => console.log("Delete", product.id)}
+                                                            sx={{ color: "error.main" }}
+                                                        >
+                                                            <DeleteIcon fontSize="small" />
+                                                        </IconButton>
+                                                    </Box>
+                                                    <Divider sx={{ my: 1 }} />
+                                                </>
+
+                                            ))}
+                                        </Box>
+                                        <Box sx={{ mt: 1, display: "flex", justifyContent: "center" }}>
+                                            <Button
+                                                variant="contained"
+                                                size="small"
+                                                sx={{
+                                                    fontFamily: theme.palette.typography.fontFamily,
+                                                    backgroundColor: "#fff",
+                                                    textTransform: "none",
+                                                    fontWeight: "bold",
+                                                    color: theme.palette.primary.main,
+                                                }}
+                                                onClick={() => console.log("View All clicked")}
+                                            >
+                                                View All
+                                            </Button>
+                                        </Box>
+                                    </>
+
+                                ) : (
+                                    <Typography variant="body2" sx={{ textAlign: 'center', fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main, }}>No liked products</Typography>
+                                )}
+                            </Popover>
 
                             {/* Profile Icon */}
                             <IconButton
@@ -136,7 +307,7 @@ export default function Header() {
 
                             {/* Cart */}
                             <Badge
-                                badgeContent={2}
+                                badgeContent={cartProduct?.length}
                                 color="error"
                                 overlap="circular"
                                 anchorOrigin={{
@@ -144,9 +315,140 @@ export default function Header() {
                                     horizontal: "right",
                                 }}
                             >
-                                <IconButton sx={{ color: theme.palette.primary.main }}>
+                                <IconButton sx={{ color: theme.palette.primary.main }} onClick={handleCartClick}>
                                     <ShoppingBagOutlinedIcon />
                                 </IconButton>
+                                <Popover
+                                    open={cartPopoverOpen}
+                                    anchorEl={cartProductPopover}
+                                    onClose={handleCartClose}
+                                    anchorOrigin={{
+                                        vertical: "bottom",
+                                        horizontal: "right",
+                                    }}
+                                    transformOrigin={{
+                                        vertical: "top",
+                                        horizontal: "right",
+                                    }}
+                                    PaperProps={{
+                                        sx: {
+                                            width: { xs: 300, sm: 350 },
+                                            p: 2,
+                                            bgcolor: "background.paper",
+                                            boxShadow: 3,
+                                            borderRadius: 2,
+                                        },
+                                    }}
+                                >
+                                    <Typography
+                                        variant="subtitle1"
+                                        fontWeight="bold"
+                                        sx={{ fontFamily: theme.palette.typography.fontFamily }}
+                                    >
+                                        Cart Products
+                                    </Typography>
+                                    <Divider sx={{ my: 1 }} />
+
+                                    {cartProduct?.length > 0 ? (
+                                        <>
+                                            <Box
+                                                sx={{
+                                                    maxHeight: 210,
+                                                    overflowY: "auto",
+                                                    scrollbarWidth: "none",
+                                                    "&::-webkit-scrollbar": { display: "none" },
+                                                }}
+                                            >
+                                                {cartProduct?.map((product) => (
+                                                    <Box key={product.id}>
+                                                        <Box
+                                                            sx={{
+                                                                display: "flex",
+                                                                alignItems: "start",
+                                                                gap: 1,
+                                                                my: 1,
+                                                            }}
+                                                        >
+                                                            {/* Product Image */}
+                                                            <Box
+                                                                component="img"
+                                                                src={product.image}
+                                                                alt={product.productname}
+                                                                sx={{ width: 60, height: 60, objectFit: "cover", borderRadius: 1 }}
+                                                            />
+
+                                                            {/* Product Details */}
+                                                            <Box sx={{ flex: 1 }}>
+                                                                <Typography
+                                                                    variant="body2"
+                                                                    sx={{
+                                                                        fontFamily: theme.palette.typography.fontFamily,
+                                                                        fontWeight: 500,
+                                                                        mb: 1,
+                                                                    }}
+                                                                >
+                                                                    {product.productname}
+                                                                </Typography>
+
+                                                                <Typography
+                                                                    variant="body2"
+                                                                    sx={{
+                                                                        fontFamily: theme.palette.typography.fontFamily,
+                                                                        fontWeight: 400,
+                                                                        fontSize: 13,
+                                                                    }}
+                                                                >
+                                                                    ₹{product.price} × {product.quantity}
+                                                                </Typography>
+                                                            </Box>
+
+                                                            {/* Delete Icon */}
+                                                            <IconButton
+                                                                size="small"
+                                                                onClick={() => dispatch({ type: 'cart/removeFromCart', payload: product.id })}
+                                                                sx={{ color: "error.main" }}
+                                                            >
+                                                                <DeleteIcon fontSize="small" />
+                                                            </IconButton>
+                                                        </Box>
+                                                        <Divider sx={{ my: 1 }} />
+                                                    </Box>
+                                                ))}
+                                            </Box>
+
+                                            {/* View All Button */}
+                                            <Box sx={{ mt: 1, display: "flex", justifyContent: "center" }}>
+                                                <Button
+                                                    variant="contained"
+                                                    size="small"
+                                                    sx={{
+                                                        fontFamily: theme.palette.typography.fontFamily,
+                                                        backgroundColor: "#fff",
+                                                        textTransform: "none",
+                                                        fontWeight: "bold",
+                                                        color: theme.palette.primary.main,
+                                                    }}
+                                                    onClick={() => console.log("View All clicked")}
+                                                >
+                                                    View All
+                                                </Button>
+                                            </Box>
+                                        </>
+                                    ) : (
+                                        <Typography
+                                            variant="body2"
+                                            sx={{
+                                                textAlign: 'center',
+                                                fontFamily: theme.palette.typography.fontFamily,
+                                                color: theme.palette.primary.main,
+                                            }}
+                                        >
+                                            Cart Is Empty
+                                        </Typography>
+                                    )}
+
+
+                                </Popover>
                             </Badge>
 
                             {/* Mobile Menu (hamburger) */}
