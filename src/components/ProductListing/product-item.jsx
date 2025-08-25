@@ -80,7 +80,14 @@ export function ProductItem({ product }) {
   // Heart
   const renderHeart = (
     <Chip
-      onClick={() => setLiked(!liked)}
+      onClick={() => {
+        setLiked(!liked);
+        if (!liked) {
+          dispatch({ type: 'liked/addLiked', payload: product });
+        } else {
+          dispatch({ type: 'liked/removeLiked', payload: product.id });
+        }
+      }}
       icon={
         liked ? (
           <FavoriteIcon sx={{ fontSize: 22, color: "#d32f2f !important" }} />

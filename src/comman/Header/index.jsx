@@ -48,6 +48,7 @@ export default function Header() {
     const [cartProductPopover, setCartProductPopover] = useState(null);
     // const [cartProduct, setCartProduct] = useState(null);
     const cartProduct = useSelector((state) => state.cart.cartItems);
+    const likedProduct = useSelector((state) => state.liked.likedProducts);
 
     // Profile menu state
     const [anchorEl, setAnchorEl] = useState(null);
@@ -161,132 +162,142 @@ export default function Header() {
 
                         {/* Right: Icons + Mobile Menu */}
                         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                            <IconButton sx={{ color: theme.palette.primary.main }} onClick={handleFavClick} >
-                                <FavoriteBorderIcon />
-                            </IconButton>
-                            <Popover
-                                id={id}
-                                open={open}
-                                anchorEl={favProduct}
-                                onClose={handleClose}
+                            <Badge
+                                badgeContent={likedProduct?.length || 0}
+                                color="error"
+                                overlap="circular"
                                 anchorOrigin={{
-                                    vertical: "bottom",
-                                    horizontal: "right",
-                                }}
-                                transformOrigin={{
                                     vertical: "top",
                                     horizontal: "right",
                                 }}
-                                PaperProps={{
-                                    sx: {
-                                        width: { xs: 300, sm: 350 },
-                                        p: 2,
-                                        bgcolor: "background.paper",
-                                        boxShadow: 3,
-                                        borderRadius: 2,
-                                    },
-                                }}
                             >
-                                <Typography
-                                    variant="subtitle1"
-                                    fontWeight="bold"
-                                    sx={{ fontFamily: theme.palette.typography.fontFamily }}
+                                <IconButton sx={{ color: theme.palette.primary.main }} onClick={handleFavClick} >
+                                    <FavoriteBorderIcon />
+                                </IconButton>
+                                <Popover
+                                    id={id}
+                                    open={open}
+                                    anchorEl={favProduct}
+                                    onClose={handleClose}
+                                    anchorOrigin={{
+                                        vertical: "bottom",
+                                        horizontal: "right",
+                                    }}
+                                    transformOrigin={{
+                                        vertical: "top",
+                                        horizontal: "right",
+                                    }}
+                                    PaperProps={{
+                                        sx: {
+                                            width: { xs: 300, sm: 350 },
+                                            p: 2,
+                                            bgcolor: "background.paper",
+                                            boxShadow: 3,
+                                            borderRadius: 2,
+                                        },
+                                    }}
                                 >
-                                    Liked Products
-                                </Typography>
-                                <Divider sx={{ my: 1 }} />
+                                    <Typography
+                                        variant="subtitle1"
+                                        fontWeight="bold"
+                                        sx={{ fontFamily: theme.palette.typography.fontFamily }}
+                                    >
+                                        Liked Products
+                                    </Typography>
+                                    <Divider sx={{ my: 1 }} />
 
-                                {likedProductsExample.length > 0 ? (
-                                    <>
+                                    {likedProduct?.length > 0 ? (
+                                        <>
 
-                                        <Box
-                                            sx={{
-                                                maxHeight: 210,
-                                                overflowY: "auto",
-                                                scrollbarWidth: "none",
-                                                "&::-webkit-scrollbar": {
-                                                    display: "none",
-                                                },
-                                            }}
-                                        >
-                                            {likedProductsExample.map((product) => (
-                                                <>
-                                                    <Box
-                                                        key={product.id}
-                                                        sx={{
-                                                            display: "flex",
-                                                            alignItems: "center",
-                                                            gap: 1,
-                                                            my: 1,
-                                                        }}
-                                                    >
-                                                        {/* Product Image */}
-                                                        <Box
-                                                            component="img"
-                                                            src={product.image}
-                                                            alt={product.name}
-                                                            sx={{ width: 60, height: 60, objectFit: "cover", borderRadius: 1 }}
-                                                        />
-
-                                                        {/* Product Details */}
-                                                        <Box sx={{ flex: 1 }}>
-                                                            <Typography
-                                                                variant="body2"
-                                                                sx={{
-                                                                    fontFamily: theme.palette.typography.fontFamily,
-                                                                    fontWeight: 500,
-                                                                }}
-                                                            >
-                                                                {product.name}
-                                                            </Typography>
-                                                            <Typography
-                                                                variant="body2"
-                                                                sx={{
-                                                                    fontFamily: theme.palette.typography.fontFamily,
-                                                                    fontWeight: 400,
-                                                                    fontSize: 13,
-                                                                }}
-                                                            >
-                                                                ₹{product.price} &nbsp; <del>₹{product.discountprice}</del>
-                                                            </Typography>
-                                                        </Box>
-
-                                                        {/* Delete Icon */}
-                                                        <IconButton
-                                                            size="small"
-                                                            onClick={() => console.log("Delete", product.id)}
-                                                            sx={{ color: "error.main" }}
-                                                        >
-                                                            <DeleteIcon fontSize="small" />
-                                                        </IconButton>
-                                                    </Box>
-                                                    <Divider sx={{ my: 1 }} />
-                                                </>
-
-                                            ))}
-                                        </Box>
-                                        <Box sx={{ mt: 1, display: "flex", justifyContent: "center" }}>
-                                            <Button
-                                                variant="contained"
-                                                size="small"
+                                            <Box
                                                 sx={{
-                                                    fontFamily: theme.palette.typography.fontFamily,
-                                                    backgroundColor: "#fff",
-                                                    textTransform: "none",
-                                                    fontWeight: "bold",
-                                                    color: theme.palette.primary.main,
+                                                    maxHeight: 210,
+                                                    overflowY: "auto",
+                                                    scrollbarWidth: "none",
+                                                    "&::-webkit-scrollbar": {
+                                                        display: "none",
+                                                    },
                                                 }}
-                                                onClick={() => console.log("View All clicked")}
                                             >
-                                                View All
-                                            </Button>
-                                        </Box>
-                                    </>
+                                                {likedProduct?.map((product) => (
+                                                    <>
+                                                        <Box
+                                                            key={product.id}
+                                                            sx={{
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                gap: 1,
+                                                                my: 1,
+                                                            }}
+                                                        >
+                                                            {/* Product Image */}
+                                                            <Box
+                                                                component="img"
+                                                                src={product.image}
+                                                                alt={product.name}
+                                                                sx={{ width: 60, height: 60, objectFit: "cover", borderRadius: 1 }}
+                                                            />
 
-                                ) : (
-                                    <Typography variant="body2" sx={{ textAlign: 'center', fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main, }}>No liked products</Typography>
-                                )}
-                            </Popover>
+                                                            {/* Product Details */}
+                                                            <Box sx={{ flex: 1 }}>
+                                                                <Typography
+                                                                    variant="body2"
+                                                                    sx={{
+                                                                        fontFamily: theme.palette.typography.fontFamily,
+                                                                        fontWeight: 500,
+                                                                    }}
+                                                                >
+                                                                    {product.productname}
+                                                                </Typography>
+                                                                <Typography
+                                                                    variant="body2"
+                                                                    sx={{
+                                                                        fontFamily: theme.palette.typography.fontFamily,
+                                                                        fontWeight: 400,
+                                                                        fontSize: 13,
+                                                                    }}
+                                                                >
+                                                                    ₹{product.price} &nbsp; <del>₹{product.discountprice}</del>
+                                                                </Typography>
+                                                            </Box>
+
+                                                            {/* Delete Icon */}
+                                                            <IconButton
+                                                                size="small"
+                                                                onClick={() => dispatch({ type: 'liked/removeLiked', payload: product.id })}
+                                                                sx={{ color: "error.main" }}
+                                                            >
+                                                                <DeleteIcon fontSize="small" />
+                                                            </IconButton>
+                                                        </Box>
+                                                        <Divider sx={{ my: 1 }} />
+                                                    </>
+
+                                                ))}
+                                            </Box>
+                                            <Box sx={{ mt: 1, display: "flex", justifyContent: "center" }}>
+                                                <Button
+                                                    variant="contained"
+                                                    size="small"
+                                                    sx={{
+                                                        fontFamily: theme.palette.typography.fontFamily,
+                                                        backgroundColor: "#fff",
+                                                        textTransform: "none",
+                                                        fontWeight: "bold",
+                                                        color: theme.palette.primary.main,
+                                                    }}
+                                                    onClick={() => console.log("View All clicked")}
+                                                >
+                                                    View All
+                                                </Button>
+                                            </Box>
+                                        </>
+
+                                    ) : (
+                                        <Typography variant="body2" sx={{ textAlign: 'center', fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main, }}>No liked products</Typography>
+                                    )}
+                                </Popover>
+                            </Badge>
 
                             {/* Profile Icon */}
                             <IconButton
@@ -307,7 +318,7 @@ export default function Header() {
 
                             {/* Cart */}
                             <Badge
-                                badgeContent={cartProduct?.length}
+                                badgeContent={cartProduct?.length || 0}
                                 color="error"
                                 overlap="circular"
                                 anchorOrigin={{
