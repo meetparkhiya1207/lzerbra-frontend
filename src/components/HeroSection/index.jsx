@@ -41,7 +41,7 @@ const HeroSection = () => {
         backgroundSize: "cover",
         backgroundPosition: "center",
         position: "relative",
-        zIndex:111111
+        zIndex:0
       }}
     >
       {/* Overlay */}
