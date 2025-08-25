@@ -12,6 +12,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { use, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import confetti from 'canvas-confetti';
 
 // ----------------------------------------------------------------------
 
@@ -83,6 +84,7 @@ export function ProductItem({ product }) {
       onClick={() => {
         setLiked(!liked);
         if (!liked) {
+          confetti()
           dispatch({ type: 'liked/addLiked', payload: product });
         } else {
           dispatch({ type: 'liked/removeLiked', payload: product.id });
@@ -149,10 +151,10 @@ export function ProductItem({ product }) {
           fontFamily: theme.palette.typography.fontFamily
         }}
       >
-        {product.price ? `₹${product.discountprice}` : ''}
+        {product.price ? `₹${product.price}` : ''}
       </Typography>{""}
       <span style={{ color: theme.palette.primary.main, fontWeight: 600, fontSize: '1.5rem', fontFamily: theme.palette.typography.fontFamily }}>
-        ₹{product.price || product.discountprice}
+        ₹{product.discountprice || product.discountprice}
       </span>
     </Typography>
   );

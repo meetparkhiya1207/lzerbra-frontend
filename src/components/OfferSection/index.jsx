@@ -1,8 +1,17 @@
 import React from "react";
-import { Box, Typography, Button, useTheme } from "@mui/material";
+import { Box, Typography, Button, useTheme, keyframes } from "@mui/material";
+import Snowfall from "react-snowfall";
+import Confetti from "react-confetti";
+
 
 const OfferSection = () => {
   const theme = useTheme();
+  // Up-Down Animation
+  const rotateInfinite = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
+
   return (
     <Box
       className="offer-section"
@@ -12,10 +21,56 @@ const OfferSection = () => {
         alignItems: "center",
         justifyContent: "center",
         textAlign: "center",
-        p: { xs: 4, md: 10 },
+        px: { xs: 4, md: 10 },
+        py: { xs: 8, md: 10 },
         fontFamily: theme.palette.typography.fontFamily,
+        position: "relative",
+        overflow: "hidden",
       }}
     >
+      {/* Top Left Animated Blur */}
+      <Box
+        sx={{
+          borderRadius: "40px",
+          position: "absolute",
+          top: { xs: "-80px", md: "-150px" },
+          left: { xs: "-80px", md: "-150px" },
+          width: { xs: "200px", md: "400px" },
+          height: { xs: "200px", md: "400px" },
+          // background: theme.palette.primary.main,
+          border: `10px solid ${theme.palette.primary.main}`,
+          zIndex: 0,
+          transform: "rotate(45deg)",
+          // filter: "blur(100px)",
+          opacity: 0.3,
+          animation: `${rotateInfinite} 20s linear infinite`,
+        }}
+      />
+
+      {/* Bottom Right Animated Blur */}
+      <Box
+        sx={{
+          borderRadius: "40px",
+          position: "absolute",
+          bottom: { xs: "-80px", md: "-150px" },
+          right: { xs: "-80px", md: "-150px" },
+          width: { xs: "200px", md: "400px" },
+          height: { xs: "200px", md: "400px" },
+          // background: theme.palette.primary.main,  
+          border: `10px solid ${theme.palette.primary.main}`,
+          zIndex: 0,
+          transform: "rotate(45deg)",
+          // filter: "blur(100px)",
+          opacity: 0.3,
+          animation: `${rotateInfinite} 20s linear infinite`,
+        }}
+      />
+
+
+      <Snowfall color={`${theme.palette.primary.main}`} snowflakeCount={100} />
+      <Confetti width={window.innerWidth} height={window.innerHeight} numberOfPieces={150} />
+
+      {/* Text Content */}
       <Box className="offer-text">
         <Typography
           variant="h4" fontWeight="bold" mb={4}

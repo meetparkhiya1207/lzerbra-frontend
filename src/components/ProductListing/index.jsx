@@ -45,7 +45,7 @@ const defaultFilters = {
   subcategory: [],
 };
 
-const PRODUCTS_PER_PAGE = 12;
+const PRODUCTS_PER_PAGE = 8;
 
 const ProductListing = () => {
   const theme = useTheme();
