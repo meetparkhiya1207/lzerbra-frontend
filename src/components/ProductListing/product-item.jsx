@@ -13,12 +13,14 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { use, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import confetti from 'canvas-confetti';
+import { useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
 export function ProductItem({ product }) {
   const theme = useTheme();
   const dispatch  = useDispatch();
+  const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
 
   const discountPercentage =
@@ -54,6 +56,7 @@ export function ProductItem({ product }) {
       icon={<VisibilityIcon sx={{ fontSize: 18, color: "white" }} />}
       color="primary"
       size="small"
+      onClick={() => navigate("/product-details")} 
       sx={{
         position: "absolute",
         top: 12,

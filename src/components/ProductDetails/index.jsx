@@ -1,176 +1,355 @@
-import React, { useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import {
   Box,
-  Typography,
   Grid,
-  Button,
-  IconButton,
+  Typography,
+  Breadcrumbs,
+  Link as MLink,
+  Chip,
   Rating,
   Stack,
+  IconButton,
+  Button,
+  Divider,
+  Tooltip,
+  ToggleButton,
+  ToggleButtonGroup,
+  Badge,
+  useMediaQuery,
+  useTheme,
+  Skeleton,
+  Container,
 } from "@mui/material";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShareIcon from "@mui/icons-material/Share";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-const product = {
-  id: 1,
-  name: "Premium Cotton Shirt",
-  description:
-    "Experience comfort with our 100% premium cotton shirt, perfect for casual and formal wear.",
-  price: 1200,
-  discountPrice: 899,
-  rating: 4.5,
-  images: [
-    "/images/Slider1.jpg",
-    "/images/Slider2.jpg",
-    "/images/Slider1.jpg",
-    "/images/Slider2.jpg",
-  ],
-  sizes: ["S", "M", "L", "XL"],
-  colors: ["White", "Blue", "Black"],
-};
+export default function ProductDetailsPage() {
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
 
-const ProductDetails = () => {
-  const [selectedImage, setSelectedImage] = useState(product.images[0]);
-  const [selectedSize, setSelectedSize] = useState("");
-  const [selectedColor, setSelectedColor] = useState("");
+  const product = useMemo(
+    () => ({
+      id: 1,
+      productid: "P001",
+      productname: "Striped Line Cotton Fabric",
+      category: "Cotton Fabric",
+      subcategory: "Line Cotton",
+      price: 1200,
+      mrp: 1500,
+      discountLabel: "20% OFF",
+      rating: 4.5,
+      reviews: 34,
+      images: [
+        "/images/Product1.jpg",
+        "/images/Product2.jpg",
+        "/images/Product3.jpg",
+        "/images/Product4.jpg",
+        "/images/Product5.jpg",
+      ],
+      colors: [
+        { key: "beige", label: "Beige", hex: "#f5f5dc", border: true },
+        { key: "blue", label: "Blue", hex: "#0000ff" },
+        { key: "green", label: "Green", hex: "#008000" },
+        { key: "red", label: "Red", hex: "#ff0000" },
+        { key: "black", label: "Black", hex: "#000000" },
+      ],
+      sizes: ["1.0 m", "1.5 m", "2.0 m", "2.5 m", "3.0 m"],
+      badges: ["Bestseller", "Free Shipping"],
+      highlights: [
+        "100% Cotton fabric, soft and breathable",
+        "Perfect for shirts, dresses, and light apparel",
+        "Durable with a smooth finish",
+        "Available in multiple colors and sizes",
+      ],
+      description:
+        "This striped cotton fabric is perfect for creating comfortable and stylish clothing. Its breathable material ensures all-day comfort, while the vibrant stripes add a touch of elegance to any outfit. Ideal for both casual and formal wear.",
+      instock: true,
+    }),
+    []
+  );
 
-  return (
-    <Box sx={{ p: 4 }}>
-      <Grid container spacing={4}>
-        {/* Left Side: Product Images */}
-        <Grid item xs={12} md={6}>
-          <Box
-            sx={{
-              borderRadius: 2,
-              overflow: "hidden",
-              boxShadow: 2,
-              mb: 2,
-            }}
-          >
-            <img
-              src={selectedImage}
-              alt={product.name}
-              style={{ width: "100%", height: "auto" }}
-            />
-          </Box>
+  const [selectedImg, setSelectedImg] = useState(0);
+  const [hoverZoom, setHoverZoom] = useState({ active: false, x: 50, y: 50 });
+  const [color, setColor] = useState(product.colors[0].key);
+  const [size, setSize] = useState(product.sizes[1]);
+  const [qty, setQty] = useState(1);
+  const [liked, setLiked] = useState(false);
+  const mainImgRef = useRef(null);
 
-          {/* Thumbnails */}
-          <Stack direction="row" spacing={2}>
-            {product.images.map((img, index) => (
-              <Box
-                key={index}
-                sx={{
-                  border:
-                    selectedImage === img
-                      ? "2px solid #1976d2"
-                      : "2px solid transparent",
-                  borderRadius: 2,
-                  cursor: "pointer",
-                  overflow: "hidden",
-                  width: 80,
-                  height: 80,
-                }}
-                onClick={() => setSelectedImage(img)}
-              >
-                <img
-                  src={img}
-                  alt={`Thumbnail ${index}`}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              </Box>
-            ))}
-          </Stack>
-        </Grid>
+  const handlePrev = () =>
+    setSelectedImg((i) => (i - 1 + product.images.length) % product.images.length);
+  const handleNext = () => setSelectedImg((i) => (i + 1) % product.images.length);
 
-        {/* Right Side: Product Details */}
-        <Grid item xs={12} md={6}>
-          <Typography variant="h4" fontWeight="bold">
-            {product.name}
-          </Typography>
+  // Keyboard navigation
+  const onKeyDown = (e) => {
+    if (e.key === "ArrowLeft") handlePrev();
+    if (e.key === "ArrowRight") handleNext();
+  };
 
-          <Stack direction="row" alignItems="center" spacing={1} sx={{ mt: 1 }}>
-            <Rating value={product.rating} precision={0.5} readOnly />
-            <Typography variant="body2" color="text.secondary">
-              {product.rating} / 5
-            </Typography>
-          </Stack>
+  // Hover zoom logic (desktop only)
+  const handleMouseMove = (e) => {
+    if (!isMdUp) return;
+    const rect = mainImgRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setHoverZoom({ active: true, x, y });
+  };
 
-          <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: 2 }}>
-            <Typography variant="h5" fontWeight="bold" color="primary">
-              ₹{product.discountPrice}
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{ textDecoration: "line-through", color: "text.secondary" }}
-            >
-              ₹{product.price}
-            </Typography>
-            <Typography variant="body2" color="green">
-              {Math.round(
-                ((product.price - product.discountPrice) / product.price) * 100
-              )}
-              % OFF
-            </Typography>
-          </Stack>
+  const handleMouseLeave = () =>
+    setHoverZoom((z) => ({ ...z, active: false }));
 
-          <Typography variant="body1" sx={{ mt: 2 }}>
-            {product.description}
-          </Typography>
-
-          {/* Size Selection */}
-          <Box sx={{ mt: 3 }}>
-            <Typography variant="subtitle1" fontWeight="bold">
-              Select Size:
-            </Typography>
-            <Stack direction="row" spacing={2} sx={{ mt: 1 }}>
-              {product.sizes.map((size) => (
-                <Button
-                  key={size}
-                  variant={selectedSize === size ? "contained" : "outlined"}
-                  onClick={() => setSelectedSize(size)}
-                >
-                  {size}
-                </Button>
-              ))}
-            </Stack>
-          </Box>
-
-          {/* Color Selection */}
-          <Box sx={{ mt: 3 }}>
-            <Typography variant="subtitle1" fontWeight="bold">
-              Select Color:
-            </Typography>
-            <Stack direction="row" spacing={2} sx={{ mt: 1 }}>
-              {product.colors.map((color) => (
-                <Button
-                  key={color}
-                  variant={selectedColor === color ? "contained" : "outlined"}
-                  onClick={() => setSelectedColor(color)}
-                >
-                  {color}
-                </Button>
-              ))}
-            </Stack>
-          </Box>
-
-          {/* Buttons */}
-          <Stack direction="row" spacing={2} sx={{ mt: 4 }}>
-            <Button
-              variant="contained"
-              startIcon={<ShoppingCartIcon />}
-              size="large"
-              fullWidth
-            >
-              Add to Cart
-            </Button>
-            <IconButton color="error">
-              <FavoriteBorderIcon />
-            </IconButton>
-          </Stack>
-        </Grid>
-      </Grid>
+  const priceBlock = (
+    <Box>
+      <Stack direction="row" spacing={1} alignItems="baseline" flexWrap="wrap">
+        <Typography variant="h4" fontWeight={700} sx={{ color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily }}>
+          ₹{product.price}
+        </Typography>
+        <Typography
+          variant="body1"
+          color="text.secondary"
+          sx={{ textDecoration: "line-through", color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily }}
+        >
+          ₹{product.mrp}
+        </Typography>
+        <Chip size="small" color="success" label={product.discountLabel} sx={{ color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily }} />
+      </Stack>
+      <Stack direction="row" spacing={1} mt={1} flexWrap="wrap">
+        {product.badges.map((b) => (
+          <Chip
+            key={b}
+            size="small"
+            color="primary"
+            variant="outlined"
+            label={b}
+            sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}
+          />
+        ))}
+      </Stack>
     </Box>
   );
-};
 
-export default ProductDetails;
+  return (
+    <Container maxWidth="xl">
+      <Box onKeyDown={onKeyDown} tabIndex={0} sx={{ outline: "none", py: 3 }}>
+
+
+        <Grid container spacing={10}>
+          {/* Left: Gallery */}
+          <Grid item xs={12} md={8}>
+            <Box
+              sx={{
+                position: { md: "sticky" },
+                top: { md: 24 },
+                display: "grid",
+                gap: 2,
+              }}
+            >
+              {/* Main Image */}
+              <Box
+                ref={mainImgRef}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                sx={{
+                  position: "relative",
+                  borderRadius: 3,
+                  overflow: "hidden",
+                  boxShadow: 3,
+                  width: "100%",
+                  aspectRatio: "1 / 1", // keeps square ratio on all screens
+                  bgcolor: "background.paper",
+                }}
+              >
+                {/* Navigation Arrows */}
+                <IconButton
+                  onClick={handlePrev}
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: 12,
+                    transform: "translateY(-50%)",
+                    bgcolor: "rgba(0,0,0,0.4)",
+                    color: "#fff",
+                    "&:hover": { bgcolor: "rgba(0,0,0,0.6)" },
+                  }}
+                >
+                  <ArrowBackIosNewIcon fontSize="small" />
+                </IconButton>
+                <IconButton
+                  onClick={handleNext}
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    right: 12,
+                    transform: "translateY(-50%)",
+                    bgcolor: "rgba(0,0,0,0.4)",
+                    color: "#fff",
+                    "&:hover": { bgcolor: "rgba(0,0,0,0.6)" },
+                  }}
+                >
+                  <ArrowForwardIosIcon fontSize="small" />
+                </IconButton>
+
+                <Box
+                  component="img"
+                  src={product.images[selectedImg]}
+                  alt={`Product image ${selectedImg + 1}`}
+                  loading="lazy"
+                  sx={{
+                    width: { xs: '100%', sm: "800px" },
+                    height: { xs: '100%', sm: "800px" },
+                    objectFit: "cover",
+                  }}
+                />
+              </Box>
+
+              {/* Thumbnails */}
+              <Stack
+                direction="row"
+                spacing={1}
+                justifyContent={{ xs: "center", md: "flex-start" }}
+                flexWrap="wrap"
+              >
+                {product.images.map((src, idx) => (
+                  <Box
+                    key={src}
+                    component="img"
+                    src={src}
+                    alt={`Thumb ${idx + 1}`}
+                    onClick={() => setSelectedImg(idx)}
+                    sx={{
+                      width: { xs: 64, sm: 80, md: 90 },
+                      height: { xs: 64, sm: 80, md: 90 },
+                      objectFit: "cover",
+                      borderRadius: 2,
+                      cursor: "pointer",
+                      border: (theme) =>
+                        `2px solid ${selectedImg === idx
+                          ? theme.palette.primary.main
+                          : "transparent"
+                        }`,
+                      boxShadow: selectedImg === idx ? 3 : 1,
+                      transition: "transform .2s, box-shadow .2s",
+                      "&:hover": { transform: "translateY(-2px)" },
+                    }}
+                  />
+                ))}
+              </Stack>
+            </Box>
+          </Grid>
+
+          {/* Right: Details */}
+          <Grid item xs={12} md={4}>
+            <Stack spacing={2} sx={{ paddingTop: { xs: 4, md: 0 } }}>
+              <Typography variant="h4" fontWeight={700} lineHeight={1.2} sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
+                {product.productname}
+              </Typography>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Rating
+                  name="read-only"
+                  value={product.rating}
+                  precision={0.5}
+                  readOnly
+                  size="small"
+                />
+                <Typography variant="body2" color="text.secondary">
+                  {product.rating} • {product.reviews} reviews
+                </Typography>
+              </Stack>
+
+              {priceBlock}
+
+              <Divider sx={{ my: 1 }} />
+
+              {/* Quantity */}
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Typography variant="subtitle2" sx={{ fontWeight: 600, color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily }}>
+                  Quantity :
+                </Typography>
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  alignItems="center"
+                  sx={{
+                    border: "1px solid",
+                    borderColor: "divider",
+                    borderRadius: 2,
+                    p: 0.5,
+                    color: theme.palette.primary.main,
+                    fontFamily: theme.palette.typography.fontFamily
+                  }}
+                >
+                  <IconButton
+                    size="small"
+                    onClick={() => setQty((q) => Math.max(1, q - 1))}
+                    sx={{ color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily }}
+                  >
+                    <RemoveIcon fontSize="small" />
+                  </IconButton>
+                  <Typography width={28} textAlign="center">
+                    {qty}
+                  </Typography>
+                  <IconButton
+                    size="small"
+                    onClick={() => setQty((q) => q + 1)}
+                    sx={{ color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily }}
+                  >
+                    <AddIcon fontSize="small" />
+                  </IconButton>
+                </Stack>
+              </Stack>
+
+              {/* Actions */}
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                spacing={1.5}
+                alignItems={{ xs: "stretch", sm: "center" }}
+              >
+                <Button
+                  variant="contained"
+                  size="large"
+                  startIcon={<ShoppingCartIcon />}
+                  sx={{ borderRadius: 2, minWidth: 180 }}
+                >
+                  Add to Cart
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="large"
+                  sx={{ borderRadius: 2, minWidth: 160 }}
+                >
+                  Buy Now
+                </Button>
+                <Tooltip
+                  title={liked ? "Remove from Wishlist" : "Add to Wishlist"}
+                >
+                  <IconButton
+                    onClick={() => setLiked((l) => !l)}
+                    color={liked ? "error" : "default"}
+                  >
+                    {liked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Share">
+                  <IconButton>
+                    <ShareIcon />
+                  </IconButton>
+                </Tooltip>
+              </Stack>
+
+              <Divider sx={{ my: 1.5 }} />
+
+
+            </Stack>
+          </Grid>
+        </Grid>
+      </Box>
+    </Container>
+  );
+}

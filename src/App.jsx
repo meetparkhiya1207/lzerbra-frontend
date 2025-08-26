@@ -7,6 +7,7 @@ import { AuthProvider } from "./context/AuthContext";
 import RegisterModal from "./auth/Register";
 import { useState } from "react";
 import { ToastContainer } from "react-toastify";
+import ProductDetailsPage from "./components/ProductDetails";
 
 export default function App() {
 const [loginOpen, setLoginOpen] = useState(true);
@@ -29,6 +30,7 @@ const [loginOpen, setLoginOpen] = useState(true);
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/product-details" element={<ProductDetailsPage />} />
         </Routes>
         <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} onSwitch={switchToRegister} />
         <RegisterModal open={registerOpen} onClose={() => setRegisterOpen(false)} onSwitch={switchToLogin} />
