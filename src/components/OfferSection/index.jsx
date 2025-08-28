@@ -237,6 +237,7 @@ const OfferSection = () => {
                         fontSize: { xs: "1.5rem", sm: "2rem" },
                         fontWeight: "bold",
                         color: theme.palette.primary.main,
+                        fontFamily: theme.typography.fontFamily,
                       }}
                     >
                       :

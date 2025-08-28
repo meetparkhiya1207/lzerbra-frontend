@@ -6,6 +6,7 @@ import ProductListing from '../../components/ProductListing'
 import ProductDetails from '../../components/ProductDetails'
 import ServiceSection from '../../components/ServiceSection'
 import Footer from '../../comman/Footer'
+import Testimonials from '../../components/Testimonials'
 
 const Home = () => {
   return (
@@ -16,6 +17,7 @@ const Home = () => {
       <ProductListing/>
       {/* <ProductDetails/> */}
       <ServiceSection/>
+      <Testimonials/>
       {/* <Footer/> */}
     </div>
   )
