@@ -56,7 +56,7 @@ const OfferSection = () => {
             alignItems: "center",
             justifyContent: "space-between",
             textAlign: { xs: "center", md: "left" },
-            px: { xs: 4, md: 10 },
+            px: { xs: 0, sm: 4, md: 10 },
             py: { xs: 8, md: 10 },
             fontFamily: theme.palette.typography.fontFamily,
             // overflow: "hidden",
@@ -95,11 +95,11 @@ const OfferSection = () => {
           />
 
           {/* Effects */}
-          <Snowfall color={`${theme.palette.primary.main}`} snowflakeCount={80} />
-          <Confetti width={window.innerWidth} height={window.innerHeight} numberOfPieces={100} />
+          <Snowfall color={`${theme.palette.primary.main}`} snowflakeCount={20} />
+          <Confetti width={window.innerWidth} height={window.innerHeight} numberOfPieces={20} />
 
           {/* LEFT SIDE - Text Content */}
-          <Box className="offer-text" sx={{ flex: 1, zIndex: 1 }}>
+          <Box className="offer-text" sx={{ flex: 1, zIndex: 1, p: 2 }}>
             <Typography
               variant="h4"
               fontWeight="bold"
@@ -120,6 +120,7 @@ const OfferSection = () => {
                 color: theme.palette.primary.main,
                 fontSize: { xs: "3rem", md: "4rem" },
                 lineHeight: 1.1,
+                fontFamily: theme.palette.typography.fontFamily,
                 mb: 2,
               }}
             >
@@ -129,6 +130,7 @@ const OfferSection = () => {
               sx={{
                 mb: 2,
                 color: theme.palette.primary.lightmain,
+                fontFamily: theme.palette.typography.fontFamily,
                 fontSize: { xs: "1rem", md: "1.125rem" },
               }}
             >
@@ -142,6 +144,7 @@ const OfferSection = () => {
                 py: 1.5,
                 bgcolor: theme.palette.primary.main,
                 color: theme.palette.background.default,
+                fontFamily: theme.palette.typography.fontFamily,
                 borderRadius: "999px",
                 fontWeight: 600,
                 fontSize: { xs: "1rem", md: "1.125rem" },
@@ -167,7 +170,7 @@ const OfferSection = () => {
               py: { xs: 2, sm: 3 },
               textAlign: "center",
               width: { xs: "100%", sm: "auto" },
-              maxWidth: 400,
+              maxWidth: { xs: 300, sm: 400 },
               mt: { xs: 6, md: 0 },
             }}
           >

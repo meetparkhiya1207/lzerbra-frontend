@@ -14,6 +14,7 @@ import { ProductFilters } from "./product-filters";
 import { ProductSort } from "./product-sort";
 import { ProductItem } from "./product-item";
 import { products } from "../../Data/product";
+import CommonHeading from "../../comman/CommonHeading";
 
 const PRICE_OPTIONS = [
   { value: '250', label: 'Below ₹250' },
@@ -135,11 +136,16 @@ const ProductListing = () => {
   return (
     <>
       <Container maxWidth="xl" >
-        <Box sx={{ py: 10 }}>
-          <Typography variant="h4" sx={{ mb: 2, color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily, textAlign: 'center', }}>
+        <Box sx={{ py: { xs: 4, sm: 10 } }}>
+          <CommonHeading
+            title="Our Products"
+            lineWidth={140}
+            align="center"
+          />
+          {/* <Typography variant="h4" sx={{ mb: 2, color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily, textAlign: 'center', }}>
             Our Products
-          </Typography>
-          <Box
+          </Typography> */}
+          {/* <Box
             sx={{
               width: 140,
               height: 3,
@@ -148,7 +154,7 @@ const ProductListing = () => {
               borderRadius: 2,
               mb: 5
             }}
-          />
+          /> */}
           <Box
             sx={{
               mb: 5,
@@ -196,7 +202,7 @@ const ProductListing = () => {
 
           <Grid container spacing={3}>
             {paginatedProducts.map((product) => (
-              <Grid key={product?.id} size={{ xs: 12, sm: 6, md: 3 }}>
+              <Grid key={product?.id} item size={{ xs: 6, sm: 6, md: 3 }}>
                 <ProductItem product={product} />
               </Grid>
             ))}

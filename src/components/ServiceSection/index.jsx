@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Typography, Grid, Paper, Container } from "@mui/material";
 import { LocalShipping, SupportAgent, CreditCard, Replay } from "@mui/icons-material";
 import { useTheme } from "@mui/material/styles";
+import CommonHeading from "../../comman/CommonHeading";
 
 const services = [
     {
@@ -32,7 +33,7 @@ export default function ServiceSection() {
     return (
         <Container maxWidth="xl">
             <Box sx={{ pb: 6, pt: 4 }}>
-                <Typography
+                {/* <Typography
                     variant="h5"
                     align="center"
                     sx={{
@@ -53,6 +54,12 @@ export default function ServiceSection() {
                         borderRadius: 2,
                         mb: 5
                     }}
+                /> */}
+
+                <CommonHeading
+                    title="Our Services"
+                    lineWidth={140}
+                    align="center"
                 />
 
                 {/* ✅ Add container */}

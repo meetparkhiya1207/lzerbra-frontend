@@ -52,7 +52,7 @@ const HeroSection = () => {
           left: 0,
           width: "100%",
           height: "100%",
-          bgcolor: "rgba(0,0,0,0.55)",
+          bgcolor: "rgba(70, 68, 68, 0.55)",
           zIndex: 1,
         }}
       />

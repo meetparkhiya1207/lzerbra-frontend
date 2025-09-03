@@ -5,12 +5,13 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
-import Rating from '@mui/material/Rating';   // <-- ADD
-import { useTheme } from '@emotion/react';
+import Rating from '@mui/material/Rating';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import confetti from 'canvas-confetti';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +20,8 @@ import { useNavigate } from 'react-router-dom';
 
 export function ProductItem({ product }) {
   const theme = useTheme();
-  const dispatch  = useDispatch();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
 
@@ -40,12 +42,12 @@ export function ProductItem({ product }) {
         left: 12,
         zIndex: 10,
         fontWeight: 600,
-        fontSize: 12,
+        fontSize: { xs: 10, sm: 12 },
         px: 0.5,
-        height: 28,
+        height: { xs: 24, sm: 28 },
         borderRadius: "6px",
         letterSpacing: 0.5,
-        fontFamily: theme.palette.typography.fontFamily,
+        fontFamily: theme.typography.fontFamily,
       }}
     />
   ) : null;
@@ -53,30 +55,25 @@ export function ProductItem({ product }) {
   // View label
   const renderView = (
     <Chip
-      icon={<VisibilityIcon sx={{ fontSize: 18, color: "white" }} />}
-      color="primary"
+      icon={<VisibilityIcon sx={{ fontSize: { xs: 14, sm: 18 }, color: theme.palette.primary.main }} />}
       size="small"
-      onClick={() => navigate("/product-details")} 
+      onClick={() => navigate(`/product-details/${product.id}`)}
       sx={{
         position: "absolute",
         top: 12,
         right: 12,
         zIndex: 10,
-        height: 44,
-        width: 44,
+        height: { xs: 30, sm: 44 },
+        width: { xs: 30, sm: 44 },
         borderRadius: "50%",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         bgcolor: "rgba(255, 255, 255, 0.93)",
-        color: theme.palette.primary.main,
         border: `1px solid ${theme.palette.primary.main}`,
-        "& .MuiChip-label": {
-          display: "none" // label remove kariye to only icon center ma
-        },
-        "& .MuiChip-icon": {
-          margin: 0 // default margin remove
-        }
+        cursor: "pointer",
+        "& .MuiChip-label": { display: "none" },
+        "& .MuiChip-icon": { margin: 0 },
       }}
     />
   );
@@ -87,7 +84,7 @@ export function ProductItem({ product }) {
       onClick={() => {
         setLiked(!liked);
         if (!liked) {
-          confetti()
+          confetti();
           dispatch({ type: 'liked/addLiked', payload: product });
         } else {
           dispatch({ type: 'liked/removeLiked', payload: product.id });
@@ -95,19 +92,19 @@ export function ProductItem({ product }) {
       }}
       icon={
         liked ? (
-          <FavoriteIcon sx={{ fontSize: 22, color: "#d32f2f !important" }} />
+          <FavoriteIcon sx={{ fontSize: { xs: 14, sm: 18 }, color: "#d32f2f !important" }} />
         ) : (
-          <FavoriteBorderIcon sx={{ fontSize: 22 }} />
+          <FavoriteBorderIcon sx={{ fontSize: { xs: 14, sm: 18 } }} />
         )
       }
       size="small"
       sx={{
         position: "absolute",
-        top: 60,
+        top: { xs: 50, sm: 60 },
         right: 12,
         zIndex: 10,
-        height: 44,
-        width: 44,
+        height: { xs: 30, sm: 44 },
+        width: { xs: 30, sm: 44 },
         borderRadius: "50%",
         display: "flex",
         alignItems: "center",
@@ -121,9 +118,6 @@ export function ProductItem({ product }) {
       }}
     />
   );
-
-
-
 
   // Product Image
   const renderImg = (
@@ -144,20 +138,23 @@ export function ProductItem({ product }) {
   // Price section
   const renderPrice = (
     <Typography variant="subtitle1">
-      <Typography
-        component="span"
-        variant="body2"
-        sx={{
-          color: theme.palette.primary.maindark,
-          textDecoration: 'line-through',
-          mr: 1.2,
-          fontFamily: theme.palette.typography.fontFamily
-        }}
-      >
-        {product.price ? `₹${product.price}` : ''}
-      </Typography>{""}
-      <span style={{ color: theme.palette.primary.main, fontWeight: 600, fontSize: '1.5rem', fontFamily: theme.palette.typography.fontFamily }}>
-        ₹{product.discountprice || product.discountprice}
+      {product.price && (
+        <Typography
+          component="span"
+          variant="body2"
+          sx={{
+            color: theme.palette.grey[600],
+            textDecoration: 'line-through',
+            mr: 1.2,
+            fontFamily: theme.typography.fontFamily,
+
+          }}
+        >
+          ₹{product.price}
+        </Typography>
+      )}
+      <span style={{ color: theme.palette.primary.main, fontWeight: 600, fontSize: isMobile ? '1.2rem' : '1.1rem', fontFamily: theme.typography.fontFamily }}>
+        ₹{product.discountprice}
       </span>
     </Typography>
   );
@@ -173,9 +170,8 @@ export function ProductItem({ product }) {
         fontWeight: 600,
         fontSize: 12,
         borderRadius: "6px",
-        py: 1.8,
         height: 22,
-        fontFamily: theme.palette.typography.fontFamily,
+        fontFamily: theme.typography.fontFamily,
       }}
     />
   );
@@ -207,81 +203,70 @@ export function ProductItem({ product }) {
         {renderImg}
       </Box>
 
-      <Stack spacing={2} sx={{ p: 3 }}>
+      <Stack spacing={1.5} sx={{ px: 2, py:2 }}>
         <Link
           color="inherit"
           variant="subtitle2"
           noWrap
+          onClick={() => navigate(`/product-details/${product.id}`)}
           sx={{
-            fontFamily: theme.palette.typography.fontFamily,
+            fontFamily: theme.typography.fontFamily,
             fontWeight: 600,
             color: theme.palette.primary.main,
-            fontSize: { xs: "1.2rem", md: "1.4rem" },
+            fontSize: { xs: "1.2rem", md: "1.2rem" },
             textDecoration: 'none',
+            cursor: "pointer",
           }}
         >
           {product.productname}
         </Link>
 
-
-
         {/* Stock + Price row */}
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {renderPrice}
-          {renderStock}
+
         </Box>
+
         {/* Rating row */}
         {renderRating}
-        {/* Buttons */}
-        <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-          <Button
-            variant="contained"
-            sx={{
-              mt: 2,
-              px: 2,
-              py: 1,
-              bgcolor: theme.palette.primary.main,
-              color: theme.palette.backgroundcolor.main,
-              borderRadius: "12px",
-              fontWeight: 600,
-              fontSize: { xs: "16px" },
-              textTransform: "none",
-              fontFamily: theme.palette.typography.fontFamily,
-              transition: "background 0.2s",
-            }}
-          >
-            Buy Now
-          </Button>
-          <Button
-            onClick={() => { dispatch({ type: 'cart/addToCart', payload: product }); }}
-            variant="outlined"
-            sx={{
-              mt: 2,
-              px: 4,
-              py: 1,
-              bgcolor: "rgba(255,255,255,0.15)",
-              color: theme.palette.primary.main,
-              borderRadius: "12px",
-              fontWeight: 600,
-              fontSize: { xs: "1rem", md: "1.125rem" },
-              textTransform: "none",
-              fontFamily: theme.palette.typography.fontFamily,
-              transition: "background 0.2s",
-              "&:hover": {
-                bgcolor: "rgba(255,255,255,0.15)",
+
+        {/* Buttons (only desktop) */}
+        {!isMobile && (
+          <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
+            <Button
+              variant="contained"
+              sx={{
+                px: 2,
+                py: 1,
+                bgcolor: theme.palette.primary.main,
+                color: theme.palette.background.paper,
+                borderRadius: "12px",
+                fontWeight: 600,
+                fontSize: "0.9rem",
+                textTransform: "none",
+                fontFamily: theme.typography.fontFamily,
+              }}
+            >
+              Buy Now
+            </Button>
+            <Button
+              onClick={() => { dispatch({ type: 'cart/addToCart', payload: product }); }}
+              variant="outlined"
+              sx={{
+                px: 3,
+                py: 1,
                 color: theme.palette.primary.main,
-              },
-            }}
-          >
-            Add to Cart
-          </Button>
-        </Stack>
+                borderRadius: "12px",
+                fontWeight: 600,
+                fontSize: "0.9rem",
+                textTransform: "none",
+                fontFamily: theme.typography.fontFamily,
+              }}
+            >
+              Add to Cart
+            </Button>
+          </Stack>
+        )}
       </Stack>
     </Card>
   );

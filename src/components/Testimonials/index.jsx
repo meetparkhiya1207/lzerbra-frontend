@@ -6,6 +6,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { FormatQuote } from "@mui/icons-material";
+import CommonHeading from "../../comman/CommonHeading";
 
 const testimonials = [
   {
@@ -50,7 +51,7 @@ export default function Testimonials() {
     >
       <Container maxWidth="xl">
         {/* Section Title */}
-        <Typography
+        {/* <Typography
           variant="h4"
           align="center"
           gutterBottom
@@ -61,24 +62,30 @@ export default function Testimonials() {
           }}
         >
           What Our Customers Say
-        </Typography>
+        </Typography> */}
+
+        <CommonHeading
+          title="What Our Customers Say"
+          lineWidth={270}
+          align="center"
+        />
 
         {/* Swiper Slider */}
-         <Swiper
-        spaceBetween={30}
-        slidesPerView={1}
-        loop={true}
-        autoplay={{ delay: 4000 }}
-        // pagination={{ clickable: true }}
-        // navigation={true} // 👈 Arrows enable
-        sx={{color: theme.palette.primary.main}}
-        modules={[Autoplay]}
-        breakpoints={{
-          640: { slidesPerView: 1 },
-          900: { slidesPerView: 2 },
-          1200: { slidesPerView: 3 },
-        }}
-      >
+        <Swiper
+          spaceBetween={30}
+          slidesPerView={1}
+          loop={true}
+          autoplay={{ delay: 4000 }}
+          // pagination={{ clickable: true }}
+          // navigation={true} // 👈 Arrows enable
+          sx={{ color: theme.palette.primary.main }}
+          modules={[Autoplay]}
+          breakpoints={{
+            640: { slidesPerView: 1 },
+            900: { slidesPerView: 2 },
+            1200: { slidesPerView: 3 },
+          }}
+        >
           {testimonials.map((item, i) => (
             <SwiperSlide key={i}>
               <Box
@@ -92,7 +99,7 @@ export default function Testimonials() {
                   alignItems: "center",
                   textAlign: "center",
                   position: "relative",
-                //   boxShadow: "0px 8px 20px rgba(0,0,0,0.08)",
+                  //   boxShadow: "0px 8px 20px rgba(0,0,0,0.08)",
                 }}
               >
                 {/* Decorative Quote Icon */}
@@ -138,7 +145,7 @@ export default function Testimonials() {
                 {/* Name & Role */}
                 <Typography
                   variant="subtitle1"
-                  sx={{ fontWeight: "bold", color: theme.palette.primary.main , fontFamily: theme.palette.typography.fontFamily}}
+                  sx={{ fontWeight: "bold", color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily }}
                 >
                   {item.name}
                 </Typography>
