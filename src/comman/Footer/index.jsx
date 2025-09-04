@@ -1,118 +1,319 @@
 import React from "react";
-import { Box, Grid, Typography, IconButton, Link, Divider, Container } from "@mui/material";
-import { Facebook, Twitter, Instagram, YouTube, Email, Phone } from "@mui/icons-material";
-import { useTheme } from "@mui/material/styles";
+import {
+  Box,
+  Typography,
+  Grid,
+  Divider,
+  TextField,
+  Button,
+  IconButton,
+  useTheme,
+  Container,
+} from "@mui/material";
+import {
+  Phone,
+  Mail,
+  MessageCircle,
+  Shield,
+  Truck,
+  Award,
+  Facebook,
+  Instagram,
+  Twitter,
+  Youtube,
+  CreditCard,
+  Lock,
+} from "lucide-react";
 
-const Footer = () => {
+export default function Footer() {
   const theme = useTheme();
 
   return (
     <Box
       component="footer"
       sx={{
-        // backgroundColor: theme.palette.primary.maindark,
-        color: "#fff",
-        mt: 5,
-        pt: 6,
-        pb: 3,
+        bgcolor: theme.palette.primary.lightdark,
+        color: theme.palette.text.primary,
+        pt: 8,
+        pb: 4,
       }}
     >
       <Container maxWidth="xl">
-        <Grid container spacing={4}>
-          {/* Logo + About */}
-          <Grid item xs={12} sm={6} md={3}>
-            <Box display="flex" alignItems="center" mb={2}>
-              <img src="/images/LZEBRA_LOGO.png" alt="Logo" />
-            </Box>
-            <Typography variant="body2" sx={{ opacity: 0.8 }}>
-              Your trusted store for premium fabrics with fast delivery,
-              secure payments, and hassle-free returns.
-            </Typography>
-            <Box mt={2}>
-              <IconButton href="#" sx={{ color: "#fff" }}>
-                <Facebook />
-              </IconButton>
-              <IconButton href="#" sx={{ color: "#fff" }}>
-                <Twitter />
-              </IconButton>
-              <IconButton href="#" sx={{ color: "#fff" }}>
-                <Instagram />
-              </IconButton>
-              <IconButton href="#" sx={{ color: "#fff" }}>
-                <YouTube />
-              </IconButton>
-            </Box>
-          </Grid>
+        {/* Main Content */}
+        <Box sx={{ px: { xs: 3, md: 6 } }}>
+          <Grid container spacing={6}>
+            {/* Brand Section */}
+            <Grid item xs={12} md={6} lg={3}>
+              <Typography
+                variant="h5"
+                fontWeight="bold"
+                sx={{ color: theme.palette.primary.main, mb: 2, fontFamily: theme.palette.typography.fontFamily }}
+              >
+                Lzebra
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ color: theme.palette.primary.lightmain, mb: 3, fontFamily: theme.palette.typography.fontFamily }}
+              >
+                Premium men's fabrics crafted with elegance, and quality comfort.
+              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                <Phone size={16} color={theme.palette.primary.main} sx={{ fontFamily: theme.palette.typography.fontFamily }} />
+                <Typography variant="body2" sx={{ ml: 1, fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }}>
+                  +1 (555) 123-4567
+                </Typography>
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "center", mb: 1, fontFamily: theme.palette.typography.fontFamily }}>
+                <Mail size={16} color={theme.palette.primary.main} />
+                <Typography variant="body2" sx={{ ml: 1, fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }}>
+                  hello@fabriccraft.com
+                </Typography>
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "center", fontFamily: theme.palette.typography.fontFamily }}>
+                <MessageCircle size={16} color={theme.palette.primary.main} />
+                <Button
+                  variant="text"
+                  sx={{
+                    ml: 1,
+                    fontSize: "0.85rem",
+                    fontFamily: theme.palette.typography.fontFamily,
+                    color: theme.palette.primary.lightmain,
+                    "&:hover": { color: theme.palette.primary.main },
+                  }}
+                >
+                  Live Chat Support
+                </Button>
+              </Box>
+            </Grid>
 
-          {/* Quick Links */}
-          <Grid item xs={6} sm={6} md={2}>
-            <Typography variant="h6" gutterBottom>
-              Quick Links
-            </Typography>
-            <Box>
-              <Link href="#" color="inherit" underline="hover" display="block">
-                Home
-              </Link>
-              <Link href="#" color="inherit" underline="hover" display="block">
+            {/* Shop Links */}
+            <Grid item xs={12} md={6} lg={3}>
+              <Typography
+                variant="subtitle1"
+                sx={{ fontWeight: "bold", color: theme.palette.primary.main, mb: 2, fontFamily: theme.palette.typography.fontFamily }}
+              >
                 Shop
-              </Link>
-              <Link href="#" color="inherit" underline="hover" display="block">
-                About Us
-              </Link>
-              <Link href="#" color="inherit" underline="hover" display="block">
-                Contact
-              </Link>
+              </Typography>
+              {[
+                "Premium Suits",
+                "Dress Shirts",
+                "Casual Wear",
+                "Accessories",
+                "New Arrivals",
+                "Sale Items",
+              ].map((item, i) => (
+                <Typography
+                  key={i}
+                  component="a"
+                  href="#"
+                  variant="body2"
+                  sx={{
+                    display: "block",
+                    color: theme.palette.primary.lightmain,
+                    mb: 1,
+                    textDecoration: "none",
+                    fontFamily: theme.palette.typography.fontFamily,
+                    "&:hover": { color: theme.palette.primary.main },
+                  }}
+                >
+                  {item}
+                </Typography>
+              ))}
+            </Grid>
+
+            {/* Resources */}
+            <Grid item xs={12} md={6} lg={3}>
+              <Typography
+                variant="subtitle1"
+                sx={{ fontWeight: "bold", color: theme.palette.primary.main, mb: 2, fontFamily: theme.palette.typography.fontFamily }}
+              >
+                Resources
+              </Typography>
+              {[
+                "Fabric Care Guide",
+                "Size Guide",
+                "Tailoring Advice",
+                "Style Tips",
+                "About Us",
+                "FAQs",
+              ].map((item, i) => (
+                <Typography
+                  key={i}
+                  component="a"
+                  href="#"
+                  variant="body2"
+                  sx={{
+                    display: "block",
+                    color: theme.palette.primary.lightmain,
+                    mb: 1,
+                    textDecoration: "none",
+                    fontFamily: theme.palette.typography.fontFamily,
+                    "&:hover": { color: theme.palette.primary.main },
+                  }}
+                >
+                  {item}
+                </Typography>
+              ))}
+            </Grid>
+
+            {/* Newsletter */}
+            <Grid item xs={12} md={6} lg={3}>
+              <Typography
+                variant="subtitle1"
+                sx={{ fontWeight: "bold", color: theme.palette.primary.main, mb: 2, fontFamily: theme.palette.typography.fontFamily }}
+              >
+                Stay Connected
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{ color: theme.palette.primary.lightmain, mb: 2, fontFamily: theme.palette.typography.fontFamily }}
+              >
+                Get the latest fabric collections and styling tips delivered to
+                your inbox.
+              </Typography>
+              <TextField
+                fullWidth
+                placeholder="Enter your email"
+                variant="outlined"
+                size="small"
+                sx={{
+                  mb: 2,
+                  bgcolor: theme.palette.background.paper,
+                  input: { color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily },
+
+                }}
+              />
+              <Button
+                variant="contained"
+                sx={{
+                  px: 2,
+                  py: 1,
+                  bgcolor: theme.palette.primary.main,
+                  color: theme.palette.background.paper,
+                  borderRadius: "12px",
+                  fontWeight: 600,
+                  fontSize: "0.9rem",
+                  textTransform: "none",
+                  fontFamily: theme.typography.fontFamily,
+                  mx: 'auto'
+                }}
+              >
+                Subscribe to Newsletter
+              </Button>
+
+              {/* Social */}
+              <Typography
+                variant="subtitle1"
+                sx={{ fontWeight: "bold", color: theme.palette.primary.main, my: 2, fontFamily: theme.palette.typography.fontFamily }}
+              >
+                Follow Us
+              </Typography>
+              <Box sx={{ display: "flex", gap: 2 }}>
+                {[Facebook, Instagram, Twitter, Youtube].map((Icon, i) => (
+                  <IconButton
+                    key={i}
+                    sx={{
+                      bgcolor: theme.palette.background.default,
+                      color: theme.palette.primary.lightmain,
+                      "&:hover": {
+                        bgcolor: theme.palette.primary.lightdark,
+                        color: theme.palette.primary.navy,
+                      },
+                      fontFamily: theme.palette.typography.fontFamily
+                    }}
+                  >
+                    <Icon size={22} />
+                  </IconButton>
+                ))}
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+
+        <Divider sx={{ bgcolor: theme.palette.divider, my: 3 }} />
+
+        {/* Trust Elements */}
+        {/* <Box sx={{ maxWidth: "lg", mx: "auto", px: { xs: 3, md: 6 }, mb: 4 }}>
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={4} textAlign="center">
+            <Box display="flex" justifyContent="center" alignItems="center" mb={1}>
+              <Lock size={18} color={theme.palette.primary.gold} />
+              <Typography sx={{ ml: 1, color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily }} variant="body2">
+                Secure Shopping
+              </Typography>
             </Box>
+            <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
+              SSL Encrypted
+            </Typography>
           </Grid>
 
-          {/* Customer Service */}
-          <Grid item xs={6} sm={6} md={2}>
-            <Typography variant="h6" gutterBottom>
-              Customer Service
-            </Typography>
-            <Box>
-              <Link href="#" color="inherit" underline="hover" display="block">
-                FAQs
-              </Link>
-              <Link href="#" color="inherit" underline="hover" display="block">
-                Shipping
-              </Link>
-              <Link href="#" color="inherit" underline="hover" display="block">
-                Returns
-              </Link>
-              <Link href="#" color="inherit" underline="hover" display="block">
-                Privacy Policy
-              </Link>
+          <Grid item xs={12} md={4} textAlign="center">
+            <Box display="flex" justifyContent="center" alignItems="center" mb={1}>
+              <Truck size={18} color={theme.palette.primary.gold} />
+              <Typography sx={{ ml: 1, color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily }} variant="body2">
+                Free Shipping
+              </Typography>
             </Box>
+            <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
+              On orders over $200
+            </Typography>
           </Grid>
 
-          {/* Contact */}
-          <Grid item xs={12} sm={12} md={5}>
-            <Typography variant="h6" gutterBottom>
-              Contact Us
+          <Grid item xs={12} md={4} textAlign="center">
+            <Box display="flex" justifyContent="center" alignItems="center" mb={1}>
+              <Award size={18} color={theme.palette.primary.gold} />
+              <Typography sx={{ ml: 1, color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily }} variant="body2">
+                Quality Guarantee
+              </Typography>
+            </Box>
+            <Typography variant="caption" sx={{ color: theme.palette.text.main, fontFamily: theme.palette.typography.fontFamily }}>
+              30-day return policy
             </Typography>
-            <Box display="flex" alignItems="center" mb={1}>
-              <Phone sx={{ mr: 1 }} /> 
-              <Typography variant="body2">+91 98765 43210</Typography>
-            </Box>
-            <Box display="flex" alignItems="center">
-              <Email sx={{ mr: 1 }} /> 
-              <Typography variant="body2">support@example.com</Typography>
-            </Box>
           </Grid>
         </Grid>
+      </Box> */}
 
-        <Divider sx={{ my: 3, backgroundColor: "rgba(255,255,255,0.3)" }} />
+        {/* <Divider sx={{ bgcolor: theme.palette.divider, mb: 3 }} /> */}
 
-        {/* Bottom Section */}
-        <Box textAlign="center">
-          <Typography variant="body2" sx={{ opacity: 0.7 }}>
-            © {new Date().getFullYear()} Example.com | All Rights Reserved
+        {/* Bottom Bar */}
+        <Box
+          sx={{
+            maxWidth: "xl",
+            mx: "auto",
+            px: { xs: 3, md: 6 },
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            justifyContent: "space-between",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          <Typography variant="caption" sx={{ color: theme.palette.primary.lightmain, fontFamily: theme.palette.typography.fontFamily }}>
+            © {new Date().getFullYear()} Lzebra. All rights reserved.
           </Typography>
+          <Box sx={{ display: "flex", gap: 3 }}>
+            {["Privacy Policy", "Terms of Service", "Cookie Policy", "Accessibility"].map(
+              (item, i) => (
+                <Typography
+                  key={i}
+                  component="a"
+                  href="#"
+                  variant="caption"
+                  sx={{
+                    color: theme.palette.primary.lightmain,
+                    fontFamily: theme.palette.typography.fontFamily,
+                    textDecoration: "none",
+                    "&:hover": { color: theme.palette.primary.main },
+                  }}
+                >
+                  {item}
+                </Typography>
+              )
+            )}
+          </Box>
         </Box>
+
       </Container>
     </Box>
   );
-};
-
-export default Footer;
+}

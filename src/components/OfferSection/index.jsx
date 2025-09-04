@@ -57,13 +57,13 @@ const OfferSection = () => {
             justifyContent: "space-between",
             textAlign: { xs: "center", md: "left" },
             px: { xs: 0, sm: 4, md: 10 },
-            py: { xs: 8, md: 10 },
+            py: { xs: 8, md: 8 },
             fontFamily: theme.palette.typography.fontFamily,
             // overflow: "hidden",
           }}
         >
           {/* Background Animated Shapes */}
-          <Box
+          {/* <Box
             sx={{
               borderRadius: "40px",
               position: "absolute",
@@ -92,7 +92,7 @@ const OfferSection = () => {
               opacity: 0.3,
               animation: `${rotateInfinite} 20s linear infinite`,
             }}
-          />
+          /> */}
 
           {/* Effects */}
           <Snowfall color={`${theme.palette.primary.main}`} snowflakeCount={20} />

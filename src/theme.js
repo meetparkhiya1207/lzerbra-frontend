@@ -6,7 +6,7 @@ const theme = createTheme({
     primary: {
       main: "#5A3A1B", // Indigo
       maindark: "#b39f7dff", // Indigo
-      lightmain: "#5b4d3696"
+      lightmain: "#705f44cb"
     },
     secondary: {
       main: "#C4A484", // Purple

@@ -50,7 +50,6 @@ export default function ProductDetailsPage() {
         "/images/Product2.jpg",
         "/images/Product3.jpg",
         "/images/Product4.jpg",
-        "/images/Product5.jpg",
       ],
       colors: [
         { key: "beige", label: "Beige", hex: "#f5f5dc", border: true },

@@ -8,13 +8,16 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Provider } from 'react-redux'
 import { store } from './store.js'
+import { HelmetProvider } from 'react-helmet-async'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
-      <Provider store={store}>
-        <App />
-      </Provider>
+      <HelmetProvider>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </HelmetProvider>
     </ThemeProvider>
   </StrictMode>,
 )

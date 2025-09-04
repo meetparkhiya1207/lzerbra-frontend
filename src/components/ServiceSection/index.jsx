@@ -111,7 +111,7 @@ export default function ServiceSection() {
                                     variant="body2"
                                     sx={{
                                         fontFamily: theme.palette.typography.fontFamily,
-                                        color: theme.palette.text.secondary,
+                                        color: theme.palette.primary.lightmain,
                                         fontSize: { xs: "1rem", },
                                     }}
                                 >
