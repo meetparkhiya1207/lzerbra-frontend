@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Grid,
   Card,
@@ -9,37 +9,20 @@ import {
   useTheme,
   Container,
   Pagination,
+  CircularProgress,
 } from "@mui/material";
 import { ProductFilters } from "./product-filters";
 import { ProductSort } from "./product-sort";
 import { ProductItem } from "./product-item";
-import { products } from "../../Data/product";
+// import { products } from "../../Data/product";
 import CommonHeading from "../../comman/CommonHeading";
+import { getProducts } from "../../api/productApi";
 
 const PRICE_OPTIONS = [
   { value: '250', label: 'Below ₹250' },
   { value: '250-750', label: 'Between ₹250 - ₹750' },
   { value: '750', label: 'Above ₹750' },
 ];
-
-
-const getUniqueValues = (array, key) => {
-  return [...new Set(array.map((item) => item[key]))];
-};
-
-// Generate Options
-const CATEGORY_OPTIONS = getUniqueValues(products, "category").map((cat) => ({
-  value: cat,
-  label: cat,
-}));
-
-const SUBCATEGORY_OPTIONS = getUniqueValues(products, "subcategory").map(
-  (sub) => ({
-    value: sub,
-    label: sub,
-  })
-);
-
 const defaultFilters = {
   price: "",
   category: [],
@@ -49,41 +32,59 @@ const defaultFilters = {
 const PRODUCTS_PER_PAGE = 8;
 
 const ProductListing = () => {
-  const theme = useTheme();
-  const [sortBy, setSortBy] = useState('featured');
+ const theme = useTheme();
 
+  // ✅ Hooks inside component
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [sortBy, setSortBy] = useState("featured");
   const [openFilter, setOpenFilter] = useState(false);
-
   const [filters, setFilters] = useState(defaultFilters);
-
   const [page, setPage] = useState(1);
 
-  const handleOpenFilter = useCallback(() => {
-    setOpenFilter(true);
+  // ✅ Fetch products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const res = await getProducts();
+        setProducts(res);
+      } catch (err) {
+        console.error("❌ Failed to fetch products", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
   }, []);
 
-  const handleCloseFilter = useCallback(() => {
-    setOpenFilter(false);
-  }, []);
+  const getUniqueValues = (array, key) => {
+    return [...new Set(array.map((item) => item[key]))];
+  };
 
-  const handleSort = useCallback((newSort) => {
-    setSortBy(newSort);
-  }, []);
+  const CATEGORY_OPTIONS = getUniqueValues(products, "category").map((cat) => ({
+    value: cat,
+    label: cat,
+  }));
 
-  const handleSetFilters = useCallback((updateState) => {
-    console.log("updateState", updateState);
+  const SUBCATEGORY_OPTIONS = getUniqueValues(products, "subcategory").map(
+    (sub) => ({
+      value: sub,
+      label: sub,
+    })
+  );
 
+  const handleOpenFilter = () => setOpenFilter(true);
+  const handleCloseFilter = () => setOpenFilter(false);
+  const handleSort = (newSort) => setSortBy(newSort);
+  const handleSetFilters = (updateState) =>
     setFilters((prevValue) => ({ ...prevValue, ...updateState }));
-  }, []);
 
   const canReset = Object.keys(filters).some(
     (key) => filters[key] !== defaultFilters[key]
   );
 
-  const handlePageChange = (event, value) => {
-    setPage(value);
-  };
-
+  const handlePageChange = (event, value) => setPage(value);
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
@@ -91,47 +92,36 @@ const ProductListing = () => {
       const hasSubcategory = filters.subcategory.length > 0;
       const hasPrice = !!filters.price;
 
-      const matchCategory = hasCategory ? filters.category.includes(p.category) : false;
-      const matchSubcategory = hasSubcategory ? filters.subcategory.includes(p.subcategory) : false;
+      const matchCategory = hasCategory
+        ? filters.category.includes(p.category)
+        : false;
+      const matchSubcategory = hasSubcategory
+        ? filters.subcategory.includes(p.subcategory)
+        : false;
 
-      // Price logic
       let matchPrice = true;
       if (hasPrice && filters.price.includes("-")) {
         const [min, max] = filters.price.split("-").map(Number);
         matchPrice = p.price >= min && p.price <= max;
       } else {
-        if (filters.price === "250") {
-          matchPrice = p.price < 250;
-        } else if (filters.price === "750") {
-          matchPrice = p.price > 750;
-        }
+        if (filters.price === "250") matchPrice = p.price < 250;
+        else if (filters.price === "750") matchPrice = p.price > 750;
       }
 
-      // CATEGORY + SUBCATEGORY Logic
-      if (hasCategory && hasSubcategory) {
+      if (hasCategory && hasSubcategory)
         return (matchCategory || matchSubcategory) && matchPrice;
-      }
+      if (hasCategory && !hasSubcategory) return matchCategory && matchPrice;
+      if (!hasCategory && hasSubcategory) return matchSubcategory && matchPrice;
 
-      if (hasCategory && !hasSubcategory) {
-        return matchCategory && matchPrice;
-      }
-
-      if (!hasCategory && hasSubcategory) {
-        return matchSubcategory && matchPrice;
-      }
-
-      // koi filter na hoy to price match check thase
       return matchPrice;
     });
-  }, [filters]);
-
-
-  console.log("filteredProducts", filteredProducts);
+  }, [products, filters]);
 
   const startIdx = (page - 1) * PRODUCTS_PER_PAGE;
   const endIdx = startIdx + PRODUCTS_PER_PAGE;
   const paginatedProducts = filteredProducts.slice(startIdx, endIdx);
   const pageCount = Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE);
+
 
   return (
     <>
@@ -200,15 +190,22 @@ const ProductListing = () => {
             </Box>
           </Box>
 
-          <Grid container spacing={3}>
-            {paginatedProducts.map((product) => (
-              <Grid key={product?.id} item size={{ xs: 6, sm: 6, md: 3 }}>
-                <ProductItem product={product} />
-              </Grid>
-            ))}
-          </Grid>
+          {loading ? (
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
+              <CircularProgress />
+            </Box>
+          ) : (
 
-          <Pagination
+            <Grid container spacing={3}>
+              {paginatedProducts.map((product) => (
+                <Grid key={product?.id} item size={{ xs: 6, sm: 6, md: 3 }}>
+                  <ProductItem product={product} />
+                </Grid>
+              ))}
+            </Grid>
+          )}
+
+          < Pagination
             count={pageCount}
             page={page}
             onChange={handlePageChange}

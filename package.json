@@ -15,6 +15,7 @@
     "@mui/icons-material": "^7.3.1",
     "@mui/material": "^7.3.1",
     "@reduxjs/toolkit": "^2.8.2",
+    "axios": "^1.11.0",
     "canvas-confetti": "^1.9.3",
     "lucide-react": "^0.542.0",
     "react": "^19.1.1",

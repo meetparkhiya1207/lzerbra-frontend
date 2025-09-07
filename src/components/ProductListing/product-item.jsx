@@ -15,6 +15,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import confetti from 'canvas-confetti';
 import { useNavigate } from 'react-router-dom';
+import ProductDetailsPage from '../ProductDetails';
 
 // ----------------------------------------------------------------------
 
@@ -24,10 +25,22 @@ export function ProductItem({ product }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [liked, setLiked] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openProductDetails = (product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
+  const closeProductDetails = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
+  };
 
   const discountPercentage =
-    product.price && product.discountprice
-      ? Math.round(((product.price - product.discountprice) / product.price) * 100)
+    product.price && product.discountPrice
+      ? Math.round(((product.price - product.discountPrice) / product.price) * 100)
       : 0;
 
   // Discount label
@@ -57,7 +70,7 @@ export function ProductItem({ product }) {
     <Chip
       icon={<VisibilityIcon sx={{ fontSize: { xs: 14, sm: 18 }, color: theme.palette.primary.main }} />}
       size="small"
-      onClick={() => navigate(`/product-details/${product.id}`)}
+      onClick={() => openProductDetails(product)}
       sx={{
         position: "absolute",
         top: 12,
@@ -118,13 +131,14 @@ export function ProductItem({ product }) {
       }}
     />
   );
+  console.log("productproduct", product);
 
   // Product Image
   const renderImg = (
     <Box
       component="img"
       alt={product.productname}
-      src={product.image}
+      src={`${process.env.REACT_APP_BACKEND_API}/uploads/${product?.images[0]?.filename}`}
       sx={{
         top: 0,
         width: 1,
@@ -154,26 +168,27 @@ export function ProductItem({ product }) {
         </Typography>
       )}
       <span style={{ color: theme.palette.primary.main, fontWeight: 600, fontSize: isMobile ? '1.2rem' : '1.1rem', fontFamily: theme.typography.fontFamily }}>
-        ₹{product.discountprice}
+        ₹{product.discountPrice}
       </span>
     </Typography>
   );
 
   // Stock status
   const renderStock = (
-    <Chip
-      label={product.instock ? "In Stock" : "Out of Stock"}
-      size="small"
-      sx={{
-        bgcolor: product.instock ? "#C8E6C9" : "#FFCDD2",
-        color: product.instock ? "#2E7D32" : "#C62828",
-        fontWeight: 600,
-        fontSize: 12,
-        borderRadius: "6px",
-        height: 22,
-        fontFamily: theme.typography.fontFamily,
-      }}
-    />
+    !isMobile ?
+      <Chip
+        label={product.instock ? "In Stock" : "Out of Stock"}
+        size="small"
+        sx={{
+          bgcolor: product.instock ? "#C8E6C9" : "#FFCDD2",
+          color: product.instock ? "#2E7D32" : "#C62828",
+          fontWeight: 600,
+          fontSize: 12,
+          borderRadius: "6px",
+          height: 22,
+          fontFamily: theme.typography.fontFamily,
+        }}
+      /> : ''
   );
 
   // Rating
@@ -187,87 +202,99 @@ export function ProductItem({ product }) {
   );
 
   return (
-    <Card
-      sx={{
-        transition: "0.3s",
-        "&:hover": {
-          boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
-          transform: "translateY(-4px)",
-        },
-      }}
-    >
-      <Box sx={{ pt: '100%', position: 'relative' }}>
-        {renderView}
-        {renderHeart}
-        {renderDiscount}
-        {renderImg}
-      </Box>
-
-      <Stack spacing={1.5} sx={{ px: 2, py:2 }}>
-        <Link
-          color="inherit"
-          variant="subtitle2"
-          noWrap
-          onClick={() => navigate(`/product-details/${product.id}`)}
-          sx={{
-            fontFamily: theme.typography.fontFamily,
-            fontWeight: 600,
-            color: theme.palette.primary.main,
-            fontSize: { xs: "1.2rem", md: "1.2rem" },
-            textDecoration: 'none',
-            cursor: "pointer",
-          }}
-        >
-          {product.productname}
-        </Link>
-
-        {/* Stock + Price row */}
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          {renderPrice}
-
+    <>
+      <Card
+        sx={{
+          transition: "0.3s",
+          "&:hover": {
+            boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
+            transform: "translateY(-4px)",
+          },
+        }}
+      >
+        <Box sx={{ pt: '100%', position: 'relative' }}>
+          {renderView}
+          {renderHeart}
+          {renderDiscount}
+          {renderImg}
         </Box>
 
-        {/* Rating row */}
-        {renderRating}
+        <Stack spacing={1.5} sx={{ px: 2, py: 2 }}>
+          <Link
+            color="inherit"
+            variant="subtitle2"
+            noWrap
+            onClick={() => navigate(`/product-details/${product.id}`)}
+            sx={{
+              fontFamily: theme.typography.fontFamily,
+              fontWeight: 600,
+              color: theme.palette.primary.main,
+              fontSize: { xs: "1.2rem", md: "1.2rem" },
+              textDecoration: 'none',
+              cursor: "pointer",
+            }}
+          >
+            {product.productname}
+          </Link>
 
-        {/* Buttons (only desktop) */}
-        {!isMobile && (
-          <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-            <Button
-              variant="contained"
-              sx={{
-                px: 2,
-                py: 1,
-                bgcolor: theme.palette.primary.main,
-                color: theme.palette.background.paper,
-                borderRadius: "12px",
-                fontWeight: 600,
-                fontSize: "0.9rem",
-                textTransform: "none",
-                fontFamily: theme.typography.fontFamily,
-              }}
-            >
-              Buy Now
-            </Button>
-            <Button
-              onClick={() => { dispatch({ type: 'cart/addToCart', payload: product }); }}
-              variant="outlined"
-              sx={{
-                px: 3,
-                py: 1,
-                color: theme.palette.primary.main,
-                borderRadius: "12px",
-                fontWeight: 600,
-                fontSize: "0.9rem",
-                textTransform: "none",
-                fontFamily: theme.typography.fontFamily,
-              }}
-            >
-              Add to Cart
-            </Button>
-          </Stack>
-        )}
-      </Stack>
-    </Card>
+          {/* Stock + Price row */}
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            {renderPrice}
+            {renderStock}
+          </Box>
+
+          {/* Rating row */}
+          {renderRating}
+
+          {/* Buttons (only desktop) */}
+          {!isMobile && (
+            <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
+              <Button
+                variant="contained"
+                sx={{
+                  px: 2,
+                  py: 1,
+                  bgcolor: theme.palette.primary.main,
+                  color: theme.palette.background.paper,
+                  borderRadius: "12px",
+                  fontWeight: 600,
+                  fontSize: "0.9rem",
+                  textTransform: "none",
+                  fontFamily: theme.typography.fontFamily,
+                }}
+              >
+                Buy Now
+              </Button>
+              <Button
+                onClick={() => { dispatch({ type: 'cart/addToCart', payload: product }); }}
+                variant="outlined"
+                sx={{
+                  px: 3,
+                  py: 1,
+                  color: theme.palette.primary.main,
+                  borderRadius: "12px",
+                  fontWeight: 600,
+                  fontSize: "0.9rem",
+                  textTransform: "none",
+                  fontFamily: theme.typography.fontFamily,
+                }}
+              >
+                Add to Cart
+              </Button>
+            </Stack>
+          )}
+        </Stack>
+      </Card>
+
+
+      {selectedProduct && (
+        <ProductDetailsPage
+          product={selectedProduct}
+          isOpen={isModalOpen}
+          onClose={closeProductDetails}
+        />
+      )}
+    </>
+
   );
 }

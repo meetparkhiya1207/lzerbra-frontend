@@ -30,7 +30,7 @@ const [loginOpen, setLoginOpen] = useState(true);
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/product-details" element={<ProductDetailsPage />} />
+          {/* <Route path="/product-details" element={<ProductDetailsPage />} /> */}
         </Routes>
         <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} onSwitch={switchToRegister} />
         <RegisterModal open={registerOpen} onClose={() => setRegisterOpen(false)} onSwitch={switchToLogin} />
