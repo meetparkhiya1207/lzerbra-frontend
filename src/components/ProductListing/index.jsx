@@ -48,6 +48,8 @@ const ProductListing = () => {
       try {
         setLoading(true);
         const res = await getProducts();
+        console.log("resss",res);
+        
         setProducts(res);
       } catch (err) {
         console.error("❌ Failed to fetch products", err);
