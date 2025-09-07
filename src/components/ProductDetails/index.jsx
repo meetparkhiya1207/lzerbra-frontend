@@ -43,7 +43,7 @@ export default function ProductDetailsPage({product, isOpen, onClose}) {
     <Dialog
       open={isOpen}
       onClose={onClose}
-      maxWidth="xl"
+      maxWidth="md"
       fullWidth
       PaperProps={{
         sx: {

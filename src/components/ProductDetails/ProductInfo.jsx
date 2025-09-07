@@ -11,7 +11,7 @@ export const ProductInfo = ({ product }) => {
                 <Typography variant="body2" color={theme.palette.primary.main} gutterBottom sx={{ fontFamily: theme.palette.typography.fontFamily }}>
                     Name :
                 </Typography>
-                <Typography variant="h5" fontWeight={600} color={theme.palette.primary.main}>
+                <Typography variant="h5" fontWeight={600} color={theme.palette.primary.main} sx={{ fontFamily: theme.palette.typography.fontFamily }}>
                     {product?.productName}
                 </Typography>
             </Box>
@@ -22,7 +22,7 @@ export const ProductInfo = ({ product }) => {
                     <Typography variant="body2" color={theme.palette.primary.main} gutterBottom sx={{ fontFamily: theme.palette.typography.fontFamily }} >
                         Category :
                     </Typography>
-                    <Typography variant="body1" color={theme.palette.primary.lightmain}>
+                    <Typography variant="body1" color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>
                         {product?.category}
                     </Typography>
                 </Box>
@@ -30,7 +30,7 @@ export const ProductInfo = ({ product }) => {
                     <Typography variant="body2" color={theme.palette.primary.main} gutterBottom sx={{ fontFamily: theme.palette.typography.fontFamily }}>
                         Sub Category :
                     </Typography>
-                    <Typography variant="body1" color={theme.palette.primary.lightmain}>
+                    <Typography variant="body1" color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>
                         {product?.subCategory}
                     </Typography>
                 </Box>
@@ -49,7 +49,7 @@ export const ProductInfo = ({ product }) => {
                         <Typography variant="body2" color={theme.palette.primary.main} gutterBottom sx={{ fontFamily: theme.palette.typography.fontFamily }}>
                             Description :
                         </Typography>
-                        <Typography variant="body1" color={theme.palette.primary.lightmain} sx={{ lineHeight: 1.7 }}>
+                        <Typography variant="body1" color={theme.palette.primary.lightmain} sx={{ lineHeight: 1.7, fontFamily: theme.palette.typography.fontFamily }}>
                             {product?.description}
                         </Typography>
                     </Box>
