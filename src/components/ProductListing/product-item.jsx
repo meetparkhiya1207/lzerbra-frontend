@@ -138,7 +138,7 @@ export function ProductItem({ product }) {
     <Box
       component="img"
       alt={product.productname}
-      src={`${import.meta.env.REACT_APP_BACKEND_API}/uploads/${product?.images[0]?.filename}`}
+      src={`${import.meta.env.VITE_BACKEND_API}/uploads/${product?.images[0]?.filename}`}
       sx={{
         top: 0,
         width: 1,

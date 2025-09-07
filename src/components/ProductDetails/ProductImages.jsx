@@ -26,7 +26,7 @@ export const ProductImages = ({ images, productName }) => {
 
   const fullImages = images.map((img) => ({
     ...img,
-    filename: `${import.meta.env.REACT_APP_BACKEND_API}/uploads/${img.filename}`,
+    filename: `${import.meta.env.VITE_BACKEND_API}/uploads/${img.filename}`,
   }));
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
