@@ -29,6 +29,9 @@ export const ProductImages = ({ images, productName }) => {
     filename: `${import.meta.env.VITE_BACKEND_API}/uploads/${img.filename}`,
   }));
 
+  console.log("fullImagesfullImages",fullImages);
+  
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const nextImage = () => setCurrentImageIndex((prev) => (prev + 1) % fullImages.length);
@@ -46,9 +49,6 @@ export const ProductImages = ({ images, productName }) => {
             image={fullImages[currentImageIndex].filename}
             alt={`${productName} - Image ${currentImageIndex + 1}`}
             sx={{ objectFit: "cover", bgcolor: "grey.100" }}
-            onError={(e) => {
-              e.target.src = "/placeholder.svg";
-            }}
           />
         </Card>
 
@@ -108,9 +108,6 @@ export const ProductImages = ({ images, productName }) => {
                 image={image.filename}
                 alt={`${productName} thumbnail ${index + 1}`}
                 sx={{ objectFit: "cover" }}
-                onError={(e) => {
-                  e.target.src = "/placeholder.svg";
-                }}
               />
             </Card>
           ))}
