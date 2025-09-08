@@ -146,6 +146,7 @@ export function ProductItem({ product }) {
         objectFit: 'cover',
         position: 'absolute',
       }}
+      onClick={() => openProductDetails(product)}
     />
   );
 
@@ -157,7 +158,7 @@ export function ProductItem({ product }) {
           component="span"
           variant="body2"
           sx={{
-            color: theme.palette.grey[600],
+            color: theme.palette.primary.lightmain,
             textDecoration: 'line-through',
             mr: 1.2,
             fontFamily: theme.typography.fontFamily,
@@ -167,7 +168,7 @@ export function ProductItem({ product }) {
           ₹{product.price}
         </Typography>
       )}
-      <span style={{ color: theme.palette.primary.main, fontWeight: 600, fontSize: isMobile ? '1.2rem' : '1.1rem', fontFamily: theme.typography.fontFamily }}>
+      <span style={{ color: theme.palette.primary.main, fontWeight: 600, fontSize: isMobile ? '1.2rem' : '1.5rem', fontFamily: theme.typography.fontFamily }}>
         ₹{product.discountPrice}
       </span>
     </Typography>
@@ -224,17 +225,18 @@ export function ProductItem({ product }) {
             color="inherit"
             variant="subtitle2"
             noWrap
-            onClick={() => navigate(`/product-details/${product.id}`)}
+                  onClick={() => openProductDetails(product)}
+
             sx={{
               fontFamily: theme.typography.fontFamily,
               fontWeight: 600,
               color: theme.palette.primary.main,
-              fontSize: { xs: "1.2rem", md: "1.2rem" },
+              fontSize: { xs: "1.2rem", md: "1.4rem" },
               textDecoration: 'none',
               cursor: "pointer",
             }}
           >
-            {product.productname}
+            {product.productName}
           </Link>
 
           {/* Stock + Price row */}
@@ -247,7 +249,7 @@ export function ProductItem({ product }) {
           {renderRating}
 
           {/* Buttons (only desktop) */}
-          {!isMobile && (
+          {/* {!isMobile && (
             <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
               <Button
                 variant="contained"
@@ -282,7 +284,7 @@ export function ProductItem({ product }) {
                 Add to Cart
               </Button>
             </Stack>
-          )}
+          )} */}
         </Stack>
       </Card>
 

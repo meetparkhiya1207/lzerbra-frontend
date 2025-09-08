@@ -11,6 +11,7 @@ import {
   Link,
 } from "@mui/material";
 import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-toastify";
 
 export default function LoginModal({ open, onClose, onSwitch }) {
   const theme = useTheme();
@@ -29,7 +30,7 @@ export default function LoginModal({ open, onClose, onSwitch }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     login(formData.username, formData.password, () => {
-        toast("Login successful!");
+      toast("Login successful!");
       onClose();
     });
   };
