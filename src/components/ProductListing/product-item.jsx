@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import confetti from 'canvas-confetti';
 import { useNavigate } from 'react-router-dom';
 import ProductDetailsPage from '../ProductDetails';
+import ProductDetailsComponents from '../ProductDetailsPage';
 
 // ----------------------------------------------------------------------
 
@@ -70,7 +71,8 @@ export function ProductItem({ product }) {
     <Chip
       icon={<VisibilityIcon sx={{ fontSize: { xs: 14, sm: 18 }, color: theme.palette.primary.main }} />}
       size="small"
-      onClick={() => openProductDetails(product)}
+      onClick={() => <ProductDetailsComponents/>}
+      // onClick={() => openProductDetails(product)}
       sx={{
         position: "absolute",
         top: 12,

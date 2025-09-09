@@ -8,6 +8,7 @@ import ServiceSection from '../../components/ServiceSection'
 import Footer from '../../comman/Footer'
 import Testimonials from '../../components/Testimonials'
 import CategorySlider from '../../components/CategorySlider'
+import ProductDetailsComponents from '../../components/ProductDetailsPage'
 
 const Home = () => {
   return (
@@ -17,6 +18,7 @@ const Home = () => {
       <OfferSection/>
       <CategorySlider/>
       <ProductListing/>
+      {/* <ProductDetailsComponents/> */}
       {/* <ProductDetails/> */}
       <ServiceSection/>
       <Testimonials/>

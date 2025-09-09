@@ -37,7 +37,6 @@ export default function ProductDetailsPage({product, isOpen, onClose}) {
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   }
-  console.log("isOpenisOpen", isOpen);
 
   return (
     <Dialog

@@ -32,7 +32,7 @@ const defaultFilters = {
 const PRODUCTS_PER_PAGE = 8;
 
 const ProductListing = () => {
- const theme = useTheme();
+  const theme = useTheme();
 
   // ✅ Hooks inside component
   const [products, setProducts] = useState([]);
@@ -48,8 +48,8 @@ const ProductListing = () => {
       try {
         setLoading(true);
         const res = await getProducts();
-        console.log("resss",res);
-        
+        console.log("resss", res);
+
         setProducts(res);
       } catch (err) {
         console.error("❌ Failed to fetch products", err);
@@ -156,7 +156,7 @@ const ProductListing = () => {
               justifyContent: 'flex-end',
             }}
           >
-            <Box
+            {/* <Box
               sx={{
                 my: 1,
                 gap: 1,
@@ -189,15 +189,37 @@ const ProductListing = () => {
                   { value: 'priceAsc', label: 'Price: Low-High' },
                 ]}
               />
-            </Box>
+            </Box> */}
           </Box>
 
           {loading ? (
             <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
               <CircularProgress />
             </Box>
+          ) : paginatedProducts.length === 0 ? (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                mt: 5,
+              }}
+            >
+              <Box
+                component="img"
+                src="/images/package.png"
+                alt="No Products"
+                sx={{ width: { xs: 100, sm: 200 }, height: "auto", mb: 2, opacity: 0.7 }}
+              />
+              <Typography
+                variant="h6"
+                sx={{ color: theme.palette.primary.lightmain, textAlign: "center", fontFamily: theme.palette.typography.fontFamily, }}
+              >
+                No Products Found
+              </Typography>
+            </Box>
           ) : (
-
             <Grid container spacing={3}>
               {paginatedProducts.map((product) => (
                 <Grid key={product?.id} item size={{ xs: 6, sm: 6, md: 3 }}>
@@ -206,6 +228,7 @@ const ProductListing = () => {
               ))}
             </Grid>
           )}
+
 
           < Pagination
             count={pageCount}
