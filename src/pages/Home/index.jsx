@@ -13,7 +13,6 @@ import ProductDetailsComponents from '../../components/ProductDetailsPage'
 const Home = () => {
   return (
     <div>
-      <Header/>
       <HeroSection/>
       <OfferSection/>
       <CategorySlider/>
@@ -22,7 +21,6 @@ const Home = () => {
       {/* <ProductDetails/> */}
       <ServiceSection/>
       <Testimonials/>
-      <Footer/>
     </div>
   )
 }

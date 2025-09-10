@@ -59,7 +59,7 @@ export default function ProductDetailsPage({product, isOpen, onClose}) {
           pb: 1,
         }}
       >
-        <Typography variant="h5" component="div" fontWeight={600} sx={{fontFamily: theme.palette.typography.fontFamily}}>
+        <Typography variant="h5" component="div" fontWeight={600} sx={{ fontFamily: theme.palette.typography.fontFamily }}>
           Product Details
         </Typography>
         <IconButton onClick={onClose} size="small">
@@ -75,8 +75,8 @@ export default function ProductDetailsPage({product, isOpen, onClose}) {
             aria-label="product details tabs"
             variant="fullWidth"
           >
-            <Tab label="Details" id="product-tab-0" aria-controls="product-tabpanel-0" sx={{fontFamily: theme.palette.typography.fontFamily}}/>
-            <Tab label="Images" id="product-tab-1" aria-controls="product-tabpanel-1" sx={{fontFamily: theme.palette.typography.fontFamily}}/>
+            <Tab label="Details" id="product-tab-0" aria-controls="product-tabpanel-0" sx={{ fontFamily: theme.palette.typography.fontFamily }} />
+            <Tab label="Images" id="product-tab-1" aria-controls="product-tabpanel-1" sx={{ fontFamily: theme.palette.typography.fontFamily }} />
           </Tabs>
         </Box>
 
@@ -92,7 +92,7 @@ export default function ProductDetailsPage({product, isOpen, onClose}) {
 
       <DialogActions sx={{ px: 3, pb: 3, gap: 1 }}>
         <Button onClick={onClose} variant="outlined"
-          sx={{ border: "1px solid #5A3A1B", color: "#5A3A1B" , fontFamily: theme.palette.typography.fontFamily}}>
+          sx={{ border: "1px solid #5A3A1B", color: "#5A3A1B", fontFamily: theme.palette.typography.fontFamily }}>
           Close
         </Button>
         <Button variant="contained" sx={{ bgcolor: "#5A3A1B", color: "#fff", fontFamily: theme.palette.typography.fontFamily }}>

@@ -17,6 +17,8 @@ import { ProductItem } from "./product-item";
 // import { products } from "../../Data/product";
 import CommonHeading from "../../comman/CommonHeading";
 import { getProducts } from "../../api/productApi";
+import ProductCard from "../../comman/ProductCard";
+import { useDispatch } from "react-redux";
 
 const PRICE_OPTIONS = [
   { value: '250', label: 'Below ₹250' },
@@ -33,6 +35,7 @@ const PRODUCTS_PER_PAGE = 8;
 
 const ProductListing = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
 
   // ✅ Hooks inside component
   const [products, setProducts] = useState([]);
@@ -48,7 +51,7 @@ const ProductListing = () => {
       try {
         setLoading(true);
         const res = await getProducts();
-        console.log("resss", res);
+        // dispatch(insertAllProductList(res))
 
         setProducts(res);
       } catch (err) {
@@ -63,18 +66,6 @@ const ProductListing = () => {
   const getUniqueValues = (array, key) => {
     return [...new Set(array.map((item) => item[key]))];
   };
-
-  const CATEGORY_OPTIONS = getUniqueValues(products, "category").map((cat) => ({
-    value: cat,
-    label: cat,
-  }));
-
-  const SUBCATEGORY_OPTIONS = getUniqueValues(products, "subcategory").map(
-    (sub) => ({
-      value: sub,
-      label: sub,
-    })
-  );
 
   const handleOpenFilter = () => setOpenFilter(true);
   const handleCloseFilter = () => setOpenFilter(false);
@@ -223,7 +214,10 @@ const ProductListing = () => {
             <Grid container spacing={3}>
               {paginatedProducts.map((product) => (
                 <Grid key={product?.id} item size={{ xs: 6, sm: 6, md: 3 }}>
-                  <ProductItem product={product} />
+                  <ProductCard
+                    product={product}
+                  />
+
                 </Grid>
               ))}
             </Grid>

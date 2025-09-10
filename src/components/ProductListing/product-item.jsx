@@ -29,9 +29,9 @@ export function ProductItem({ product }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-console.log("run::::>",selectedProduct);
+  console.log("run::::>", selectedProduct);
   const openProductDetails = (product) => {
-    
+
     setSelectedProduct(product);
     setIsModalOpen(true);
   };
@@ -74,7 +74,7 @@ console.log("run::::>",selectedProduct);
       icon={<VisibilityIcon sx={{ fontSize: { xs: 14, sm: 18 }, color: theme.palette.primary.main }} />}
       size="small"
       // onClick={() => <ProductDetailsComponents/>}
-      onClick={() => navigate("product-details")}
+      onClick={() => navigate(`/product-details/${product.id}`)}
       sx={{
         position: "absolute",
         top: 12,
@@ -135,7 +135,7 @@ console.log("run::::>",selectedProduct);
       }}
     />
   );
-  console.log("productproduct", product);
+  console.log("productproduct", import.meta.env.VITE_BACKEND_API);
 
   // Product Image
   const renderImg = (
@@ -229,7 +229,7 @@ console.log("run::::>",selectedProduct);
             color="inherit"
             variant="subtitle2"
             noWrap
-                  onClick={() => openProductDetails(product)}
+            onClick={() => openProductDetails(product)}
 
             sx={{
               fontFamily: theme.typography.fontFamily,
@@ -299,7 +299,7 @@ console.log("run::::>",selectedProduct);
         //   isOpen={isModalOpen}
         //   onClose={closeProductDetails}
         // />
-        <ProductDetailsComponents/>
+        <ProductDetailsComponents />
       )}
     </>
 

@@ -30,8 +30,15 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import DeleteIcon from "@mui/icons-material/Delete"
 import { useSelector } from "react-redux";
 import { useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 
-const menuItems = ["Home", "About", "Contact", "Shop", "Blog"];
+const menuItems = [
+    { label: "Home", path: "/" },
+    { label: "About", path: "/about" },
+    { label: "Contact", path: "/contact" },
+    { label: "Shop", path: "/shop" },
+    { label: "Blog", path: "/blog" },
+];
 
 const likedProductsExample = [
     { id: 1, name: "Striped Line Cotton Fabric", price: 1200, discountprice: 900, image: "/images/Product1.jpg" },
@@ -43,6 +50,7 @@ const likedProductsExample = [
 export default function Header() {
     const theme = useTheme();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [favProduct, setFavProduct] = useState(null);
     const [cartProductPopover, setCartProductPopover] = useState(null);
@@ -109,7 +117,7 @@ export default function Header() {
                         <Box sx={{ display: "flex", alignItems: "center" }}>
                             <Box
                                 component="img"
-                                src="images/LZEBRA_LOGO.png"
+                                src="/images/LZEBRA_LOGO.png"
                                 alt="Logo"
                                 sx={{
                                     objectFit: "contain",
@@ -133,6 +141,7 @@ export default function Header() {
                                 <Typography
                                     key={index}
                                     variant="body2"
+                                    onClick={() => navigate(item.path)}
                                     sx={{
                                         cursor: "pointer",
                                         position: "relative",
@@ -155,7 +164,7 @@ export default function Header() {
                                         },
                                     }}
                                 >
-                                    {item}
+                                    {item?.label}
                                 </Typography>
                             ))}
                         </Box>

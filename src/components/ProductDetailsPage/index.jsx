@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Container,
   Typography,
@@ -36,6 +36,8 @@ import fabricNavyWool from '../../../public/images/Product1.jpg';
 import fabricCharcoalCotton from '../../../public/images/Product2.jpg';
 import fabricBrownTweed from '../../../public/images/Product3.jpg';
 import fabricPinstripe from '../../../public/images/Product4.jpg';
+import { useParams } from 'react-router-dom';
+import { getProducts } from '../../api/productApi';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -47,19 +49,44 @@ function TabPanel(props) {
 }
 
 const ProductDetailsComponents = () => {
-  console.log("runnnnnnnn");
-  
-    const theme = useTheme();
+  const { id } = useParams();
+  console.log("runnnnnnnn", id);
+
+  const theme = useTheme();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState('Medium');
   const [tabValue, setTabValue] = useState(0);
+  const [products, setProducts] = useState([]);
+
+  const [selectedProduct] = products?.filter((val) => val?.product_id == id);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        // setLoading(true);
+        const res = await getProducts();
+        // dispatch(insertAllProductList(res))
+
+        setProducts(res);
+      } catch (err) {
+        console.error("❌ Failed to fetch products", err);
+      } finally {
+        // setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+  console.log("selectedProduct", selectedProduct);
 
   const productImages = [
-    "/images/Product1.jpg",
-    "/images/Product2.jpg",
-    "/images/Product3.jpg",
-    "/images/Product4.jpg",
+    `${import.meta.env.VITE_BACKEND_API}/uploads/${selectedProduct?.images[0]?.filename}`,
+    `${import.meta.env.VITE_BACKEND_API}/uploads/${selectedProduct?.images[1]?.filename}`,
+    `${import.meta.env.VITE_BACKEND_API}/uploads/${selectedProduct?.images[2]?.filename}`,
+    `${import.meta.env.VITE_BACKEND_API}/uploads/${selectedProduct?.images[3]?.filename}`,
+    // "/images/Product2.jpg",
+    // "/images/Product3.jpg",
+    // "/images/Product4.jpg",
   ];
 
   const product = {
@@ -121,11 +148,14 @@ const ProductDetailsComponents = () => {
           <Card sx={{ mb: 2 }}>
             <CardMedia
               component="img"
-              height="500"
               image={productImages[selectedImage]}
               alt={product.name}
-              sx={{ objectFit: 'cover' }}
+              sx={{
+                objectFit: 'cover',
+                height: { xs: 500, sm: 700 }, // responsive height
+              }}
             />
+
           </Card>
           <Box sx={{ display: 'flex', gap: 1 }}>
             {productImages.map((image, index) => (
@@ -155,7 +185,7 @@ const ProductDetailsComponents = () => {
         <Box sx={{ flex: 1 }}>
           <Box sx={{ mb: 2 }}>
             <Chip label="Premium Quality" color={theme.palette.primary.main} size="small" sx={{ mb: 2 }} />
-            <Typography variant="h6" gutterBottom sx={{fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main, fontWeight:"bold"}}>
+            <Typography variant="h6" gutterBottom sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main, fontWeight: "bold" }}>
               {product.productName}
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -174,34 +204,34 @@ const ProductDetailsComponents = () => {
               variant="body1"
               color={theme.palette.primary.lightmain}
               component="span"
-              sx={{ ml: 2, textDecoration: 'line-through',fontFamily: theme.palette.typography.fontFamily }}
+              sx={{ ml: 2, textDecoration: 'line-through', fontFamily: theme.palette.typography.fontFamily }}
             >
               ₹{product.originalPrice}
             </Typography>
-            <Chip label="25% OFF" color="error" size="small" sx={{ ml: 2 , fontFamily: theme.palette.typography.fontFamily}} />
+            <Chip label="25% OFF" color="error" size="small" sx={{ ml: 2, fontFamily: theme.palette.typography.fontFamily }} />
           </Box>
 
-          <Typography variant="body2" paragraph color={theme.palette.primary.lightmain} sx={{fontFamily: theme.palette.typography.fontFamily}}>
+          <Typography variant="body2" paragraph color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>
             {product.description}
           </Typography>
 
           {/* Fabric Specifications */}
           <Box sx={{ mb: 3 }}>
-            <Typography variant="h6" gutterBottom sx={{fontFamily: theme.palette.typography.fontFamily,color: theme.palette.primary.main, mb:1}}>
+            <Typography variant="h6" gutterBottom sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main, mb: 1 }}>
               Specifications
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="body2" color={theme.palette.primary.main} sx={{fontFamily: theme.palette.typography.fontFamily}}>Fabric:</Typography>
-                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{fontFamily: theme.palette.typography.fontFamily}}>{product.fabric}</Typography>
+                <Typography variant="body2" color={theme.palette.primary.main} sx={{ fontFamily: theme.palette.typography.fontFamily }}>Fabric:</Typography>
+                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>{product.fabric}</Typography>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="body2" color={theme.palette.primary.main} sx={{fontFamily: theme.palette.typography.fontFamily}}>Weight:</Typography>
-                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{fontFamily: theme.palette.typography.fontFamily}}>{product.weight}</Typography>
+                <Typography variant="body2" color={theme.palette.primary.main} sx={{ fontFamily: theme.palette.typography.fontFamily }}>Weight:</Typography>
+                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>{product.weight}</Typography>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="body2" color={theme.palette.primary.main} sx={{fontFamily: theme.palette.typography.fontFamily}}>Width:</Typography>
-                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{fontFamily: theme.palette.typography.fontFamily}}>{product.width}</Typography>
+                <Typography variant="body2" color={theme.palette.primary.main} sx={{ fontFamily: theme.palette.typography.fontFamily }}>Width:</Typography>
+                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>{product.width}</Typography>
               </Box>
               {/* <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="body2" color={theme.palette.primary.main} sx={{fontFamily: theme.palette.typography.fontFamily}}>Composition:</Typography>
@@ -227,22 +257,22 @@ const ProductDetailsComponents = () => {
 
           {/* Quantity Selection */}
           <Box sx={{ mb: 3 }}>
-            <Typography variant="h6" gutterBottom sx={{fontFamily: theme.palette.typography.fontFamily,color:theme.palette.primary.main}}>
+            <Typography variant="h6" gutterBottom sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
               Quantity
             </Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 , fontFamily: theme.palette.typography.fontFamily,color:theme.palette.primary.lightmain}}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }}>
               <IconButton onClick={() => handleQuantityChange(-1)} size="small">
                 <Remove />
               </IconButton>
-              <Typography variant="h6" sx={{fontFamily: theme.palette.typography.fontFamily,color:theme.palette.primary.main}}>{quantity}</Typography>
-              <IconButton onClick={() => handleQuantityChange(1)} size="small" sx={{fontFamily: theme.palette.typography.fontFamily,color:theme.palette.primary.lightmain}}>
+              <Typography variant="h6" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>{quantity}</Typography>
+              <IconButton onClick={() => handleQuantityChange(1)} size="small" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }}>
                 <Add />
               </IconButton>
             </Box>
           </Box>
 
           {/* Action Buttons */}
-          <Box sx={{ mb: 3 , display:'flex', alignItems:'center'}}>
+          <Box sx={{ mb: 3, display: 'flex', alignItems: 'center' }}>
             <Button
               variant="contained"
               size="large"
@@ -266,11 +296,11 @@ const ProductDetailsComponents = () => {
           <Paper sx={{ p: 2, backgroundColor: 'grey.50' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
               <LocalShipping color={theme.palette.primary.main} sx={{ mr: 1 }} />
-              <Typography variant="body2" sx={{fontFamily: theme.palette.typography.fontFamily,color:theme.palette.primary.lightmain}}>Free shipping on orders over ₹2000</Typography>
+              <Typography variant="body2" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }}>Free shipping on orders over ₹2000</Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Security color={theme.palette.primary.main} sx={{ mr: 1 }} />
-              <Typography variant="body2" sx={{fontFamily: theme.palette.typography.fontFamily,color:theme.palette.primary.lightmain}}>30-day return guarantee</Typography>
+              <Typography variant="body2" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }}>30-day return guarantee</Typography>
             </Box>
           </Paper>
         </Box>
@@ -279,28 +309,28 @@ const ProductDetailsComponents = () => {
       {/* Product Details Tabs */}
       <Box sx={{ mt: 6 }}>
         <Tabs value={tabValue} onChange={handleTabChange}>
-          <Tab label="Features" sx={{fontFamily: theme.palette.typography.fontFamily,color:theme.palette.primary.lightmain}}/>
-          <Tab label="Reviews" sx={{fontFamily: theme.palette.typography.fontFamily,color:theme.palette.primary.lightmain}}/>
-          <Tab label="Care Instructions" sx={{fontFamily: theme.palette.typography.fontFamily,color:theme.palette.primary.lightmain}}/>
+          <Tab label="Features" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }} />
+          <Tab label="Reviews" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }} />
+          <Tab label="Care Instructions" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }} />
         </Tabs>
-        
+
         <TabPanel value={tabValue} index={0}>
           <List>
             {product.features.map((feature, index) => (
               <ListItem key={index}>
-                <ListItemText primary={feature} sx={{fontFamily: theme.palette.typography.fontFamily,color:theme.palette.primary.lightmain}}/>
+                <ListItemText primary={feature} sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }} />
               </ListItem>
             ))}
           </List>
         </TabPanel>
-        
+
         <TabPanel value={tabValue} index={1}>
           {reviews?.map((review, index) => (
             <Box key={index} sx={{ mb: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                 <Avatar sx={{ mr: 2 }}>{review.avatar}</Avatar>
                 <Box>
-                  <Typography variant="subtitle1" color={theme.palette.primary.main} sx={{fontFamily: theme.palette.typography.fontFamily}}>{review.name}</Typography>
+                  <Typography variant="subtitle1" color={theme.palette.primary.main} sx={{ fontFamily: theme.palette.typography.fontFamily }}>{review.name}</Typography>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Rating value={review.rating} size="small" readOnly />
                     <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ ml: 1, fontFamily: theme.palette.typography.fontFamily }}>
@@ -309,31 +339,31 @@ const ProductDetailsComponents = () => {
                   </Box>
                 </Box>
               </Box>
-              <Typography variant="body2" sx={{fontFamily: theme.palette.typography.fontFamily, color:theme.palette.primary.lightmain}}>{review.comment}</Typography>
+              <Typography variant="body2" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }}>{review.comment}</Typography>
               {index < reviews.length - 1 && <Divider sx={{ mt: 2 }} />}
             </Box>
           ))}
         </TabPanel>
-        
+
         <TabPanel value={tabValue} index={2}>
-          <Typography variant="body1" paragraph sx={{color:theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily}}>
+          <Typography variant="body1" paragraph sx={{ color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily }}>
             <strong>Washing Instructions:</strong>
           </Typography>
           <List>
             <ListItem>
-              <ListItemText sx={{color:theme.palette.primary.lightmain, fontFamily: theme.palette.typography.fontFamily}} primary="Machine wash cold water (30°C max)" />
+              <ListItemText sx={{ color: theme.palette.primary.lightmain, fontFamily: theme.palette.typography.fontFamily }} primary="Machine wash cold water (30°C max)" />
             </ListItem>
             <ListItem>
-              <ListItemText sx={{color:theme.palette.primary.lightmain, fontFamily: theme.palette.typography.fontFamily}} primary="Use mild detergent, no bleach" />
+              <ListItemText sx={{ color: theme.palette.primary.lightmain, fontFamily: theme.palette.typography.fontFamily }} primary="Use mild detergent, no bleach" />
             </ListItem>
             <ListItem>
-              <ListItemText sx={{color:theme.palette.primary.lightmain, fontFamily: theme.palette.typography.fontFamily}} primary="Tumble dry low or hang to dry" />
+              <ListItemText sx={{ color: theme.palette.primary.lightmain, fontFamily: theme.palette.typography.fontFamily }} primary="Tumble dry low or hang to dry" />
             </ListItem>
             <ListItem>
-              <ListItemText sx={{color:theme.palette.primary.lightmain, fontFamily: theme.palette.typography.fontFamily}} primary="Iron on low heat if needed" />
+              <ListItemText sx={{ color: theme.palette.primary.lightmain, fontFamily: theme.palette.typography.fontFamily }} primary="Iron on low heat if needed" />
             </ListItem>
             <ListItem>
-              <ListItemText sx={{color:theme.palette.primary.lightmain, fontFamily: theme.palette.typography.fontFamily}} primary="Professional dry cleaning recommended for best results" />
+              <ListItemText sx={{ color: theme.palette.primary.lightmain, fontFamily: theme.palette.typography.fontFamily }} primary="Professional dry cleaning recommended for best results" />
             </ListItem>
           </List>
         </TabPanel>
