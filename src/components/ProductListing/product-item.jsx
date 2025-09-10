@@ -29,7 +29,9 @@ export function ProductItem({ product }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+console.log("run::::>",selectedProduct);
   const openProductDetails = (product) => {
+    
     setSelectedProduct(product);
     setIsModalOpen(true);
   };
@@ -71,8 +73,8 @@ export function ProductItem({ product }) {
     <Chip
       icon={<VisibilityIcon sx={{ fontSize: { xs: 14, sm: 18 }, color: theme.palette.primary.main }} />}
       size="small"
-      onClick={() => <ProductDetailsComponents/>}
-      // onClick={() => openProductDetails(product)}
+      // onClick={() => <ProductDetailsComponents/>}
+      onClick={() => navigate("product-details")}
       sx={{
         position: "absolute",
         top: 12,
@@ -292,11 +294,12 @@ export function ProductItem({ product }) {
 
 
       {selectedProduct && (
-        <ProductDetailsPage
-          product={selectedProduct}
-          isOpen={isModalOpen}
-          onClose={closeProductDetails}
-        />
+        // <ProductDetailsPage
+        //   product={selectedProduct}
+        //   isOpen={isModalOpen}
+        //   onClose={closeProductDetails}
+        // />
+        <ProductDetailsComponents/>
       )}
     </>
 

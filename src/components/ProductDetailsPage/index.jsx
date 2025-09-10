@@ -47,6 +47,8 @@ function TabPanel(props) {
 }
 
 const ProductDetailsComponents = () => {
+  console.log("runnnnnnnn");
+  
     const theme = useTheme();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -54,10 +56,10 @@ const ProductDetailsComponents = () => {
   const [tabValue, setTabValue] = useState(0);
 
   const productImages = [
-    fabricNavyWool,
-    fabricCharcoalCotton,
-    fabricBrownTweed,
-    fabricPinstripe,
+    "/images/Product1.jpg",
+    "/images/Product2.jpg",
+    "/images/Product3.jpg",
+    "/images/Product4.jpg",
   ];
 
   const product = {
