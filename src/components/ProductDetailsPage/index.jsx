@@ -32,10 +32,6 @@ import {
   LocalShipping,
   Security,
 } from '@mui/icons-material';
-import fabricNavyWool from '../../../public/images/Product1.jpg';
-import fabricCharcoalCotton from '../../../public/images/Product2.jpg';
-import fabricBrownTweed from '../../../public/images/Product3.jpg';
-import fabricPinstripe from '../../../public/images/Product4.jpg';
 import { useParams } from 'react-router-dom';
 import { getProducts } from '../../api/productApi';
 
@@ -126,11 +122,6 @@ const ProductDetailsComponents = () => {
     },
   ];
 
-  const relatedProducts = [
-    { name: 'Charcoal Cotton Blend', price: 69.99, image: fabricCharcoalCotton },
-    { name: 'Brown Tweed Classic', price: 95.99, image: fabricBrownTweed },
-    { name: 'Black Pinstripe Wool', price: 109.99, image: fabricPinstripe },
-  ];
 
   const handleQuantityChange = (change) => {
     setQuantity(Math.max(1, quantity + change));
