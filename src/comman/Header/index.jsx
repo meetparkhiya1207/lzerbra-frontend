@@ -56,6 +56,8 @@ export default function Header() {
     const [cartProductPopover, setCartProductPopover] = useState(null);
     // const [cartProduct, setCartProduct] = useState(null);
     const cartProduct = useSelector((state) => state.cart.cartItems);
+    console.log("cartProductcartProduct",cartProduct);
+    
     const likedProduct = useSelector((state) => state.liked.likedProducts);
 
     // Profile menu state
@@ -363,7 +365,7 @@ export default function Header() {
                                     <Typography
                                         variant="subtitle1"
                                         fontWeight="bold"
-                                        sx={{ fontFamily: theme.palette.typography.fontFamily }}
+                                        sx={{ fontFamily: theme.palette.typography.fontFamily, color:theme.palette.primary.main }}
                                     >
                                         Cart Products
                                     </Typography>
@@ -392,8 +394,8 @@ export default function Header() {
                                                             {/* Product Image */}
                                                             <Box
                                                                 component="img"
-                                                                src={product.image}
-                                                                alt={product.productname}
+                                                                src={`${import.meta.env.VITE_BACKEND_API}/uploads/${product?.images[0]?.filename}`}
+                                                                alt={product.productName}
                                                                 sx={{ width: 60, height: 60, objectFit: "cover", borderRadius: 1 }}
                                                             />
 
@@ -407,7 +409,7 @@ export default function Header() {
                                                                         mb: 1,
                                                                     }}
                                                                 >
-                                                                    {product.productname}
+                                                                    {product?.productName}
                                                                 </Typography>
 
                                                                 <Typography
@@ -448,7 +450,7 @@ export default function Header() {
                                                         fontWeight: "bold",
                                                         color: theme.palette.primary.main,
                                                     }}
-                                                    onClick={() => navigate("/cart")}
+                                                    onClick={() => {handleCartClose(); navigate("/cart")}}
                                                 >
                                                     View All
                                                 </Button>

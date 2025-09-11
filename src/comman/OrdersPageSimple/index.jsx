@@ -106,7 +106,7 @@ const OrdersPageSimple = () => {
     };
 
     return (
-        <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Container maxWidth="xl" sx={{ py: 4 }}>
             <CommonHeading title="My Orders" lineWidth={100} align="center" />
 
             {orders.length === 0 ? (

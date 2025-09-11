@@ -76,7 +76,7 @@ const CartPageSimple = () => {
     const total = subtotal + shipping + tax;
 
     return (
-        <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Container maxWidth="xl" sx={{ py: 4 }}>
             <CommonHeading
                 title="Shopping Cart"
                 lineWidth={140}

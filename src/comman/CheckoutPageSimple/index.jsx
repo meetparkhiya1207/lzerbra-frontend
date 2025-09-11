@@ -155,7 +155,7 @@ const CheckoutPageSimple = () => {
                     sx={{ flex: 1, minWidth: 120, fontFamily: theme.palette.typography.fontFamily }}
                 />
             </Box>
-
+{/* 
             <FormControl component="fieldset" sx={{ mt: 2 }}>
                 <FormLabel sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
                     Shipping Method
@@ -186,7 +186,7 @@ const CheckoutPageSimple = () => {
                         }
                     />
                 </RadioGroup>
-            </FormControl>
+            </FormControl> */}
         </Box>
     );
 
@@ -310,7 +310,7 @@ const CheckoutPageSimple = () => {
     };
 
     return (
-        <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Container maxWidth="xl" sx={{ py: 4 }}>
             <CommonHeading title="Checkout" lineWidth={100} align="center" />
 
             <Box sx={{ display: 'flex', gap: 4, flexDirection: { xs: 'column', md: 'row' } }}>
