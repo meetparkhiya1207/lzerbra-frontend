@@ -488,7 +488,7 @@ export default function Header() {
                     <List>
                         {menuItems.map((text, index) => (
                             <ListItem key={index} disablePadding>
-                                <ListItemButton onClick={() => setDrawerOpen(false)}>
+                                <ListItemButton onClick={() => {navigate(text.path); setDrawerOpen(false)}}>
                                     <ListItemText
                                         primary={text?.label}
                                         primaryTypographyProps={{ fontWeight: "bold" }}
