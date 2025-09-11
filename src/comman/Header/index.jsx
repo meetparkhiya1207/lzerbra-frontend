@@ -490,7 +490,7 @@ export default function Header() {
                             <ListItem key={index} disablePadding>
                                 <ListItemButton onClick={() => setDrawerOpen(false)}>
                                     <ListItemText
-                                        primary={text}
+                                        primary={text?.label}
                                         primaryTypographyProps={{ fontWeight: "bold" }}
                                     />
                                 </ListItemButton>
