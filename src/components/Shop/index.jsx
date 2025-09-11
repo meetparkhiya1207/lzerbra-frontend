@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
     Box,
     Container,
@@ -26,6 +26,7 @@ import { Home, FilterList } from '@mui/icons-material';
 import ProductCard from '../../comman/ProductCard';
 import FilterSidebar from '../../comman/FilterSidebar/FilterSidebar';
 import { MenuIcon, SearchIcon } from 'lucide-react';
+import { getProducts } from '../../api/productApi';
 
 // Sample product data
 const sampleProducts = [
@@ -120,33 +121,54 @@ const Shop = () => {
         inStock: false,
     });
 
+      // ✅ Hooks inside component
+  const [products, setProducts] = useState([]);
+  console.log("productsproducts",products);
+  
+
+  // ✅ Fetch products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await getProducts();
+        // dispatch(insertAllProductList(res))
+
+        setProducts(res);
+      } catch (err) {
+        console.error("❌ Failed to fetch products", err);
+      } finally {
+      }
+    };
+    fetchProducts();
+  }, []);
+
     // Filter and sort products
     const filteredAndSortedProducts = useMemo(() => {
-        let filtered = sampleProducts.filter(product => {
+        let filtered = products.filter(product => {
             // Search filter
-            if (searchQuery && !product.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+            if (searchQuery && !product.productName.toLowerCase().includes(searchQuery.toLowerCase())) {
                 return false;
             }
 
             // Category filter
-            if (filters.categories.length > 0 && !filters.categories.includes(product.category)) {
+            if (filters.categories.length > 0 && !filters.category.includes(product.category)) {
                 return false;
             }
 
             // Price filter
-            if (product.price < filters.priceRange[0] || product.price > filters.priceRange[1]) {
-                return false;
-            }
+            // if (product.price < filters.priceRange[0] || product.price > filters.priceRange[1]) {
+            //     return false;
+            // }
 
-            // Rating filter
-            if (product.rating < filters.rating) {
-                return false;
-            }
+            // // Rating filter
+            // if (product.rating < filters.rating) {
+            //     return false;
+            // }
 
-            // Stock filter
-            if (filters.inStock && !product.inStock) {
-                return false;
-            }
+            // // Stock filter
+            // if (filters.inStock && !product.inStock) {
+            //     return false;
+            // }
 
             return true;
         });
@@ -290,7 +312,7 @@ const Shop = () => {
                                 fontSize: { xs: '0.9rem', sm: '1rem' }, fontFamily: theme.palette.typography.fontFamily,
                                 color: theme.palette.primary.main
                             }}>
-                                Showing {filteredAndSortedProducts.length} results
+                                Showing {products.length} results
                                 {searchQuery && ` for "${searchQuery}"`}
                             </Typography>
                             <Box sx={{ display: "flex", gap: {xs:4, sm:2}, flexDirection: { xs: 'column', sm: 'row' }, width: { xs: "100%", sm: "60%" } }}>
@@ -378,7 +400,7 @@ const Shop = () => {
                                 gap: { xs: 1, sm: 2 },
                             }}
                         >
-                            {filteredAndSortedProducts.map((product) => (
+                            {products.map((product) => (
                                 <ProductCard
                                     key={product.id}
                                     product={product}
@@ -388,7 +410,7 @@ const Shop = () => {
                             ))}
                         </Box>
 
-                        {filteredAndSortedProducts.length === 0 && (
+                        {products.length === 0 && (
                             <Box
                                 sx={{
                                     display: "flex",

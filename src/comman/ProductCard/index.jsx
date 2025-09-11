@@ -70,7 +70,7 @@ const ProductCard = ({
             <Box sx={{ position: 'relative', pt: '100%' }}>
                 <Box
                     component="img"
-                    src={`${import.meta.env.VITE_BACKEND_API}/uploads/${product?.images[0]?.filename}`}
+                    src={`${import.meta.env.VITE_BACKEND_API}/uploads/${product?.images?.[0]?.filename}` || product?.images}
                     alt={product.productName}
                     sx={{
                         top: 0,
