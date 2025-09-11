@@ -14,15 +14,15 @@ import CartPageSimple from '../../comman/CartPage'
 const Home = () => {
   return (
     <div>
-      {/* <HeroSection/> */}
-      <CartPageSimple/>
-      {/* <OfferSection/> */}
-      {/* <CategorySlider/> */}
+      <HeroSection/>
+      {/* <CartPageSimple/> */}
+      <OfferSection/>
+      <CategorySlider/>
       <ProductListing/>
       {/* <ProductDetailsComponents/> */}
       {/* <ProductDetails/> */}
-      {/* <ServiceSection/> */}
-      {/* <Testimonials/> */}
+      <ServiceSection/>
+      <Testimonials/>
     </div>
   )
 }
