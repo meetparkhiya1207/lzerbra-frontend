@@ -448,7 +448,7 @@ export default function Header() {
                                                         fontWeight: "bold",
                                                         color: theme.palette.primary.main,
                                                     }}
-                                                    onClick={() => console.log("View All clicked")}
+                                                    onClick={() => navigate("/cart")}
                                                 >
                                                     View All
                                                 </Button>

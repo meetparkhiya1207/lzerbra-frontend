@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import { ExpandMore, Close as CloseIcon, FilterList } from '@mui/icons-material';
 
-const categories = [
+const category = [
     'Electronics',
     'Computers',
     'Audio',
@@ -31,13 +31,13 @@ const categories = [
 const FilterContent = ({ filters, onFiltersChange, isMobile = false }) => {
     const theme = useTheme();
     const handleCategoryChange = (category, checked) => {
-        const newCategories = checked
-            ? [...filters.categories, category]
-            : filters.categories.filter(c => c !== category);
+        const newcategory = checked
+            ? [...filters.category, category]
+            : filters.category.filter(c => c !== category);
 
         onFiltersChange({
             ...filters,
-            categories: newCategories,
+            category: newcategory,
         });
     };
 
@@ -64,7 +64,7 @@ const FilterContent = ({ filters, onFiltersChange, isMobile = false }) => {
 
     const clearAllFilters = () => {
         onFiltersChange({
-            categories: [],
+            category: [],
             priceRange: [0, 200000],
             rating: 0,
             inStock: false,
@@ -106,14 +106,14 @@ const FilterContent = ({ filters, onFiltersChange, isMobile = false }) => {
                 </AccordionSummary>
                 <AccordionDetails>
                     <FormGroup>
-                        {categories.map((category) => (
+                        {category.map((category) => (
                             <FormControlLabel
                                 key={category}
                                 sx={{ mb: 0.5, fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }}
                                 control={
                                     <Checkbox
                                         sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}
-                                        checked={filters.categories.includes(category)}
+                                        checked={filters.category.includes(category)}
                                         onChange={(e) => handleCategoryChange(category, e.target.checked)}
                                         size="small"
                                     />

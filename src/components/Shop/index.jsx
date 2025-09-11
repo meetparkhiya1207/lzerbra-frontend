@@ -115,7 +115,7 @@ const Shop = () => {
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
     const [filters, setFilters] = useState({
-        categories: [],
+        category: [],
         priceRange: [0, 200000],
         rating: 0,
         inStock: false,
@@ -151,7 +151,7 @@ const Shop = () => {
             }
 
             // Category filter
-            if (filters.categories.length > 0 && !filters.category.includes(product.category)) {
+            if (filters.category.length > 0 && !filters.category.includes(product.category)) {
                 return false;
             }
 
@@ -214,7 +214,7 @@ const Shop = () => {
             case 'category':
                 setFilters({
                     ...filters,
-                    categories: filters.categories.filter(c => c !== value),
+                    category: filters.category.filter(c => c !== value),
                 });
                 break;
             case 'price':
@@ -264,13 +264,13 @@ const Shop = () => {
                     {/* Main Content */}
                     <Box sx={{ flexGrow: 1 }}>
                         {/* Active Filters */}
-                        {(filters.categories.length > 0 || filters.rating > 0 || filters.priceRange[0] > 0 || filters.priceRange[1] < 200000) && (
+                        {(filters.category.length > 0 || filters.rating > 0 || filters.priceRange[0] > 0 || filters.priceRange[1] < 200000) && (
                             <Box sx={{ mb: 2 }}>
                                 <Typography variant="subtitle2" sx={{ mb: 1 }}>
                                     Active Filters:
                                 </Typography>
                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                                    {filters.categories.map(category => (
+                                    {filters.category.map(category => (
                                         <Chip
                                             key={category}
                                             label={category}

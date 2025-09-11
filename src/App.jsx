@@ -10,6 +10,10 @@ import ProductDetailsComponents from "./components/ProductDetailsPage";
 import Shop from "./components/Shop";
 import Header from "./comman/Header";
 import Footer from "./comman/Footer";
+import CartPageSimple from "./comman/CartPage";
+import ScrollToTop from "./comman/ScrollToTop";
+import CheckoutPageSimple from "./comman/CheckoutPageSimple";
+import OrdersPageSimple from "./comman/OrdersPageSimple";
 
 function Layout() {
   return (
@@ -40,12 +44,16 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+       <ScrollToTop /> 
         <Routes>
           {/* Layout wrapper */}
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/product-details/:id" element={<ProductDetailsComponents />} />
             <Route path="/shop" element={<Shop />} />
+            <Route path="/cart" element={<CartPageSimple />} />
+            <Route path="/checkout" element={<CheckoutPageSimple />} />
+            <Route path="/orders" element={<OrdersPageSimple />} />
           </Route>
         </Routes>
 

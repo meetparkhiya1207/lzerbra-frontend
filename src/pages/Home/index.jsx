@@ -9,18 +9,20 @@ import Footer from '../../comman/Footer'
 import Testimonials from '../../components/Testimonials'
 import CategorySlider from '../../components/CategorySlider'
 import ProductDetailsComponents from '../../components/ProductDetailsPage'
+import CartPageSimple from '../../comman/CartPage'
 
 const Home = () => {
   return (
     <div>
-      <HeroSection/>
-      <OfferSection/>
-      <CategorySlider/>
+      {/* <HeroSection/> */}
+      <CartPageSimple/>
+      {/* <OfferSection/> */}
+      {/* <CategorySlider/> */}
       <ProductListing/>
       {/* <ProductDetailsComponents/> */}
       {/* <ProductDetails/> */}
-      <ServiceSection/>
-      <Testimonials/>
+      {/* <ServiceSection/> */}
+      {/* <Testimonials/> */}
     </div>
   )
 }

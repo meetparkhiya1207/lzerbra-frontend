@@ -27,6 +27,7 @@
     "react-snowfall": "^2.3.0",
     "react-toastify": "^11.0.5",
     "react-tsparticles": "^2.12.2",
+    "redux-persist": "^6.0.0",
     "slick-carousel": "^1.8.1",
     "swiper": "^11.2.10"
   },
