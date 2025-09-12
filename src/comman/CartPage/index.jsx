@@ -25,7 +25,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import CommonHeading from '../CommonHeading';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateQuantity } from '../../features/cart/cartSlice';
+import { removeFromCart, updateQuantity } from '../../features/cart/cartSlice';
 
 const CartPageSimple = () => {
     const theme = useTheme();
@@ -70,8 +70,8 @@ const CartPageSimple = () => {
     //     );
     // };
 
-    const subtotal = cartProduct.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const shipping = subtotal > 100 ? 0 : 9.99;
+    const subtotal = cartProduct.reduce((sum, item) => sum + item?.price * item.quantity, 0);
+    const shipping = subtotal > 2000 ? 0 : 9.99;
     const tax = subtotal * 0.08;
     const total = subtotal + shipping + tax;
 
@@ -101,7 +101,7 @@ const CartPageSimple = () => {
             ) : (
                 <Box sx={{ display: 'flex', gap: 4, flexDirection: { xs: 'column', md: 'row' } }}>
                     <Box sx={{ flex: 1 }}>
-                        {subtotal > 100 && (
+                        {subtotal > 2000 && (
                             <Alert sx={{ mb: 2, fontFamily: theme.palette.typography.fontFamily, color: "green" }}>
                                 🎉 Congratulations! You qualify for free shipping
                             </Alert>
@@ -112,27 +112,35 @@ const CartPageSimple = () => {
                                 <CardContent>
                                     <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
                                         <Avatar
-                                            src={"/images/Product2.jpg"}
+                                            src={item?.images[0]?.url}
                                             variant="rounded"
                                             sx={{ width: 80, height: 80 }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                navigate(`/product-details/${item?.product_id}`)
+                                            }}
                                         />
 
                                         <Box sx={{ flex: 1, minWidth: 200 }}>
-                                            <Typography variant="h6" gutterBottom sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
-                                                {item.productName}
+                                            <Typography variant="h6" gutterBottom sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    navigate(`/product-details/${item?.product_id}`)
+                                                }}>
+                                                {item?.productName}
                                             </Typography>
                                             <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                                                {item.category && (
+                                                {item?.category && (
                                                     <Chip
-                                                        label={`Category: ${item.category}`}
+                                                        label={`Category: ${item?.category}`}
                                                         size="small"
                                                         variant="outlined"
                                                         sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }}
                                                     />
                                                 )}
-                                                {item.inStock && (
+                                                {item?.inStock && (
                                                     <Chip
-                                                        label={`In Stock: ${item.inStock}`}
+                                                        label={`In Stock: ${item?.inStock}`}
                                                         size="small"
                                                         variant="outlined"
                                                         sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }}
@@ -161,11 +169,11 @@ const CartPageSimple = () => {
                                         </Box>
 
                                         <Typography variant="h6" sx={{ minWidth: 80, textAlign: 'center', fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
-                                            ₹{(item.price * item.quantity).toFixed(2)}
+                                            ₹{(item?.price * item.quantity).toFixed(2)}
                                         </Typography>
 
                                         <IconButton
-                                            onClick={() => dispatch({ type: 'cart/removeFromCart', payload: item.id })}
+                                            onClick={() => dispatch(removeFromCart(item.id))}
                                             color="error"
                                         >
                                             <Delete />
@@ -231,11 +239,11 @@ const CartPageSimple = () => {
                                 <Box sx={{ mt: 3, pt: 3, borderTop: 1, borderColor: 'grey.200' }}>
                                     <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                                         <LocalShipping sx={{ mr: 1, color: theme.palette.primary.main }} />
-                                        <Typography variant="body2" sx={{fontFamily: theme.palette.typography.fontFamily}}>Free shipping over ₹2000</Typography>
+                                        <Typography variant="body2" sx={{ fontFamily: theme.palette.typography.fontFamily }}>Free shipping over ₹2000</Typography>
                                     </Box>
                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                         <Security sx={{ mr: 1, color: theme.palette.primary.main }} />
-                                        <Typography variant="body2" sx={{fontFamily: theme.palette.typography.fontFamily}}>Secure checkout</Typography>
+                                        <Typography variant="body2" sx={{ fontFamily: theme.palette.typography.fontFamily }}>Secure checkout</Typography>
                                     </Box>
                                 </Box>
                             </CardContent>

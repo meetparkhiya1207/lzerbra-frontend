@@ -32,10 +32,13 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import CommonHeading from '../CommonHeading';
+import { useDispatch, useSelector } from 'react-redux';
 
 const CheckoutPageSimple = () => {
     const theme = useTheme();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const cartProduct = useSelector((state) => state.cart.cartItems);
     const [activeStep, setActiveStep] = useState(0);
     const [shippingMethod, setShippingMethod] = useState('standard');
     const [paymentMethod, setPaymentMethod] = useState('card');
@@ -66,7 +69,7 @@ const CheckoutPageSimple = () => {
         { id: 2, name: 'Smart Fitness Watch', price: 299.99, quantity: 2, image: '/placeholder.svg' },
     ];
 
-    const subtotal = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const subtotal = cartProduct.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const shippingCost = shippingMethod === 'express' ? 19.99 : shippingMethod === 'standard' ? 9.99 : 0;
     const tax = subtotal * 0.08;
     const total = subtotal + shippingCost + tax;
@@ -155,7 +158,7 @@ const CheckoutPageSimple = () => {
                     sx={{ flex: 1, minWidth: 120, fontFamily: theme.palette.typography.fontFamily }}
                 />
             </Box>
-{/* 
+            {/* 
             <FormControl component="fieldset" sx={{ mt: 2 }}>
                 <FormLabel sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
                     Shipping Method
@@ -256,7 +259,7 @@ const CheckoutPageSimple = () => {
             <Typography variant="h6" gutterBottom sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
                 Order Summary
             </Typography>
-            {orderItems.map((item) => (
+            {cartProduct.map((item) => (
                 <Box key={item.id} sx={{ mb: 2 }}>
                     <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
                         <Avatar src={item.image} variant="rounded" sx={{ width: 60, height: 60 }} />
@@ -355,15 +358,15 @@ const CheckoutPageSimple = () => {
                             <Accordion>
                                 <AccordionSummary expandIcon={<ExpandMore sx={{ color: theme.palette.primary.main }} />}>
                                     <Typography sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
-                                        Order Items ({orderItems.length})
+                                        Order Items ({cartProduct?.length})
                                     </Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
-                                    {orderItems.map((item) => (
+                                    {cartProduct?.map((item) => (
                                         <Box key={item.id} sx={{ mb: 1 }}>
                                             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                                 <Typography variant="body2" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
-                                                    {item.name} × {item.quantity}
+                                                    {item.productName} × {item.quantity}
                                                 </Typography>
                                                 <Typography variant="body2" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
                                                     ₹{(item.price * item.quantity).toFixed(2)}

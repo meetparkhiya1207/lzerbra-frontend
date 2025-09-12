@@ -14,6 +14,7 @@ import { ShoppingCart, FavoriteBorder, Favorite, Visibility } from '@mui/icons-m
 import { useDispatch } from 'react-redux';
 import confetti from 'canvas-confetti';
 import { useNavigate } from 'react-router-dom';
+import { addToCart } from '../../features/cart/cartSlice';
 
 const ProductCard = ({
     product,
@@ -70,7 +71,7 @@ const ProductCard = ({
             <Box sx={{ position: 'relative', pt: '100%' }}>
                 <Box
                     component="img"
-                    src={`${import.meta.env.VITE_BACKEND_API}/uploads/${product?.images?.[0]?.filename}`}
+                    src={product?.images[0]?.url}
                     alt={product.productName}
                     sx={{
                         top: 0,
@@ -211,7 +212,7 @@ const ProductCard = ({
                     disabled={!product.inStock}
                     onClick={(e) => {
                         e.stopPropagation();
-                        dispatch({ type: "cart/addToCart", payload: product })
+                        dispatch(addToCart(product))
                     }}
                     sx={{
                         mt: 'auto',

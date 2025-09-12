@@ -99,6 +99,7 @@ export default function Header() {
     const open = Boolean(favProduct);
     const cartPopoverOpen = Boolean(cartProductPopover);
     const id = open ? "simple-popover" : undefined;
+console.log("cartProductcartProduct",cartProduct);
 
     return (
         <>
@@ -126,6 +127,7 @@ export default function Header() {
                                     height: { xs: "60px", md: "80px" },
                                     width: { xs: "100px", md: "150px" },
                                 }}
+                                onClick={() => navigate("/")}
                             />
                         </Box>
 
@@ -380,8 +382,9 @@ export default function Header() {
                                                     scrollbarWidth: "none",
                                                     "&::-webkit-scrollbar": { display: "none" },
                                                 }}
+                                                onClick={() => {handleCartClose(); navigate("/cart")}}
                                             >
-                                                {cartProduct?.map((product) => (
+                                                {cartProduct.map((product) => (
                                                     <Box key={product.id}>
                                                         <Box
                                                             sx={{
@@ -394,7 +397,7 @@ export default function Header() {
                                                             {/* Product Image */}
                                                             <Box
                                                                 component="img"
-                                                                src={`${import.meta.env.VITE_BACKEND_API}/uploads/${product?.images[0]?.filename}`}
+                                                                src={product?.images[0]?.url}
                                                                 alt={product.productName}
                                                                 sx={{ width: 60, height: 60, objectFit: "cover", borderRadius: 1 }}
                                                             />
@@ -420,7 +423,7 @@ export default function Header() {
                                                                         fontSize: 13,
                                                                     }}
                                                                 >
-                                                                    ₹{product.price} × {product.quantity}
+                                                                    ₹{product?.price} × {product?.quantity}
                                                                 </Typography>
                                                             </Box>
 

@@ -1,15 +1,25 @@
-import axios from "axios";
+import axiosInstance from ".";
 
 // ✅ Use import.meta.env in Vite
-const API_URL = `${import.meta.env.VITE_BACKEND_API}/api/products`;
+const API_URL = `/products`;
 
 // ✅ Get all products
-export const getProducts = async () => {
-    console.log("API_URLAPI_URL",API_URL);
-    
+export const getProducts = async () => {    
   try {
-    const res = await axios.get(API_URL);
+    const res = await axiosInstance.get(API_URL);
     console.log("Fetched products:", res.data);
+    return res.data; // backend mathi direct products ave
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    throw error;
+  }
+};
+
+// ✅ Get single products
+export const getProductById = async (id) => {    
+  try {
+    const res = await axiosInstance.get(API_URL + `/${id}`);
+    console.log("Fetched Single Products:", res.data);
     return res.data; // backend mathi direct products ave
   } catch (error) {
     console.error("Error fetching products:", error);

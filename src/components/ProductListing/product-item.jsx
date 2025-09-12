@@ -135,14 +135,13 @@ export function ProductItem({ product }) {
       }}
     />
   );
-  console.log("productproduct", import.meta.env.VITE_BACKEND_API);
 
   // Product Image
   const renderImg = (
     <Box
       component="img"
       alt={product.productname}
-      src={`${import.meta.env.VITE_BACKEND_API}/uploads/${product?.images[0]?.filename}`}
+      src={product?.images[0]?.url}
       sx={{
         top: 0,
         width: 1,

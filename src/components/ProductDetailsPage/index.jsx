@@ -22,6 +22,7 @@ import {
   Paper,
   Stack,
   useTheme,
+  CircularProgress,
 } from '@mui/material';
 import {
   FavoriteBorder,
@@ -33,7 +34,9 @@ import {
   Security,
 } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
-import { getProducts } from '../../api/productApi';
+import { getProductById, getProducts } from '../../api/productApi';
+import { addToCart } from '../../features/cart/cartSlice';
+import { useDispatch } from 'react-redux';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -46,80 +49,47 @@ function TabPanel(props) {
 
 const ProductDetailsComponents = () => {
   const { id } = useParams();
-  console.log("runnnnnnnn", id);
-
   const theme = useTheme();
+  const dispatch = useDispatch();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState('Medium');
   const [tabValue, setTabValue] = useState(0);
-  const [products, setProducts] = useState([]);
-
-  const [selectedProduct] = products?.filter((val) => val?.product_id == id);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // setLoading(true);
-        const res = await getProducts();
-        // dispatch(insertAllProductList(res))
-
-        setProducts(res);
+        setLoading(true);
+        const res = await getProductById(id);
+        if (res.success) {
+          console.log("ressss", res);
+          setSelectedProduct(res.data);
+        }
       } catch (err) {
         console.error("❌ Failed to fetch products", err);
       } finally {
-        // setLoading(false);
+        setLoading(false);
       }
     };
     fetchProducts();
   }, []);
-  console.log("selectedProduct", selectedProduct);
-
-  const productImages = [
-    `${import.meta.env.VITE_BACKEND_API}/uploads/${selectedProduct?.images[0]?.filename}`,
-    `${import.meta.env.VITE_BACKEND_API}/uploads/${selectedProduct?.images[1]?.filename}`,
-    `${import.meta.env.VITE_BACKEND_API}/uploads/${selectedProduct?.images[2]?.filename}`,
-    `${import.meta.env.VITE_BACKEND_API}/uploads/${selectedProduct?.images[3]?.filename}`,
-    // "/images/Product2.jpg",
-    // "/images/Product3.jpg",
-    // "/images/Product4.jpg",
-  ];
-
-  const product = {
-    productName: 'Premium Navy Wool Suiting Fabric',
-    price: 89.99,
-    originalPrice: 119.99,
-    rating: 4.8,
-    reviewCount: 127,
-    fabric: 'Italian Wool Blend',
-    weight: '280gsm',
-    width: '58 inches',
-    composition: '70% Wool, 25% Polyester, 5% Elastane',
-    description: 'Luxurious Italian wool blend fabric perfect for tailored suits and formal wear. Features a smooth finish with excellent drape and wrinkle resistance.',
-    features: [
-      'Premium Italian wool blend',
-      'Wrinkle resistant finish',
-      'Excellent drape and structure',
-      'Suitable for year-round wear',
-      'Machine washable',
-    ],
-  };
 
   const reviews = [
-    {
-      name: 'Michael Johnson',
-      rating: 5,
-      date: '2 weeks ago',
-      comment: 'Excellent quality fabric. Perfect for my custom suit. The texture and feel are amazing.',
-      avatar: 'M',
-    },
-    {
-      name: 'David Smith',
-      rating: 4,
-      date: '1 month ago',
-      comment: 'Great fabric, nice weight and drape. Delivery was quick and packaging was perfect.',
-      avatar: 'D',
-    },
+    // {
+    //   name: 'Michael Johnson',
+    //   rating: 5,
+    //   date: '2 weeks ago',
+    //   comment: 'Excellent quality fabric. Perfect for my custom suit. The texture and feel are amazing.',
+    //   avatar: 'M',
+    // },
+    // {
+    //   name: 'David Smith',
+    //   rating: 4,
+    //   date: '1 month ago',
+    //   comment: 'Great fabric, nice weight and drape. Delivery was quick and packaging was perfect.',
+    //   avatar: 'D',
+    // },
   ];
 
 
@@ -131,6 +101,22 @@ const ProductDetailsComponents = () => {
     setTabValue(newValue);
   };
 
+  const discountPercentage = selectedProduct?.discountPrice
+    ? Math.round(((selectedProduct?.discountPrice - selectedProduct?.price) / selectedProduct?.discountPrice) * 100)
+    : 0;
+
+  if (loading) {
+    return (
+      <Container
+        maxWidth="xl"
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "80vh" }}
+      >
+        <CircularProgress size={60} />
+      </Container>
+    );
+  }
+
+
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
@@ -139,17 +125,17 @@ const ProductDetailsComponents = () => {
           <Card sx={{ mb: 2 }}>
             <CardMedia
               component="img"
-              image={productImages[selectedImage]}
-              alt={product.name}
+              image={selectedProduct?.images[selectedImage]?.url}
+              alt={selectedProduct.productName}
               sx={{
                 objectFit: 'cover',
-                height: { xs: 500, sm: 700 }, // responsive height
+                height: { xs: 500, sm: 700 },
               }}
             />
 
           </Card>
           <Box sx={{ display: 'flex', gap: 1 }}>
-            {productImages.map((image, index) => (
+            {selectedProduct?.images?.map((image, index) => (
               <Box key={index} sx={{ flex: 1 }}>
                 <Card
                   sx={{
@@ -162,7 +148,7 @@ const ProductDetailsComponents = () => {
                   <CardMedia
                     component="img"
                     height="80"
-                    image={image}
+                    image={image?.url}
                     alt={`Fabric view ${index + 1}`}
                     sx={{ objectFit: 'cover' }}
                   />
@@ -177,19 +163,19 @@ const ProductDetailsComponents = () => {
           <Box sx={{ mb: 2 }}>
             <Chip label="Premium Quality" color={theme.palette.primary.main} size="small" sx={{ mb: 2 }} />
             <Typography variant="h6" gutterBottom sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main, fontWeight: "bold" }}>
-              {product.productName}
+              {selectedProduct?.productName}
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Rating value={product.rating} precision={0.1} readOnly size="small" />
+              <Rating value={selectedProduct?.rating || 4} precision={0.1} readOnly size="small" />
               <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ ml: 1 }}>
-                ({product.reviewCount} reviews)
+                ({selectedProduct?.reviewCount || 0} reviews)
               </Typography>
             </Box>
           </Box>
 
           <Box sx={{ mb: 3 }}>
             <Typography variant="h5" color={theme.palette.primary.main} component="span" sx={{ fontWeight: 600, fontFamily: theme.palette.typography.fontFamily }}>
-              ₹{product.price}
+              ₹{selectedProduct?.price}
             </Typography>
             <Typography
               variant="body1"
@@ -197,13 +183,13 @@ const ProductDetailsComponents = () => {
               component="span"
               sx={{ ml: 2, textDecoration: 'line-through', fontFamily: theme.palette.typography.fontFamily }}
             >
-              ₹{product.originalPrice}
+              ₹{selectedProduct?.discountPrice}
             </Typography>
-            <Chip label="25% OFF" color="error" size="small" sx={{ ml: 2, fontFamily: theme.palette.typography.fontFamily }} />
+            <Chip label={`${discountPercentage}% OFF`} color="error" size="small" sx={{ ml: 2, fontFamily: theme.palette.typography.fontFamily }} />
           </Box>
 
           <Typography variant="body2" paragraph color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>
-            {product.description}
+            {selectedProduct?.description}
           </Typography>
 
           {/* Fabric Specifications */}
@@ -214,15 +200,15 @@ const ProductDetailsComponents = () => {
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="body2" color={theme.palette.primary.main} sx={{ fontFamily: theme.palette.typography.fontFamily }}>Fabric:</Typography>
-                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>{product.fabric}</Typography>
+                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>{selectedProduct?.category}</Typography>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="body2" color={theme.palette.primary.main} sx={{ fontFamily: theme.palette.typography.fontFamily }}>Weight:</Typography>
-                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>{product.weight}</Typography>
+                <Typography variant="body2" color={theme.palette.primary.main} sx={{ fontFamily: theme.palette.typography.fontFamily }}>Shirt:</Typography>
+                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>{selectedProduct?.shirtMeter}m</Typography>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="body2" color={theme.palette.primary.main} sx={{ fontFamily: theme.palette.typography.fontFamily }}>Width:</Typography>
-                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>{product.width}</Typography>
+                <Typography variant="body2" color={theme.palette.primary.main} sx={{ fontFamily: theme.palette.typography.fontFamily }}>Paint:</Typography>
+                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>{selectedProduct?.paintMeter}m</Typography>
               </Box>
               {/* <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="body2" color={theme.palette.primary.main} sx={{fontFamily: theme.palette.typography.fontFamily}}>Composition:</Typography>
@@ -269,7 +255,10 @@ const ProductDetailsComponents = () => {
               size="large"
               fullWidth
               startIcon={<ShoppingCart />}
-            //   sx={{ mb: 2 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                dispatch(addToCart({ ...selectedProduct, quantity }));
+              }}
             >
               Add to Cart
             </Button>
@@ -305,39 +294,64 @@ const ProductDetailsComponents = () => {
           <Tab label="Care Instructions" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }} />
         </Tabs>
 
-        <TabPanel value={tabValue} index={0}>
-          <List>
-            {product.features.map((feature, index) => (
+        <TabPanel value={tabValue} index={0} sx={{ p: 0 }}>
+          <List sx={{ pl: 0, pr: 0 }}>
+            {selectedProduct?.features.map((feature, index) => (
               <ListItem key={index}>
                 <ListItemText primary={feature} sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }} />
               </ListItem>
             ))}
           </List>
         </TabPanel>
-
-        <TabPanel value={tabValue} index={1}>
-          {reviews?.map((review, index) => (
-            <Box key={index} sx={{ mb: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                <Avatar sx={{ mr: 2 }}>{review.avatar}</Avatar>
-                <Box>
-                  <Typography variant="subtitle1" color={theme.palette.primary.main} sx={{ fontFamily: theme.palette.typography.fontFamily }}>{review.name}</Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Rating value={review.rating} size="small" readOnly />
-                    <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ ml: 1, fontFamily: theme.palette.typography.fontFamily }}>
-                      {review.date}
+        <TabPanel value={tabValue} index={1} sx={{ p: 0 }}>
+          {reviews && reviews.length > 0 ? (
+            reviews.map((review, index) => (
+              <Box key={index} sx={{ my: 3 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                  <Avatar sx={{ mr: 2 }}>{review.avatar}</Avatar>
+                  <Box>
+                    <Typography
+                      variant="subtitle1"
+                      color={theme.palette.primary.main}
+                      sx={{ fontFamily: theme.palette.typography.fontFamily }}
+                    >
+                      {review.name}
                     </Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Rating value={review.rating} size="small" readOnly />
+                      <Typography
+                        variant="body2"
+                        color={theme.palette.primary.lightmain}
+                        sx={{ ml: 1, fontFamily: theme.palette.typography.fontFamily }}
+                      >
+                        {review.date}
+                      </Typography>
+                    </Box>
                   </Box>
                 </Box>
+                <Typography
+                  variant="body2"
+                  sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }}
+                >
+                  {review.comment}
+                </Typography>
+                {index < reviews.length - 1 && <Divider sx={{ mt: 2 }} />}
               </Box>
-              <Typography variant="body2" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }}>{review.comment}</Typography>
-              {index < reviews.length - 1 && <Divider sx={{ mt: 2 }} />}
-            </Box>
-          ))}
+            ))
+          ) : (
+            <Typography
+              variant="body2"
+              align="center"
+              sx={{ color: theme.palette.primary.lightmain, fontFamily: theme.palette.typography.fontFamily, my: 4 }}
+            >
+              No reviews yet
+            </Typography>
+          )}
         </TabPanel>
 
+
         <TabPanel value={tabValue} index={2}>
-          <Typography variant="body1" paragraph sx={{ color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily }}>
+          <Typography variant="body1" paragraph sx={{ color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily, mt: 2, px: 2 }}>
             <strong>Washing Instructions:</strong>
           </Typography>
           <List>
