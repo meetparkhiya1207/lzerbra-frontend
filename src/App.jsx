@@ -14,11 +14,13 @@ import CartPageSimple from "./comman/CartPage";
 import ScrollToTop from "./comman/ScrollToTop";
 import CheckoutPageSimple from "./comman/CheckoutPageSimple";
 import OrdersPageSimple from "./comman/OrdersPageSimple";
+import { CartDrawer } from "./comman/CartDrawer";
 
 function Layout() {
   return (
     <>
       <Header />
+       <CartDrawer />
       <Outlet />
       <Footer />
     </>

@@ -19,8 +19,8 @@ import { addToCart } from '../../features/cart/cartSlice';
 const ProductCard = ({
     product,
 }) => {
-    console.log("productproductproduct",product);
-    
+    console.log("productproductproduct", product);
+
     const theme = useTheme();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -113,8 +113,8 @@ const ProductCard = ({
                     onClick={(e) => {
                         e.stopPropagation();
                         setLiked(!liked);
-                        console.log("likedliked",liked);
-                        
+                        console.log("likedliked", liked);
+
                         if (!liked) {
                             confetti();
                             dispatch({ type: 'liked/addLiked', payload: product });
@@ -155,6 +155,8 @@ const ProductCard = ({
                         fontWeight: 600,
                         mb: 1,
                         overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
                         textOverflow: 'ellipsis',
                         display: '-webkit-box',
                         WebkitLineClamp: 2,

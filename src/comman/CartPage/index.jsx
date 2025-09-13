@@ -151,7 +151,7 @@ const CartPageSimple = () => {
 
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                             <IconButton
-                                                onClick={() => dispatch(updateQuantity({ id: item.id, change: -1 }))}
+                                                onClick={() => dispatch(updateQuantity({ id: item.product_id, change: -1 }))}
                                                 size="small"
                                             >
                                                 <Remove />
@@ -160,7 +160,7 @@ const CartPageSimple = () => {
                                                 {item.quantity}
                                             </Typography>
                                             <IconButton
-                                                onClick={() => dispatch(updateQuantity({ id: item.id, change: 1 }))}
+                                                onClick={() => dispatch(updateQuantity({ id: item.product_id, change: 1 }))}
 
                                                 size="small"
                                             >

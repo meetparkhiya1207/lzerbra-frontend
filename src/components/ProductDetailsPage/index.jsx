@@ -34,9 +34,9 @@ import {
   Security,
 } from '@mui/icons-material';
 import { useParams } from 'react-router-dom';
-import { getProductById, getProducts } from '../../api/productApi';
 import { addToCart } from '../../features/cart/cartSlice';
 import { useDispatch } from 'react-redux';
+import { getProductById } from '../../hooks/useProducts';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -49,31 +49,12 @@ function TabPanel(props) {
 
 const ProductDetailsComponents = () => {
   const { id } = useParams();
+  const { product, isLoading, isError } = getProductById(id);  
   const theme = useTheme();
   const dispatch = useDispatch();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [tabValue, setTabValue] = useState(0);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const res = await getProductById(id);
-        if (res.success) {
-          console.log("ressss", res);
-          setSelectedProduct(res.data);
-        }
-      } catch (err) {
-        console.error("❌ Failed to fetch products", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  }, []);
 
   const reviews = [
     // {
@@ -101,11 +82,11 @@ const ProductDetailsComponents = () => {
     setTabValue(newValue);
   };
 
-  const discountPercentage = selectedProduct?.discountPrice
-    ? Math.round(((selectedProduct?.discountPrice - selectedProduct?.price) / selectedProduct?.discountPrice) * 100)
+  const discountPercentage = product?.discountPrice
+    ? Math.round(((product?.discountPrice - product?.price) / product?.discountPrice) * 100)
     : 0;
 
-  if (loading) {
+  if (isLoading) {
     return (
       <Container
         maxWidth="xl"
@@ -125,8 +106,8 @@ const ProductDetailsComponents = () => {
           <Card sx={{ mb: 2 }}>
             <CardMedia
               component="img"
-              image={selectedProduct?.images[selectedImage]?.url}
-              alt={selectedProduct.productName}
+              image={product?.images[selectedImage]?.url}
+              alt={product?.productName}
               sx={{
                 objectFit: 'cover',
                 height: { xs: 500, sm: 700 },
@@ -135,8 +116,8 @@ const ProductDetailsComponents = () => {
 
           </Card>
           <Box sx={{ display: 'flex', gap: 1 }}>
-            {selectedProduct?.images?.map((image, index) => (
-              <Box key={index} sx={{ flex: 1 }}>
+            {product?.images?.map((image, index) => (
+              <Box key={index}>
                 <Card
                   sx={{
                     cursor: 'pointer',
@@ -144,6 +125,7 @@ const ProductDetailsComponents = () => {
                     borderColor: selectedImage === index ? 'primary.main' : 'transparent',
                   }}
                   onClick={() => setSelectedImage(index)}
+                  // width="80"
                 >
                   <CardMedia
                     component="img"
@@ -163,19 +145,19 @@ const ProductDetailsComponents = () => {
           <Box sx={{ mb: 2 }}>
             <Chip label="Premium Quality" color={theme.palette.primary.main} size="small" sx={{ mb: 2 }} />
             <Typography variant="h6" gutterBottom sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main, fontWeight: "bold" }}>
-              {selectedProduct?.productName}
+              {product?.productName}
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <Rating value={selectedProduct?.rating || 4} precision={0.1} readOnly size="small" />
+              <Rating value={product?.rating || 4} precision={0.1} readOnly size="small" />
               <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ ml: 1 }}>
-                ({selectedProduct?.reviewCount || 0} reviews)
+                ({product?.reviewCount || 0} reviews)
               </Typography>
             </Box>
           </Box>
 
           <Box sx={{ mb: 3 }}>
             <Typography variant="h5" color={theme.palette.primary.main} component="span" sx={{ fontWeight: 600, fontFamily: theme.palette.typography.fontFamily }}>
-              ₹{selectedProduct?.price}
+              ₹{product?.price}
             </Typography>
             <Typography
               variant="body1"
@@ -183,13 +165,13 @@ const ProductDetailsComponents = () => {
               component="span"
               sx={{ ml: 2, textDecoration: 'line-through', fontFamily: theme.palette.typography.fontFamily }}
             >
-              ₹{selectedProduct?.discountPrice}
+              ₹{product?.discountPrice}
             </Typography>
             <Chip label={`${discountPercentage}% OFF`} color="error" size="small" sx={{ ml: 2, fontFamily: theme.palette.typography.fontFamily }} />
           </Box>
 
           <Typography variant="body2" paragraph color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>
-            {selectedProduct?.description}
+            {product?.description}
           </Typography>
 
           {/* Fabric Specifications */}
@@ -200,15 +182,15 @@ const ProductDetailsComponents = () => {
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="body2" color={theme.palette.primary.main} sx={{ fontFamily: theme.palette.typography.fontFamily }}>Fabric:</Typography>
-                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>{selectedProduct?.category}</Typography>
+                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>{product?.category}</Typography>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="body2" color={theme.palette.primary.main} sx={{ fontFamily: theme.palette.typography.fontFamily }}>Shirt:</Typography>
-                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>{selectedProduct?.shirtMeter}m</Typography>
+                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>{product?.shirtMeter}m</Typography>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="body2" color={theme.palette.primary.main} sx={{ fontFamily: theme.palette.typography.fontFamily }}>Paint:</Typography>
-                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>{selectedProduct?.paintMeter}m</Typography>
+                <Typography variant="body2" color={theme.palette.primary.lightmain} sx={{ fontFamily: theme.palette.typography.fontFamily }}>{product?.paintMeter}m</Typography>
               </Box>
               {/* <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Typography variant="body2" color={theme.palette.primary.main} sx={{fontFamily: theme.palette.typography.fontFamily}}>Composition:</Typography>
@@ -253,12 +235,13 @@ const ProductDetailsComponents = () => {
             <Button
               variant="contained"
               size="large"
-              fullWidth
+              // fullWidth
               startIcon={<ShoppingCart />}
               onClick={(e) => {
                 e.stopPropagation();
-                dispatch(addToCart({ ...selectedProduct, quantity }));
+                dispatch(addToCart({ ...product, quantity }));
               }}
+              sx={{width:{xs:'100%',sm:"32%",md:"43%",lg:"36%", xl:"30%"}}}
             >
               Add to Cart
             </Button>
@@ -296,7 +279,7 @@ const ProductDetailsComponents = () => {
 
         <TabPanel value={tabValue} index={0} sx={{ p: 0 }}>
           <List sx={{ pl: 0, pr: 0 }}>
-            {selectedProduct?.features.map((feature, index) => (
+            {product?.features.map((feature, index) => (
               <ListItem key={index}>
                 <ListItemText primary={feature} sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }} />
               </ListItem>

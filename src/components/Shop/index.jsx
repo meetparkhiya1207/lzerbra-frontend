@@ -21,12 +21,13 @@ import {
     alpha,
     TextField,
     InputAdornment,
+    CircularProgress,
 } from '@mui/material';
 import { Home, FilterList } from '@mui/icons-material';
 import ProductCard from '../../comman/ProductCard';
 import FilterSidebar from '../../comman/FilterSidebar/FilterSidebar';
 import { MenuIcon, SearchIcon } from 'lucide-react';
-import { getProducts } from '../../api/productApi';
+import { getAllProducts } from '../../hooks/useProducts';
 
 // Sample product data
 const sampleProducts = [
@@ -105,6 +106,12 @@ const sampleProducts = [
 ];
 
 const Shop = () => {
+
+    // Api Calling
+    const { products, isLoading, isError } = getAllProducts();
+    console.log("productsproducts", products);
+
+
     const [searchQuery, setSearchQuery] = useState('');
     const [sortBy, setSortBy] = useState('popularity');
     const [cartItemCount, setCartItemCount] = useState(0);
@@ -121,37 +128,18 @@ const Shop = () => {
         inStock: false,
     });
 
-      // ✅ Hooks inside component
-  const [products, setProducts] = useState([]);
-  console.log("productsproducts",products);
-  
-
-  // ✅ Fetch products
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const res = await getProducts();
-        // dispatch(insertAllProductList(res))
-
-        setProducts(res);
-      } catch (err) {
-        console.error("❌ Failed to fetch products", err);
-      } finally {
-      }
-    };
-    fetchProducts();
-  }, []);
-
+    
     // Filter and sort products
     const filteredAndSortedProducts = useMemo(() => {
-        let filtered = products.filter(product => {
+        console.log("productsproducts", products);
+        let filtered = products?.filter(product => {
             // Search filter
             if (searchQuery && !product.productName.toLowerCase().includes(searchQuery.toLowerCase())) {
                 return false;
             }
 
             // Category filter
-            if (filters.category.length > 0 && !filters.category.includes(product.category)) {
+            if (filters?.category?.length > 0 && !filters.category.includes(product.category)) {
                 return false;
             }
 
@@ -174,7 +162,7 @@ const Shop = () => {
         });
 
         // Sort products
-        filtered.sort((a, b) => {
+        filtered?.sort((a, b) => {
             switch (sortBy) {
                 case 'price-low':
                     return a.price - b.price;
@@ -214,7 +202,7 @@ const Shop = () => {
             case 'category':
                 setFilters({
                     ...filters,
-                    category: filters.category.filter(c => c !== value),
+                    category: filters.category?.filter(c => c !== value),
                 });
                 break;
             case 'price':
@@ -229,6 +217,7 @@ const Shop = () => {
     const toggleFilterDrawer = () => {
         setFilterDrawerOpen(!filterDrawerOpen);
     };
+console.log("filteredAndSortedProductsfilteredAndSortedProducts",filteredAndSortedProducts);
 
     return (
         <Box sx={{ minHeight: '100vh', backgroundColor: theme.palette.backgroundcolor.main }}>
@@ -264,13 +253,13 @@ const Shop = () => {
                     {/* Main Content */}
                     <Box sx={{ flexGrow: 1 }}>
                         {/* Active Filters */}
-                        {(filters.category.length > 0 || filters.rating > 0 || filters.priceRange[0] > 0 || filters.priceRange[1] < 200000) && (
+                        {(filters?.category?.length > 0 || filters?.rating > 0 || filters?.priceRange[0] > 0 || filters?.priceRange[1] < 200000) && (
                             <Box sx={{ mb: 2 }}>
                                 <Typography variant="subtitle2" sx={{ mb: 1 }}>
                                     Active Filters:
                                 </Typography>
                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                                    {filters.category.map(category => (
+                                    {filters?.category?.map(category => (
                                         <Chip
                                             key={category}
                                             label={category}
@@ -312,10 +301,10 @@ const Shop = () => {
                                 fontSize: { xs: '0.9rem', sm: '1rem' }, fontFamily: theme.palette.typography.fontFamily,
                                 color: theme.palette.primary.main
                             }}>
-                                Showing {products.length} results
+                                Showing {filteredAndSortedProducts?.length} results
                                 {searchQuery && ` for "${searchQuery}"`}
                             </Typography>
-                            <Box sx={{ display: "flex", gap: {xs:4, sm:2}, flexDirection: { xs: 'column', sm: 'row' }, width: { xs: "100%", sm: "60%" } }}>
+                            <Box sx={{ display: "flex", gap: { xs: 4, sm: 2 }, flexDirection: { xs: 'column', sm: 'row' }, width: { xs: "100%", sm: "60%" } }}>
 
                                 <TextField
                                     fullWidth
@@ -400,7 +389,13 @@ const Shop = () => {
                                 gap: { xs: 1, sm: 2 },
                             }}
                         >
-                            {products.map((product) => (
+                            {isLoading && (
+                                <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
+                                    <CircularProgress />
+                                </Box>
+                            )}
+
+                            {!isLoading && filteredAndSortedProducts?.map((product) => (
                                 <ProductCard
                                     key={product.id}
                                     product={product}
@@ -410,7 +405,7 @@ const Shop = () => {
                             ))}
                         </Box>
 
-                        {products.length === 0 && (
+                        {!isLoading && filteredAndSortedProducts?.length === 0 && (
                             <Box
                                 sx={{
                                     display: "flex",
@@ -428,12 +423,17 @@ const Shop = () => {
                                 />
                                 <Typography
                                     variant="h6"
-                                    sx={{ color: theme.palette.primary.lightmain, textAlign: "center", fontFamily: theme.palette.typography.fontFamily, }}
+                                    sx={{
+                                        color: theme.palette.primary.lightmain,
+                                        textAlign: "center",
+                                        fontFamily: theme.palette.typography.fontFamily,
+                                    }}
                                 >
                                     No Products Found
                                 </Typography>
                             </Box>
                         )}
+
                     </Box>
                 </Box>
 

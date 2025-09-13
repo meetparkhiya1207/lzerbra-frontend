@@ -31,6 +31,8 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import { useSelector } from "react-redux";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
+import { openDrawer } from "../../features/cart/cartSlice";
+import { CartDrawer } from "../CartDrawer";
 
 const menuItems = [
     { label: "Home", path: "/" },
@@ -56,8 +58,8 @@ export default function Header() {
     const [cartProductPopover, setCartProductPopover] = useState(null);
     // const [cartProduct, setCartProduct] = useState(null);
     const cartProduct = useSelector((state) => state.cart.cartItems);
-    console.log("cartProductcartProduct",cartProduct);
-    
+    console.log("cartProductcartProduct", cartProduct);
+
     const likedProduct = useSelector((state) => state.liked.likedProducts);
 
     // Profile menu state
@@ -99,7 +101,7 @@ export default function Header() {
     const open = Boolean(favProduct);
     const cartPopoverOpen = Boolean(cartProductPopover);
     const id = open ? "simple-popover" : undefined;
-console.log("cartProductcartProduct",cartProduct);
+    console.log("cartProductcartProduct", cartProduct);
 
     return (
         <>
@@ -113,6 +115,7 @@ console.log("cartProductcartProduct",cartProduct);
                 }}
             >
                 <Container maxWidth="xl">
+                    <CartDrawer />
                     <Toolbar
                         sx={{ display: "flex", justifyContent: "space-between", px: 0 }}
                     >
@@ -339,9 +342,13 @@ console.log("cartProductcartProduct",cartProduct);
                                     horizontal: "right",
                                 }}
                             >
-                                <IconButton sx={{ color: theme.palette.primary.main }} onClick={handleCartClick}>
+                                <IconButton
+                                    sx={{ color: theme.palette.primary.main }}
+                                    onClick={() => dispatch(openDrawer())} // ✅ Correct way
+                                >
                                     <ShoppingBagOutlinedIcon />
                                 </IconButton>
+
                                 <Popover
                                     open={cartPopoverOpen}
                                     anchorEl={cartProductPopover}
@@ -367,7 +374,7 @@ console.log("cartProductcartProduct",cartProduct);
                                     <Typography
                                         variant="subtitle1"
                                         fontWeight="bold"
-                                        sx={{ fontFamily: theme.palette.typography.fontFamily, color:theme.palette.primary.main }}
+                                        sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}
                                     >
                                         Cart Products
                                     </Typography>
@@ -382,7 +389,7 @@ console.log("cartProductcartProduct",cartProduct);
                                                     scrollbarWidth: "none",
                                                     "&::-webkit-scrollbar": { display: "none" },
                                                 }}
-                                                onClick={() => {handleCartClose(); navigate("/cart")}}
+                                                onClick={() => { handleCartClose(); navigate("/cart") }}
                                             >
                                                 {cartProduct.map((product) => (
                                                     <Box key={product.id}>
@@ -453,7 +460,7 @@ console.log("cartProductcartProduct",cartProduct);
                                                         fontWeight: "bold",
                                                         color: theme.palette.primary.main,
                                                     }}
-                                                    onClick={() => {handleCartClose(); navigate("/cart")}}
+                                                    onClick={() => { handleCartClose(); navigate("/cart") }}
                                                 >
                                                     View All
                                                 </Button>
@@ -493,7 +500,7 @@ console.log("cartProductcartProduct",cartProduct);
                     <List>
                         {menuItems.map((text, index) => (
                             <ListItem key={index} disablePadding>
-                                <ListItemButton onClick={() => {navigate(text.path); setDrawerOpen(false)}}>
+                                <ListItemButton onClick={() => { navigate(text.path); setDrawerOpen(false) }}>
                                     <ListItemText
                                         primary={text?.label}
                                         primaryTypographyProps={{ fontWeight: "bold" }}

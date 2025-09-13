@@ -4,6 +4,7 @@ const initialState = {
   cartItems: [],
   totalQuantity: 0,
   totalPrice: 0,
+  isDrawerOpen: false,
 };
 
 const cartSlice = createSlice({
@@ -12,7 +13,8 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const item = action.payload;
-      const existingItem = state.cartItems.find((i) => i.id === item.id);
+
+      const existingItem = state.cartItems.find((i) => i.product_id === item.product_id);
 
       if (existingItem) {
         existingItem.quantity += item.quantity || 1;
@@ -22,23 +24,34 @@ const cartSlice = createSlice({
 
       state.totalQuantity += item.quantity || 1;
       state.totalPrice += item.price * (item.quantity || 1);
+      state.isDrawerOpen = true;
+
     },
     updateQuantity: (state, action) => {
       const { id, change } = action.payload;
-      const item = state.cartItems.find((x) => x.id === id);
+      const item = state.cartItems.find((x) => x.product_id === id);
+      console.log("iddd", action.payload);
+
       if (item) {
         item.quantity = Math.max(1, item.quantity + change);
       }
     },
     removeFromCart: (state, action) => {
       const id = action.payload;
-      const existingItem = state.cartItems.find((i) => i.id === id);
+      const existingItem = state.cartItems.find((i) => i.product_id === id);
+      console.log("iddd", id);
 
       if (existingItem) {
         state.totalQuantity -= existingItem.quantity;
         state.totalPrice -= existingItem.price * existingItem.quantity;
-        state.cartItems = state.cartItems.filter((i) => i.id !== id);
+        state.cartItems = state.cartItems.filter((i) => i.product_id !== id);
       }
+    },
+    closeDrawer: (state) => {
+      state.isDrawerOpen = false;
+    },
+    openDrawer: (state) => {
+      state.isDrawerOpen = true;
     },
 
     clearCart: (state) => {
@@ -49,6 +62,6 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, updateQuantity, clearCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, updateQuantity, clearCart, closeDrawer, openDrawer } = cartSlice.actions;
 
 export default cartSlice.reducer;
