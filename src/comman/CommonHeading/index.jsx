@@ -33,7 +33,7 @@ const CommonHeading = ({
                     backgroundColor: theme.palette.primary.maindark,
                     mx: "auto",
                     borderRadius: 2,
-                    mb: 5
+                    mb: mb ? 3 : 5
                 }}
             />
         </Box>

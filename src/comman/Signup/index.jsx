@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useRegister, useResendOTP, useVerifyOTP } from '../../hooks/auth';
 import { toast } from 'react-toastify';
+import CommonHeading from '../CommonHeading';
 
 const Signup = () => {
   const { registerCustomer, isMutating } = useRegister();
@@ -173,10 +174,11 @@ const Signup = () => {
     <Container maxWidth="sm" sx={{ mt: 8, mb: 4 }}>
       <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
         <Box sx={{ textAlign: 'center', mb: 3 }}>
-          <Typography variant="h4" component="h1" gutterBottom fontWeight="bold" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
+          {/* <Typography variant="h4" component="h1" gutterBottom fontWeight="bold" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
             {step === 1 ? "Create Account" : "Verify OTP"}
-          </Typography>
-          <Typography variant="body1" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
+          </Typography> */}
+           <CommonHeading title={step === 1 ? "Create Account" : "Verify OTP"} lineWidth={100} align="center" mb={{ xs: 0, sm: 3 }} />
+          <Typography variant="body1" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main, fontSize: { xs: "0.8rem", sm: "1rem" } }}>
             {step === 1 ? "Join Lzebra and start shopping today" : "Enter the OTP sent to your email"}
           </Typography>
         </Box>

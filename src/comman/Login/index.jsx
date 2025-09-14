@@ -15,6 +15,7 @@ import { Google, Facebook } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useLogin } from '../../hooks/auth';
 import { toast } from 'react-toastify';
+import CommonHeading from '../CommonHeading';
 
 const Login = () => {
     const theme = useTheme();
@@ -79,10 +80,11 @@ const Login = () => {
         <Container maxWidth="sm" sx={{ mt: 8, mb: 4 }}>
             <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
                 <Box sx={{ textAlign: 'center', mb: 3 }}>
-                    <Typography variant="h4" component="h1" gutterBottom fontWeight="bold" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
+                    {/* <Typography variant="h4" component="h1" gutterBottom fontWeight="bold" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
                         Welcome Back
-                    </Typography>
-                    <Typography variant="body1" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
+                    </Typography> */}
+                    <CommonHeading title="Welcome Back" lineWidth={120} align="center" mb={{ xs: 0, sm: 3 }} />
+                    <Typography variant="body1" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main, fontSize: { xs: "0.8rem", sm: "0.9rem", md: "1rem" }, }}>
                         Sign in to your account to continue shopping
                     </Typography>
                 </Box>
