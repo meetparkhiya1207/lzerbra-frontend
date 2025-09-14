@@ -66,13 +66,14 @@ const CategorySlider = () => {
                 {/* Swiper Slider */}
                 <Swiper
                     spaceBetween={10}
-                    slidesPerView={2.5} // 👈 Smallest screen
+                    slidesPerView={1.5} // 👈 Smallest screen
                     loop={true}
                     // autoplay={{ delay: 3000 }}
                     modules={[Autoplay]}
                     breakpoints={{
+                        300: { slidesPerView: 1.5 },
+                        430: { slidesPerView: 2.5 },
                         480: { slidesPerView: 3.5 },
-                        400: { slidesPerView: 3.5 },
                         580: { slidesPerView: 3 },
                         650: { slidesPerView: 3.5 },
                         900: { slidesPerView: 3.5 },    // tablets

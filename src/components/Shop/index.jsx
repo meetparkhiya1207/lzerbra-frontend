@@ -29,91 +29,13 @@ import FilterSidebar from '../../comman/FilterSidebar/FilterSidebar';
 import { MenuIcon, SearchIcon } from 'lucide-react';
 import { getAllProducts } from '../../hooks/useProducts';
 
-// Sample product data
-const sampleProducts = [
-    {
-        id: '1',
-        name: 'Premium Smartphone - Latest Model with Advanced Camera',
-        price: 45999,
-        originalPrice: 54999,
-        image: "/images/Product1.jpg",
-        rating: 4.5,
-        reviewCount: 1234,
-        discount: 16,
-        category: 'Electronics',
-        inStock: true,
-    },
-    {
-        id: '2',
-        name: 'Wireless Bluetooth Headphones - Premium Sound Quality',
-        price: 12999,
-        originalPrice: 16999,
-        image: "/images/Product2.jpg",
-        rating: 4.3,
-        reviewCount: 856,
-        discount: 24,
-        category: 'Audio',
-        inStock: true,
-    },
-    {
-        id: '3',
-        name: 'Gaming Laptop - High Performance with RGB Keyboard',
-        price: 89999,
-        originalPrice: 109999,
-        image: "/images/Product3.jpg",
-        rating: 4.7,
-        reviewCount: 542,
-        discount: 18,
-        category: 'Computers',
-        inStock: true,
-    },
-    {
-        id: '4',
-        name: 'Smart Watch with Fitness Tracking and Health Monitor',
-        price: 8999,
-        originalPrice: 12999,
-        image: "/images/Product4.jpg",
-        rating: 4.2,
-        reviewCount: 2156,
-        discount: 31,
-        category: 'Electronics',
-        inStock: true,
-    },
-    {
-        id: '5',
-        name: 'Professional DSLR Camera with Telephoto Lens',
-        price: 65999,
-        originalPrice: 79999,
-        image: "/images/Product5.jpg",
-        rating: 4.8,
-        reviewCount: 389,
-        discount: 18,
-        category: 'Cameras',
-        inStock: false,
-    },
-    {
-        id: '6',
-        name: 'Ergonomic Gaming Chair with Lumbar Support',
-        price: 15999,
-        originalPrice: 19999,
-        image: "/images/Product1.jpg",
-        rating: 4.4,
-        reviewCount: 678,
-        discount: 20,
-        category: 'Gaming',
-        inStock: true,
-    },
-];
-
 const Shop = () => {
 
     // Api Calling
     const { products, isLoading, isError } = getAllProducts();
-    console.log("productsproducts", products);
-
 
     const [searchQuery, setSearchQuery] = useState('');
-    const [sortBy, setSortBy] = useState('popularity');
+    const [sortBy, setSortBy] = useState('price-high');
     const [cartItemCount, setCartItemCount] = useState(0);
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
     const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
@@ -128,41 +50,22 @@ const Shop = () => {
         inStock: false,
     });
 
-    
+
     // Filter and sort products
     const filteredAndSortedProducts = useMemo(() => {
-        console.log("productsproducts", products);
-        let filtered = products?.filter(product => {
-            // Search filter
-            if (searchQuery && !product.productName.toLowerCase().includes(searchQuery.toLowerCase())) {
+        let filtered = (products || []).filter(product => {
+            if (searchQuery && !product.productName?.toLowerCase().includes(searchQuery.toLowerCase())) {
                 return false;
             }
 
-            // Category filter
             if (filters?.category?.length > 0 && !filters.category.includes(product.category)) {
                 return false;
             }
 
-            // Price filter
-            // if (product.price < filters.priceRange[0] || product.price > filters.priceRange[1]) {
-            //     return false;
-            // }
-
-            // // Rating filter
-            // if (product.rating < filters.rating) {
-            //     return false;
-            // }
-
-            // // Stock filter
-            // if (filters.inStock && !product.inStock) {
-            //     return false;
-            // }
-
             return true;
         });
 
-        // Sort products
-        filtered?.sort((a, b) => {
+        filtered.sort((a, b) => {
             switch (sortBy) {
                 case 'price-low':
                     return a.price - b.price;
@@ -171,14 +74,14 @@ const Shop = () => {
                 case 'rating':
                     return b.rating - a.rating;
                 case 'newest':
-                    return 0; // Would sort by date in real app
+                    return 0;
                 default:
-                    return b.reviewCount - a.reviewCount; // popularity
+                    return b.reviewCount - a.reviewCount;
             }
         });
-
         return filtered;
-    }, [searchQuery, sortBy, filters]);
+    }, [searchQuery, sortBy, filters, products]);
+
 
     const handleAddToCart = (product) => {
         setCartItemCount(prev => prev + 1);
@@ -217,19 +120,11 @@ const Shop = () => {
     const toggleFilterDrawer = () => {
         setFilterDrawerOpen(!filterDrawerOpen);
     };
-console.log("filteredAndSortedProductsfilteredAndSortedProducts",filteredAndSortedProducts);
+    console.log("filteredAndSortedProductsfilteredAndSortedProducts", filteredAndSortedProducts);
 
     return (
         <Box sx={{ minHeight: '100vh', backgroundColor: theme.palette.backgroundcolor.main }}>
             <Container maxWidth="xl" sx={{ py: { xs: 2, sm: 3 } }}>
-                {/* Breadcrumbs */}
-                {/* <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 2, display: { xs: 'none', sm: 'flex' } }}>
-                    <Link color="inherit" href="/" sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Home sx={{ mr: 0.5 }} fontSize="inherit" />
-                        Home
-                    </Link>
-                    <Typography color="text.primary">Shop</Typography>
-                </Breadcrumbs> */}
 
                 <Box sx={{ display: 'flex', gap: { xs: 0, md: 3 } }}>
                     {/* Desktop Sidebar Filters */}

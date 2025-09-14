@@ -49,12 +49,13 @@ function TabPanel(props) {
 
 const ProductDetailsComponents = () => {
   const { id } = useParams();
-  const { product, isLoading, isError } = getProductById(id);  
+  const { product, isLoading, isError } = getProductById(id);
   const theme = useTheme();
   const dispatch = useDispatch();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [tabValue, setTabValue] = useState(0);
+  const [fade, setFade] = useState(false);
 
   const reviews = [
     // {
@@ -86,6 +87,23 @@ const ProductDetailsComponents = () => {
     ? Math.round(((product?.discountPrice - product?.price) / product?.discountPrice) * 100)
     : 0;
 
+
+  useEffect(() => {
+    if (!product?.images?.length) return; // ✅ condition only inside effect
+
+    const interval = setInterval(() => {
+      setFade(true);
+      setTimeout(() => {
+        setSelectedImage((prev) =>
+          prev === product.images.length - 1 ? 0 : prev + 1
+        );
+        setFade(false);
+      }, 400);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [product?.images]);
+
   if (isLoading) {
     return (
       <Container
@@ -96,43 +114,62 @@ const ProductDetailsComponents = () => {
       </Container>
     );
   }
-
-
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
         {/* Product Images */}
-        <Box sx={{ flex: 1 }}>
-          <Card sx={{ mb: 2 }}>
+        <Box sx={{ flex: 1, position: "relative" }}>
+          <Card sx={{ mb: 2, overflow: "hidden", position: "relative" }}>
+            {/* Main Image */}
             <CardMedia
               component="img"
-              image={product?.images[selectedImage]?.url}
+              image={product?.images?.[selectedImage]?.url}
               alt={product?.productName}
               sx={{
-                objectFit: 'cover',
-                height: "auto",
+                objectFit: "cover",
+                height: "100%",
+                width: "100%",
+                transform: fade ? "scale(1.1)" : "scale(1)",
+                transition: "transform 0.6s ease-in-out, opacity 0.6s ease-in-out",
+                opacity: fade ? 0.8 : 1,
               }}
             />
 
+            {/* White overlay */}
+            <Box
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                bgcolor: "white",
+                opacity: fade ? 0.4 : 0,
+                transition: "opacity 0.4s ease-in-out",
+                pointerEvents: "none",
+              }}
+            />
           </Card>
-          <Box sx={{ display: 'flex', gap: 1 }}>
+
+          {/* Thumbnails */}
+          <Box sx={{ display: "flex", gap: 1 }}>
             {product?.images?.map((image, index) => (
               <Box key={index}>
                 <Card
                   sx={{
-                    cursor: 'pointer',
-                    border: selectedImage === index ? '2px solid' : 'none',
-                    borderColor: selectedImage === index ? 'primary.main' : 'transparent',
+                    cursor: "pointer",
+                    border: selectedImage === index ? "2px solid" : "none",
+                    borderColor:
+                      selectedImage === index ? "primary.main" : "transparent",
                   }}
                   onClick={() => setSelectedImage(index)}
-                  // width="80"
                 >
                   <CardMedia
                     component="img"
                     height="80"
                     image={image?.url}
                     alt={`Fabric view ${index + 1}`}
-                    sx={{ objectFit: 'cover' }}
+                    sx={{ objectFit: "cover" }}
                   />
                 </Card>
               </Box>
@@ -241,7 +278,7 @@ const ProductDetailsComponents = () => {
                 e.stopPropagation();
                 dispatch(addToCart({ ...product, quantity }));
               }}
-              sx={{width:{xs:'100%',sm:"32%",md:"43%",lg:"36%", xl:"30%"}}}
+              sx={{ width: { xs: '100%', sm: "32%", md: "43%", lg: "36%", xl: "30%" } }}
             >
               Add to Cart
             </Button>

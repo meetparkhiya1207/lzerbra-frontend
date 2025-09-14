@@ -25,6 +25,8 @@ const ProductCard = ({
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [liked, setLiked] = useState(false);
+    const [hovered, setHovered] = useState(false);
+
 
     const discountPercentage = product.discountPrice
         ? Math.round(((product.discountPrice - product.price) / product.discountPrice) * 100)
@@ -71,7 +73,7 @@ const ProductCard = ({
             <Box sx={{ position: 'relative', pt: '100%' }}>
                 <Box
                     component="img"
-                    src={product?.images[0]?.url}
+                    src={hovered ? product?.images[1]?.url : product?.images[0]?.url}
                     alt={product.productName}
                     sx={{
                         top: 0,
@@ -80,7 +82,11 @@ const ProductCard = ({
                         objectFit: 'cover',
                         position: 'absolute',
                         borderRadius: '4px 4px 0 0',
+                        transition: '0.3s ease-in-out !important',
+                        cursor: 'pointer',
                     }}
+                    onMouseEnter={() => setHovered(true)}
+                    onMouseLeave={() => setHovered(false)}
                     onClick={() => navigate(`/product-details/${product.product_id}`)}
                 />
 

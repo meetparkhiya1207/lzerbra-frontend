@@ -138,15 +138,15 @@ const FilterContent = ({ filters, onFiltersChange, isMobile = false }) => {
                             onChange={handlePriceChange}
                             valueLabelDisplay="auto"
                             min={0}
-                            max={200000}
-                            step={1000}
+                            max={1000}
+                            step={4}
                             marks={[
                                 { value: 0, label: '₹0' },
-                                { value: 50000, label: '₹50K' },
-                                { value: 100000, label: '₹1L' },
-                                { value: 200000, label: '₹2L' },
+                                { value: 250, label: '₹250' },
+                                { value: 500, label: '₹500' },
+                                { value: 1000, label: '₹1000' },
                             ]}
-                            valueLabelFormat={(value) => `₹${(value / 1000).toFixed(0)}K`}
+                            valueLabelFormat={(value) => `₹${(value).toFixed(0)}`}
                             sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}
                         />
                     </Box>

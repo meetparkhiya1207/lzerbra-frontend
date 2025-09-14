@@ -167,7 +167,7 @@ const ProductListing = () => {
             <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
               <CircularProgress />
             </Box>
-          ) : paginatedProducts.length === 0 ? (
+          ) : paginatedProducts?.length === 0 ? (
             <Box
               sx={{
                 display: "flex",
@@ -192,7 +192,7 @@ const ProductListing = () => {
             </Box>
           ) : (
             <Grid container spacing={3}>
-              {paginatedProducts.map((product) => (
+              {paginatedProducts?.map((product) => (
                 <Grid key={product?.id} item size={{ xs: 6, sm: 6, md: 3 }}>
                   <ProductCard
                     product={product}

@@ -3,6 +3,7 @@ import { Box, Typography, Button, Stack, useTheme, Container } from "@mui/materi
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useNavigate } from "react-router-dom";
 
 const sliderImages = [
   "/images/Slider1.jpg",
@@ -13,6 +14,7 @@ const sliderImages = [
 
 const HeroSection = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const settings = {
     dots: false,
@@ -37,7 +39,7 @@ const HeroSection = () => {
         justifyContent: "center",
         backgroundColor: "#1c1c1c",
         color: "white",
-        backgroundImage: "url('/images/generated-image (1).png')",
+        backgroundImage: "url('/images/Hero.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         position: "relative",
@@ -126,13 +128,14 @@ const HeroSection = () => {
                 borderRadius: "10px",
                 "&:hover": { backgroundColor: theme.palette.backgroundcolor.main },
               }}
+              onClick={() => {navigate("/shop")}}
             >
               Shop Now
             </Button>
           </Box>
 
 
-          <Box
+          {/* <Box
             sx={{
               flex: 1,
               display: "flex",
@@ -169,7 +172,7 @@ const HeroSection = () => {
                 </Box>
               ))}
             </Slider>
-          </Box>
+          </Box> */}
         </Stack>
       </Container>
     </Box>
