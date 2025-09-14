@@ -22,8 +22,8 @@ import Login from "./comman/Login";
 function Layout() {
   return (
     <>
-      <Header />
       <CartDrawer />
+      <Header />
       <Outlet />
       <Footer />
     </>
