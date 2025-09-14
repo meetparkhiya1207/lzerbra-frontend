@@ -114,10 +114,11 @@ export const CartDrawer = () => {
                                                     sx={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 1 }}
                                                     image={item.images[0]?.url}
                                                     alt={item?.productName}
+                                                    onClick={()=>{navigate(`/product-details/${item?.product_id}`); dispatch(closeDrawer())}}
                                                 />
                                             </Box>
                                             <CardContent sx={{ flex: 1, p: 2, minWidth: 0 }}>
-                                                <Typography variant="subtitle2" sx={{ color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                                                <Typography variant="subtitle2" sx={{ color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }} onClick={()=>{navigate(`/product-details/${item?.product_id}`); dispatch(closeDrawer())}}>
                                                     {item?.productName}
                                                 </Typography>
                                                 <Typography variant="body2" sx={{ color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily }}>
