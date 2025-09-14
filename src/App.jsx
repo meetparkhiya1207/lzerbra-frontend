@@ -1,4 +1,4 @@
-import { useTheme } from "@mui/material";
+import { useMediaQuery, useTheme } from "@mui/material";
 import Home from "./pages/Home";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import LoginModal from "./auth/Login";
@@ -15,14 +15,26 @@ import ScrollToTop from "./comman/ScrollToTop";
 import CheckoutPageSimple from "./comman/CheckoutPageSimple";
 import OrdersPageSimple from "./comman/OrdersPageSimple";
 import { CartDrawer } from "./comman/CartDrawer";
+import Signup from "./comman/Signup";
+import Login from "./comman/Login";
 
+// 👉 Main layout (with header/footer)
 function Layout() {
   return (
     <>
       <Header />
-       <CartDrawer />
+      <CartDrawer />
       <Outlet />
       <Footer />
+    </>
+  );
+}
+
+// 👉 Blank layout (without header/footer)
+function BlankLayout() {
+  return (
+    <>
+      <Outlet />
     </>
   );
 }
@@ -30,6 +42,8 @@ function Layout() {
 export default function App() {
   const [loginOpen, setLoginOpen] = useState(true);
   const [registerOpen, setRegisterOpen] = useState(false);
+
+  const isMobile = useMediaQuery('(max-width:600px)');
 
   const switchToRegister = () => {
     setLoginOpen(false);
@@ -46,9 +60,9 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-       <ScrollToTop /> 
+        <ScrollToTop />
         <Routes>
-          {/* Layout wrapper */}
+          {/* ✅ Routes with Header + Footer */}
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/product-details/:id" element={<ProductDetailsComponents />} />
@@ -57,21 +71,23 @@ export default function App() {
             <Route path="/checkout" element={<CheckoutPageSimple />} />
             <Route path="/orders" element={<OrdersPageSimple />} />
           </Route>
+
+          <Route element={<BlankLayout />}>
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
+          </Route>
         </Routes>
-
-        {/* Auth Modals */}
-        <LoginModal
-          open={loginOpen}
-          onClose={() => setLoginOpen(false)}
-          onSwitch={switchToRegister}
+        <ToastContainer
+          position={isMobile ? "bottom-center" : "top-right"}
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
         />
-        <RegisterModal
-          open={registerOpen}
-          onClose={() => setRegisterOpen(false)}
-          onSwitch={switchToLogin}
-        />
-
-        <ToastContainer />
       </BrowserRouter>
     </AuthProvider>
   );

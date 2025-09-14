@@ -15,10 +15,9 @@ export const getAllProducts = () => {
 
 export const getProductById = (id) => {
     const { data, error, isLoading, mutate } = useSWR(
-        id ? `/products/${id}` : null, // null = skip fetch if id not available
+        id ? `/products/${id}` : null,
         fetcher
     );
-    console.log("Data", data);
 
     return {
         product: data,

@@ -5,3 +5,8 @@ export const fetcher = (url) =>
         console.log("resres", res);
         return res.data;
     });
+
+export const actionFetcher = async (url, { arg }) => {
+    const res = await axiosInstance.post(url, arg);
+    return res.data;
+};

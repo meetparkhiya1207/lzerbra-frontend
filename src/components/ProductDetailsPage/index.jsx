@@ -110,7 +110,7 @@ const ProductDetailsComponents = () => {
               alt={product?.productName}
               sx={{
                 objectFit: 'cover',
-                height: { xs: 500, sm: 700 },
+                height: "auto",
               }}
             />
 
