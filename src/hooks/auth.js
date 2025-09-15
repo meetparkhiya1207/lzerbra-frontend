@@ -2,7 +2,6 @@ import useSWRMutation from "swr/mutation";
 import { actionFetcher } from "../api/swrconfig";
 
 export const useRegister = () => {
-    // SWR mutation hook
     const { trigger, isMutating, error } = useSWRMutation(
         "/customer/register",
         actionFetcher
@@ -15,7 +14,6 @@ export const useRegister = () => {
     };
 };
 export const useLogin = () => {
-    // SWR mutation hook
     const { trigger, isMutating, error } = useSWRMutation(
         "/customer/login",
         actionFetcher
@@ -29,7 +27,6 @@ export const useLogin = () => {
 };
 
 export const useVerifyOTP = () => {
-    // SWR mutation hook
     const { trigger, isMutating, error } = useSWRMutation(
         "/customer/verify-otp",
         actionFetcher
@@ -42,7 +39,6 @@ export const useVerifyOTP = () => {
     };
 };
 export const useResendOTP = () => {
-    // SWR mutation hook
     const { trigger, isMutating, error } = useSWRMutation(
         "/customer/resend-otp",
         actionFetcher
@@ -51,6 +47,31 @@ export const useResendOTP = () => {
     return {
         resendOtp: trigger,
         isMutatingResendOtp: isMutating,
+        error,
+    };
+};
+export const useForgotPassword = () => {
+    const { trigger, isMutating, error } = useSWRMutation(
+        "/customer/forgot-password",
+        actionFetcher
+    );
+
+    return {
+        userForgotPasswordTriger: trigger,
+        isMutating: isMutating,
+        error,
+    };
+};
+
+export const useResetPassword = () => {
+    const { trigger, isMutating, error } = useSWRMutation(
+        "/customer/reset-password",
+        actionFetcher
+    );
+
+    return {
+        userResetPasswordTriger: trigger,
+        isMutating: isMutating,
         error,
     };
 };

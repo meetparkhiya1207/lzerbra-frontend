@@ -10,7 +10,7 @@ import {
     useTheme,
     IconButton,
 } from '@mui/material';
-import { ShoppingCart, FavoriteBorder, Favorite, Visibility } from '@mui/icons-material';
+import { ShoppingCart, FavoriteBorder, Favorite, Visibility, Label } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import confetti from 'canvas-confetti';
 import { useNavigate } from 'react-router-dom';
@@ -163,7 +163,6 @@ const ProductCard = ({
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
-                        textOverflow: 'ellipsis',
                         display: '-webkit-box',
                         WebkitLineClamp: 2,
                         WebkitBoxOrient: 'vertical',
@@ -174,15 +173,32 @@ const ProductCard = ({
                     {product.productName}
                 </Typography>
 
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                    <Rating value={product.rating} readOnly size="small" precision={0.1} />
-                    <Typography
-                        variant="body2"
-                        color={theme.palette.primary.lightmain}
-                        sx={{ ml: 1, fontFamily: theme.palette.typography.fontFamily }}
-                    >
-                        ({product.reviewCount || 0})
-                    </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, justifyContent: 'space-between', flexWrap:'wrap' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Rating value={product.rating || 4} readOnly size="small" precision={0.1} />
+                        <Typography
+                            variant="body2"
+                            color={theme.palette.primary.lightmain}
+                            sx={{ ml: 1, fontFamily: theme.palette.typography.fontFamily }}
+                        >
+                            ({product.reviewCount || 4})
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <Chip
+                            label={product.inStock == "Yes" ? "In Stock" : "Out of Stock"}
+                            size="small"
+                            sx={{
+                                bgcolor: product.inStock == "Yes" ? "#C8E6C9" : "#FFCDD2",
+                                color: product.inStock == "Yes" ? "#2E7D32" : "#C62828",
+                                fontWeight: 600,
+                                fontSize: 12,
+                                borderRadius: "6px",
+                                height: 22,
+                                fontFamily: theme.typography.fontFamily,
+                            }}
+                            />
+                    </Box>
                 </Box>
 
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: { xs: 1, sm: 2 } }}>
@@ -217,7 +233,7 @@ const ProductCard = ({
                     variant="contained"
                     fullWidth
                     startIcon={<ShoppingCart />}
-                    disabled={!product.inStock}
+                    disabled={product.inStock == "No"}
                     onClick={(e) => {
                         e.stopPropagation();
                         dispatch(addToCart(product))
@@ -232,7 +248,7 @@ const ProductCard = ({
                         backgroundColor: theme.palette.primary.main,
                     }}
                 >
-                    {product.inStock ? 'Add to Cart' : 'Out of Stock'}
+                    {product.inStock == "Yes" ? 'Add to Cart' : 'Out of Stock'}
                 </Button>
             </CardContent>
         </Card>

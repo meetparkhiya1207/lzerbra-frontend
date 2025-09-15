@@ -132,6 +132,7 @@ const Login = () => {
                             variant="body2"
                             type="button"
                             sx={{ textDecoration: 'none', fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}
+                            onClick={()=>navigate("/forgot-password")}
                         >
                             Forgot your password?
                         </Link>

@@ -150,7 +150,10 @@ const Shop = () => {
                         {/* Active Filters */}
                         {(filters?.category?.length > 0 || filters?.rating > 0 || filters?.priceRange[0] > 0 || filters?.priceRange[1] < 200000) && (
                             <Box sx={{ mb: 2 }}>
-                                <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                                <Typography variant="subtitle2" sx={{
+                                    mb: 1, fontFamily: theme.palette.typography.fontFamily,
+                                    color: theme.palette.primary.main
+                                }}>
                                     Active Filters:
                                 </Typography>
                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
@@ -167,11 +170,15 @@ const Shop = () => {
                                             label={`Rating: ${filters.rating}+`}
                                             size="small"
                                             onDelete={() => clearFilter('rating')}
+                                            sx={{
+                                                fontFamily: theme.palette.typography.fontFamily,
+                                                color: theme.palette.primary.main
+                                            }}
                                         />
                                     )}
-                                    {(filters.priceRange[0] > 0 || filters.priceRange[1] < 200000) && (
+                                    {(filters.priceRange[0] > 0 || filters.priceRange[1] < 2000) && (
                                         <Chip
-                                            label={`₹${(filters.priceRange[0] / 1000).toFixed(0)}K - ₹${(filters.priceRange[1] / 1000).toFixed(0)}K`}
+                                            label={`₹${(filters.priceRange[0]).toFixed(0)} - ₹${(filters.priceRange[1]).toFixed(0)}`}
                                             size="small"
                                             onDelete={() => clearFilter('price')}
                                         />

@@ -17,6 +17,8 @@ import OrdersPageSimple from "./comman/OrdersPageSimple";
 import { CartDrawer } from "./comman/CartDrawer";
 import Signup from "./comman/Signup";
 import Login from "./comman/Login";
+import ForgotPassword from "./comman/ForgotPassword";
+import ResetPassword from "./comman/ResetPassword";
 
 // 👉 Main layout (with header/footer)
 function Layout() {
@@ -75,6 +77,8 @@ export default function App() {
           <Route element={<BlankLayout />}>
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
           </Route>
         </Routes>
         <ToastContainer
