@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Container,
     Paper,
@@ -23,8 +23,8 @@ const Login = () => {
 
     const { loginCustomer, isMutating } = useLogin();
     const [formData, setFormData] = useState({
-        email: '',
-        password: '',
+        customer_email: '',
+        customer_password: '',
     });
     const [errors, setErrors] = useState({});
 
@@ -68,13 +68,29 @@ const Login = () => {
             if (res?.success) {
                 toast.success(res?.message);
                 sessionStorage.setItem('token', res.token);
-                sessionStorage.setItem('userData', res.customer);
+                try {
+                    sessionStorage.setItem('userData', JSON.stringify(res.customer));
+                } catch (_) {
+                    sessionStorage.setItem('userData', res.customer);
+                }
                 navigate("/");
             } else {
                 toast.error(res?.message);
             }
         }
     };
+
+    useEffect(() => {
+        // const otpStep = sessionStorage.getItem('otpStep');
+        // const emailForOtp = sessionStorage.getItem('emailForOtp');
+        // if (otpStep === '2' && emailForOtp) {
+        //     navigate('/signup');
+        // }
+
+        sessionStorage.removeItem('otpStep');
+        sessionStorage.removeItem('emailForOtp');
+        sessionStorage.removeItem('otpStartTime');
+    }, [navigate]);
 
     return (
         <Container maxWidth="sm" sx={{ mt: 8, mb: 4 }}>
@@ -122,8 +138,9 @@ const Login = () => {
                         variant="contained"
                         size="large"
                         sx={{ mb: 2, py: 1.5, fontFamily: theme.palette.typography.fontFamily, color: "#fff" }}
+                        disabled={isMutating}
                     >
-                        Sign In
+                        {isMutating ? 'Signing In...' : 'Sign In'}
                     </Button>
 
                     <Box sx={{ textAlign: 'center', mb: 2 }}>
@@ -132,7 +149,7 @@ const Login = () => {
                             variant="body2"
                             type="button"
                             sx={{ textDecoration: 'none', fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}
-                            onClick={()=>navigate("/forgot-password")}
+                            onClick={() => navigate("/forgot-password")}
                         >
                             Forgot your password?
                         </Link>

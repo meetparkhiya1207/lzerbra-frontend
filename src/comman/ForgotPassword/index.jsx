@@ -62,6 +62,7 @@ const ForgotPassword = () => {
                 sx={{
                   color: "#fff",
                   fontFamily: theme.palette.typography.fontFamily,
+                  py: 1.5,
                 }}
               >
                 {isMutating ? "Send Reset Link...." : "Send Reset Link"}

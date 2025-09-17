@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Container,
   Paper,
@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { Google } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useDispatch } from 'react-redux';
 import { useRegister, useResendOTP, useVerifyOTP } from '../../hooks/auth';
 import { toast } from 'react-toastify';
@@ -30,7 +31,7 @@ const Signup = () => {
 
   const [step, setStep] = useState(1);
   const [emailForOtp, setEmailForOtp] = useState('');
-  const [otpTimer, setOtpTimer] = useState(30);
+  const [otpTimer, setOtpTimer] = useState(45);
   const [canResend, setCanResend] = useState(false);
   const [otpStartTime, setOtpStartTime] = useState(Number(sessionStorage.getItem('otpStartTime')) || 0);
 
@@ -46,6 +47,12 @@ const Signup = () => {
 
   const [otp, setOtp] = useState('');
   const [errors, setErrors] = useState({});
+
+  const isOtpStepPersisted = useMemo(() => {
+    const savedStep = sessionStorage.getItem('otpStep');
+    const savedEmail = sessionStorage.getItem('emailForOtp');
+    return savedStep === '2' && !!savedEmail;
+  }, []);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -81,12 +88,11 @@ const Signup = () => {
 
     try {
       const res = await registerCustomer(formData);
-      console.log("✅ Registered:", res);
       if (res?.success) {
         toast.success(res?.message);
-        sessionStorage.setItem('emailForOtp', formData.customer_email);
+        sessionStorage.setItem('emailForOtp', formData.customer_email.trim());
         sessionStorage.setItem('otpStep', '2');
-        setEmailForOtp(formData.customer_email);
+        setEmailForOtp(formData.customer_email.trim());
         setStep(2);
         const now = new Date().getTime();
         sessionStorage.setItem('otpStartTime', now);
@@ -115,7 +121,7 @@ const Signup = () => {
     const interval = setInterval(() => {
       const now = new Date().getTime();
       const elapsed = Math.floor((now - otpStartTime) / 1000);
-      const remaining = 30 - elapsed;
+      const remaining = 45 - elapsed;
       if (remaining > 0) {
         setOtpTimer(remaining);
         setCanResend(false);
@@ -136,11 +142,13 @@ const Signup = () => {
     if (!otp) return toast.error("Please enter OTP");
 
     try {
+
       const res = await verifyOtp({ email: emailForOtp, otp });
       if (res.success) {
         toast.success(res.message);
         sessionStorage.removeItem('otpStep');
         sessionStorage.removeItem('emailForOtp');
+        sessionStorage.removeItem('otpStartTime');
         navigate('/login');
       } else {
         toast.error(res.message);
@@ -151,17 +159,23 @@ const Signup = () => {
   };
 
   const handleResendOtp = async () => {
+    const persistedEmail = sessionStorage.getItem('emailForOtp') || emailForOtp || formData.customer_email.trim();
+    if (!persistedEmail) {
+      return toast.error('Email not found. Please register again.');
+    }
     try {
-      const res = await resendOtp({ email: emailForOtp });
+      const res = await resendOtp({ email: persistedEmail });
       if (res.success) {
         toast.success(res?.message);
-        sessionStorage.setItem('emailForOtp', formData.customer_email);
+        sessionStorage.setItem('emailForOtp', persistedEmail);
         sessionStorage.setItem('otpStep', '2');
-        setEmailForOtp(formData.customer_email);
+        setEmailForOtp(persistedEmail);
         setStep(2);
         const now = new Date().getTime();
         sessionStorage.setItem('otpStartTime', now);
         setOtpStartTime(now);
+        setCanResend(false);
+        setOtpTimer(45);
       } else {
         toast.error(res.message);
       }
@@ -177,7 +191,7 @@ const Signup = () => {
           {/* <Typography variant="h4" component="h1" gutterBottom fontWeight="bold" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
             {step === 1 ? "Create Account" : "Verify OTP"}
           </Typography> */}
-           <CommonHeading title={step === 1 ? "Create Account" : "Verify OTP"} lineWidth={100} align="center" mb={{ xs: 0, sm: 3 }} />
+          <CommonHeading title={step === 1 ? "Create Account" : "Verify OTP"} lineWidth={100} align="center" mb={{ xs: 0, sm: 3 }} />
           <Typography variant="body1" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main, fontSize: { xs: "0.8rem", sm: "1rem" } }}>
             {step === 1 ? "Join Lzebra and start shopping today" : "Enter the OTP sent to your email"}
           </Typography>
@@ -204,7 +218,7 @@ const Signup = () => {
               {errors.customer_agreeToTerms && <Typography variant="caption" color="error" sx={{ ml: 4 }}>{errors.customer_agreeToTerms}</Typography>}
             </Box>
 
-            <Button type="submit" fullWidth variant="contained" size="large" sx={{ mb: 2, py: 1.5, fontFamily: theme.palette.typography.fontFamily, color: "#fff" }}>
+            <Button type="submit" fullWidth variant="contained" size="large" sx={{ mb: 2, py: 1.5, fontFamily: theme.palette.typography.fontFamily, color: "#fff" }} disabled={isMutating}>
               {isMutating ? "Registering..." : "Register"}
             </Button>
           </Box>
@@ -212,8 +226,8 @@ const Signup = () => {
 
         {step === 2 && (
           <Box component="form" onSubmit={handleOtpSubmit} sx={{ mt: 3 }}>
-            <TextField fullWidth label="Enter OTP" value={otp} onChange={(e) => setOtp(e.target.value)} sx={{ mb: 2 }} />
-            <Typography variant="body2" sx={{ mb: 2 }}>
+            <TextField fullWidth label={`Enter OTP sent to ${emailForOtp}`} value={otp} onChange={(e) => setOtp(e.target.value)} sx={{ mb: 2 }} />
+            <Typography variant="body2" sx={{ mb: 2, fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
               {otpTimer > 0 ? `OTP expires in ${otpTimer}s` : "OTP expired"}
             </Typography>
             <Button
@@ -222,25 +236,32 @@ const Signup = () => {
               variant="contained"
               size="large"
               sx={{ py: 1.5, fontFamily: theme.palette.typography.fontFamily, color: "#fff", mb: 1 }}
-              disabled={otpTimer === 0}
+              disabled={otpTimer === 0 || isMutatingOtp}
             >
               {isMutatingOtp ? "Please wait..." : "Verify OTP"}
             </Button>
             {canResend && (
-              <Button type="button" fullWidth variant="outlined" onClick={handleResendOtp}>
+              <Button type="button" fullWidth variant="outlined" onClick={handleResendOtp} sx={{ py: 1.5, mb: 1.5, fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }} disabled={isMutatingResendOtp}>
                 Resend OTP
               </Button>
             )}
           </Box>
         )}
 
-        <Divider sx={{ mb: 2, mt: 2 }}>
+        {
+          step !== 2 && (
+            <Button fullWidth variant="outlined" startIcon={<ArrowBackIcon />} sx={{ py: 1.5, fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }} onClick={() => navigate('/login')}>
+              Back to Login
+            </Button>
+          )
+        }
+        {/* <Divider sx={{ mb: 2, mt: 2 }}>
           <Typography variant="body2" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>OR</Typography>
         </Divider>
 
         <Button fullWidth variant="outlined" startIcon={<Google />} sx={{ py: 1.5, fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
           Sign up with Google
-        </Button>
+        </Button> */}
 
         <Box sx={{ textAlign: 'center', mt: 3 }}>
           <Typography variant="body2" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>

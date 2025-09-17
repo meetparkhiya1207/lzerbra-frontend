@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Container, TextField, Button, Typography, Paper, Box } from "@mui/material";
+import { Container, TextField, Button, Typography, Paper, Box, useTheme } from "@mui/material";
 import { useResetPassword } from "../../hooks/auth";
 import { toast } from "react-toastify";
+import CommonHeading from "../CommonHeading";
 
 const ResetPassword = () => {
+    const theme = useTheme();
     const { token } = useParams();
     const navigate = useNavigate();
 
@@ -70,11 +72,11 @@ const ResetPassword = () => {
     return (
         <Container maxWidth="sm">
             <Paper sx={{ p: 4, mt: 8 }}>
-                <Typography variant="h5" mb={2}>Reset Password</Typography>
+                 <CommonHeading title={"Reset Password"} lineWidth={100} align="center" mb={{ xs: 0, sm: 3 }} />
                 <form onSubmit={handleSubmit}>
                     <TextField fullWidth label="Password" name="customer_password" type="password" value={formData.customer_password} onChange={handleChange} error={!!errors.customer_password} helperText={errors.customer_password} sx={{ mb: 2 }} autoComplete="new-password" />
                     <TextField fullWidth label="Confirm Password" name="customer_confirmPassword" type="password" value={formData.customer_confirmPassword} onChange={handleChange} error={!!errors.customer_confirmPassword} helperText={errors.customer_confirmPassword} sx={{ mb: 2 }} autoComplete="new-password" />
-                    <Button type="submit" variant="contained" fullWidth>Reset Password</Button>
+                    <Button type="submit" variant="contained" fullWidth sx={{py:1.5,fontFamily: theme.palette.typography.fontFamily, color: "#fff"}}>Reset Password</Button>
                 </form>
             </Paper>
         </Container>

@@ -135,7 +135,7 @@ const HeroSection = () => {
           </Box>
 
 
-          {/* <Box
+          <Box
             sx={{
               flex: 1,
               display: "flex",
@@ -172,7 +172,7 @@ const HeroSection = () => {
                 </Box>
               ))}
             </Slider>
-          </Box> */}
+          </Box>
         </Stack>
       </Container>
     </Box>
