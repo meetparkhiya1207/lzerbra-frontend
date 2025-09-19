@@ -31,9 +31,10 @@ export default function ServiceSection() {
     const theme = useTheme();
 
     return (
-        <Container maxWidth="xl">
-            <Box sx={{ pb: 6, pt: 4 }}>
-                {/* <Typography
+        <Box sx={{ background: "#e6dcd33d", }}>
+            <Container maxWidth="xl">
+                <Box sx={{ pb: 6, pt: 4 }}>
+                    {/* <Typography
                     variant="h5"
                     align="center"
                     sx={{
@@ -56,72 +57,74 @@ export default function ServiceSection() {
                     }}
                 /> */}
 
-                <CommonHeading
-                    title="Our Services"
-                    lineWidth={140}
-                    align="center"
-                />
+                    <CommonHeading
+                        title="Our Services"
+                        lineWidth={140}
+                        align="center"
+                    />
 
-                {/* ✅ Add container */}
-                <Grid container spacing={{ xs: 2, md: 4 }} justifyContent="center">
-                    {services.map((service, index) => (
-                        <Grid
-                            item
-                            xs={12}
-                            sm={6}
-                            md={3}
-                            key={index}
-                        >
-                            <Paper
-                                elevation={3}
-                                sx={{
-                                    p: 3,
-                                    backgroundColor: "transparent",
-                                    textAlign: "center",
-                                    borderRadius: "16px",
-                                    boxShadow: "none",
-                                    transition: "all 0.3s ease",
-                                    "&:hover": {
-                                        transform: "translateY(-5px)",
-                                    },
-                                }}
+                    {/* ✅ Add container */}
+                    <Grid container spacing={{ xs: 2, md: 4 }} justifyContent="center">
+                        {services.map((service, index) => (
+                            <Grid
+                                item
+                                xs={12}
+                                sm={6}
+                                md={3}
+                                key={index}
                             >
-                                <Box
+                                <Paper
+                                    elevation={3}
                                     sx={{
-                                        color: theme.palette.primary.main,
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        mb: 2,
+                                        p: 3,
+                                        backgroundColor: "transparent",
+                                        textAlign: "center",
+                                        borderRadius: "16px",
+                                        boxShadow: "none",
+                                        transition: "all 0.3s ease",
+                                        "&:hover": {
+                                            transform: "translateY(-5px)",
+                                        },
                                     }}
                                 >
-                                    {service.icon}
-                                </Box>
-                                <Typography
-                                    variant="h6"
-                                    sx={{
-                                        fontFamily: theme.palette.typography.fontFamily,
-                                        fontWeight: 600,
-                                        mb: 1,
-                                        fontSize: { xs: "1.5rem", md: "1.1rem", lg: "1.4rem" },
-                                    }}
-                                >
-                                    {service.title}
-                                </Typography>
-                                <Typography
-                                    variant="body2"
-                                    sx={{
-                                        fontFamily: theme.palette.typography.fontFamily,
-                                        color: theme.palette.primary.lightmain,
-                                        fontSize: { xs: "1rem", },
-                                    }}
-                                >
-                                    {service.desc}
-                                </Typography>
-                            </Paper>
-                        </Grid>
-                    ))}
-                </Grid>
-            </Box>
-        </Container>
+                                    <Box
+                                        sx={{
+                                            color: theme.palette.primary.main,
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            mb: 2,
+                                        }}
+                                    >
+                                        {service.icon}
+                                    </Box>
+                                    <Typography
+                                        variant="h6"
+                                        sx={{
+                                            fontFamily: theme.palette.typography.fontFamily,
+                                            fontWeight: 600,
+                                            mb: 1,
+                                            fontSize: { xs: "1.5rem", md: "1.1rem", lg: "1.4rem" },
+                                        }}
+                                    >
+                                        {service.title}
+                                    </Typography>
+                                    <Typography
+                                        variant="body2"
+                                        sx={{
+                                            fontFamily: theme.palette.typography.fontFamily,
+                                            color: theme.palette.primary.lightmain,
+                                            fontSize: { xs: "1rem", },
+                                        }}
+                                    >
+                                        {service.desc}
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Box>
+            </Container>
+        </Box>
+
     );
 }

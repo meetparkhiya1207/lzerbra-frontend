@@ -29,6 +29,10 @@ const testimonials = [
         name: "Plan Black Berry Cotton",
         img: "/images/PlanBlackBerryCottonFabric.jpg",
     },
+    {
+        name: "Popcorn",
+        img: "/images/PopcornFabric.jpg",
+    },
 ];
 
 const CategorySlider = () => {
@@ -39,10 +43,10 @@ const CategorySlider = () => {
             sx={{
                 pt: { xs: 4, md: 10 },
                 pb: { xs: 0, md: 10 },
-                background: theme.palette.primary.lightdark,
+                background: "#e6dcd33d",
             }}
         >
-            <Container maxWidth="xl">
+            {/* <Container maxWidth="xl"> */}
                 {/* Section Title */}
                 {/* <Typography
           variant="h4"
@@ -66,18 +70,18 @@ const CategorySlider = () => {
                 {/* Swiper Slider */}
                 <Swiper
                     spaceBetween={10}
-                    slidesPerView={1.5} // 👈 Smallest screen
+                    slidesPerView={2.5}
                     loop={true}
-                    // autoplay={{ delay: 3000 }}
+                    autoplay={{ delay: 3000, disableOnInteraction: false, pauseOnMouseEnter: true }} 
                     modules={[Autoplay]}
                     breakpoints={{
-                        300: { slidesPerView: 1.5 },
+                        300: { slidesPerView: 2.5 },
                         430: { slidesPerView: 2.5 },
                         480: { slidesPerView: 3.5 },
                         580: { slidesPerView: 3 },
                         650: { slidesPerView: 3.5 },
-                        900: { slidesPerView: 3.5 },    // tablets
-                        1200: { slidesPerView: 4 },   // desktops
+                        900: { slidesPerView: 4.5 },
+                        1320: { slidesPerView: 5 },
                     }}
                 >
                     {testimonials.map((item, i) => (
@@ -115,7 +119,7 @@ const CategorySlider = () => {
                         </SwiperSlide>
                     ))}
                 </Swiper>
-            </Container>
+            {/* </Container> */}
         </Box>
     );
 };

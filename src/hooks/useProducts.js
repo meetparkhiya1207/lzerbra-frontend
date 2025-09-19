@@ -2,8 +2,11 @@
 import useSWR from "swr";
 import { fetcher } from "../api/swrconfig";
 
-export const getAllProducts = () => {
-    const { data, error, isLoading, mutate } = useSWR("/products", fetcher);
+export const getAllProducts = (shouldFetch = true) => {
+    const { data, error, isLoading, mutate } = useSWR(
+        shouldFetch ? "/products" : null, 
+        fetcher
+    );
 
     return {
         products: data,

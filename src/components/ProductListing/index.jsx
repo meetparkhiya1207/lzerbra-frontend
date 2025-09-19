@@ -14,11 +14,11 @@ import {
 import { ProductFilters } from "./product-filters";
 import { ProductSort } from "./product-sort";
 import { ProductItem } from "./product-item";
-// import { products } from "../../Data/product";
 import CommonHeading from "../../comman/CommonHeading";
 import ProductCard from "../../comman/ProductCard";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "../../hooks/useProducts";
+import { addAllProductData } from "../../features/products/productsSlice";
 
 const PRICE_OPTIONS = [
   { value: '250', label: 'Below ₹250' },
@@ -34,9 +34,17 @@ const defaultFilters = {
 const PRODUCTS_PER_PAGE = 8;
 
 const ProductListing = () => {
-  const { products, isLoading, isError } = getAllProducts();
+  const {productsList} = useSelector((state) => state.products);
+  const { products, isLoading } = getAllProducts(productsList?.length === 0);
+
   const theme = useTheme();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (products && productsList.length === 0) {
+      dispatch(addAllProductData(products));
+    }
+  }, [products, productsList, dispatch]);
 
   const [sortBy, setSortBy] = useState("featured");
   const [openFilter, setOpenFilter] = useState(false);
@@ -60,7 +68,7 @@ const ProductListing = () => {
   const handlePageChange = (event, value) => setPage(value);
 
   const filteredProducts = useMemo(() => {
-    return products?.filter((p) => {
+    return productsList?.filter((p) => {
       const hasCategory = filters.category.length > 0;
       const hasSubcategory = filters.subcategory.length > 0;
       const hasPrice = !!filters.price;
@@ -88,7 +96,7 @@ const ProductListing = () => {
 
       return matchPrice;
     });
-  }, [products, filters]);
+  }, [productsList, filters]);
 
   const startIdx = (page - 1) * PRODUCTS_PER_PAGE;
   const endIdx = startIdx + PRODUCTS_PER_PAGE;

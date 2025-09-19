@@ -4,6 +4,7 @@ import { persistStore, persistReducer } from "redux-persist";
 
 import cartReducer from "./features/cart/cartSlice";
 import likedReducer from "./features/liked/likedSlice";
+import productsSlice from "./features/products/productsSlice";
 
 const persistConfig = {
   key: "root",
@@ -13,6 +14,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   cart: cartReducer,
   liked: likedReducer,
+  products: productsSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

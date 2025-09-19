@@ -32,22 +32,22 @@ const HeroSection = () => {
     <Box
       sx={{
         width: "100%",
-        py: 4,
-        minHeight: { xs: "auto",sm: "80vh" },
+        py: 0,
+        minHeight: { xs: "auto", sm: "80vh" },
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#1c1c1c",
+        backgroundColor: "#e6dcd33d",
         color: "white",
-        backgroundImage: "url('/images/Hero.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        // backgroundImage: "url('/images/Hero.jpg')",
+        // backgroundSize: "cover",
+        // backgroundPosition: "center",
         position: "relative",
-        zIndex:0
+        zIndex: 0
       }}
     >
       {/* Overlay */}
-      <Box
+      {/* <Box
         sx={{
           position: "absolute",
           top: 0,
@@ -57,7 +57,7 @@ const HeroSection = () => {
           bgcolor: "rgba(70, 68, 68, 0.55)",
           zIndex: 1,
         }}
-      />
+      /> */}
 
       <Container maxWidth="xl" sx={{ position: "relative", zIndex: 2 }}>
         <Stack
@@ -76,7 +76,7 @@ const HeroSection = () => {
                 mb: 2,
                 fontSize: { xs: "1.7rem", md: "3.5rem" },
                 fontFamily: theme.palette.typography.fontFamily,
-
+                color: theme.palette.primary.main
               }}
             >
               Premium Men’s Fabrics
@@ -88,6 +88,7 @@ const HeroSection = () => {
                 mb: 2,
                 fontSize: { xs: "1.2rem", md: "2.5rem" },
                 fontFamily: theme.palette.typography.fontFamily,
+                color: theme.palette.primary.lightmain
               }}
             >
               New Arrival Collection 2025
@@ -95,11 +96,12 @@ const HeroSection = () => {
             <Typography
               variant="body1"
               sx={{
-                mb: {xs:2,sm:4},
+                mb: { xs: 2, sm: 4 },
                 fontSize: { xs: "0.8rem", md: "1.2rem" },
                 color: "#e0dcdc",
                 maxWidth: "500px",
                 fontFamily: theme.palette.typography.fontFamily,
+                color: theme.palette.primary.lightmain
               }}
             >
               Discover our exclusive collection of fabrics crafted for men’s wear – from elegant suits to casual shirts. Tradition meets modern style.
@@ -112,28 +114,35 @@ const HeroSection = () => {
                 color: "#e0dcdc",
                 maxWidth: "500px",
                 fontFamily: theme.palette.typography.fontFamily,
+                color: theme.palette.primary.lightmain
               }}
             >
               Free shipping on orders above ₹999 | 100% Quality Guarantee
             </Typography>
+
             <Button
-              size="large"
+              variant="contained"
               sx={{
-                backgroundColor: theme.palette.backgroundcolor.main,
-                fontFamily: theme.palette.typography.fontFamily,
-                color: theme.palette.primary.main,
-                fontWeight: "normal",
-                px: 5,
+                mt: 2,
+                px: 4,
                 py: 1.5,
-                borderRadius: "10px",
-                "&:hover": { backgroundColor: theme.palette.backgroundcolor.main },
+                bgcolor: theme.palette.primary.main,
+                color: theme.palette.background.default,
+                fontFamily: theme.palette.typography.fontFamily,
+                borderRadius: "999px",
+                fontWeight: 600,
+                fontSize: { xs: "1rem", md: "1.125rem" },
+                textTransform: "none",
+                "&:hover": {
+                  bgcolor: "rgba(255,255,255,0.15)",
+                  color: theme.palette.primary.main,
+                },
               }}
-              onClick={() => {navigate("/shop")}}
+              onClick={() => { navigate("/shop") }}
             >
               Shop Now
             </Button>
           </Box>
-
 
           <Box
             sx={{

@@ -89,7 +89,7 @@ const ProductDetailsComponents = () => {
 
 
   useEffect(() => {
-    if (!product?.images?.length) return; // ✅ condition only inside effect
+    if (!product?.images?.length) return; 
 
     const interval = setInterval(() => {
       setFade(true);
@@ -99,7 +99,7 @@ const ProductDetailsComponents = () => {
         );
         setFade(false);
       }, 400);
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [product?.images]);

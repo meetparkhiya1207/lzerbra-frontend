@@ -32,10 +32,11 @@ export default function Footer() {
     <Box
       component="footer"
       sx={{
-        bgcolor: theme.palette.primary.lightdark,
+        bgcolor: "#e6dcd33d",
         color: theme.palette.text.primary,
         pt: 8,
         pb: 4,
+
       }}
     >
       <Container maxWidth="xl">
