@@ -19,8 +19,6 @@ import { addToCart } from '../../features/cart/cartSlice';
 const ProductCard = ({
     product,
 }) => {
-    console.log("productproductproduct", product);
-
     const theme = useTheme();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -119,8 +117,7 @@ const ProductCard = ({
                     onClick={(e) => {
                         e.stopPropagation();
                         setLiked(!liked);
-                        console.log("likedliked", liked);
-
+                        
                         if (!liked) {
                             confetti();
                             dispatch({ type: 'liked/addLiked', payload: product });

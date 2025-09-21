@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Container,
     Typography,
@@ -23,68 +23,48 @@ import {
     Schedule,
     Receipt,
     Replay,
+    CheckCircleOutline,
+    PendingActions,
 } from '@mui/icons-material';
 import CommonHeading from '../CommonHeading';
+import { getOrderDetails } from '../../hooks/useOrdera';
 
 const OrdersPageSimple = () => {
     const theme = useTheme();
-
-    const [orders] = useState([
-        {
-            id: 'ORD-2024-001',
-            date: '2024-01-15',
-            status: 'delivered',
-            total: 459.97,
-            trackingNumber: 'TN123456789',
-            deliveryDate: '2024-01-18',
-            items: [
-                { id: 1, name: 'Premium Wireless Headphones', price: 199.99, quantity: 1, image: '/placeholder.svg' },
-                { id: 2, name: 'Smart Fitness Watch', price: 299.99, quantity: 1, image: '/placeholder.svg' },
-            ],
-        },
-        {
-            id: 'ORD-2024-002',
-            date: '2024-01-10',
-            status: 'shipped',
-            total: 79.99,
-            trackingNumber: 'TN987654321',
-            items: [{ id: 3, name: 'Laptop Stand Aluminum', price: 79.99, quantity: 1, image: '/placeholder.svg' }],
-        },
-        {
-            id: 'ORD-2024-003',
-            date: '2024-01-05',
-            status: 'processing',
-            total: 149.99,
-            items: [
-                { id: 4, name: 'Wireless Charging Pad', price: 49.99, quantity: 1, image: '/placeholder.svg' },
-                { id: 5, name: 'Bluetooth Speaker', price: 99.99, quantity: 1, image: '/placeholder.svg' },
-            ],
-        },
-    ]);
+    const [orders, setOrders] = useState([]);
 
     const getStatusColor = (status) => {
         switch (status) {
-            case 'delivered':
-                return 'success';
-            case 'shipped':
-                return 'info';
+            case 'pending':
+                return '#9E9E9E';
+            case 'confirmed':
+                return '#1976D2';
             case 'processing':
-                return 'warning';
+                return '#FFA000';
+            case 'shipped':
+                return '#0288D1';
+            case 'delivered':
+                return '#2E7D32';
             case 'cancelled':
-                return 'error';
+                return '#D32F2F';
             default:
-                return 'default';
+                return '#757575';
         }
     };
 
+
     const getStatusIcon = (status) => {
         switch (status) {
-            case 'delivered':
-                return <CheckCircle sx={{ color: theme.palette.primary.main }} />;
-            case 'shipped':
-                return <LocalShipping sx={{ color: theme.palette.primary.main }} />;
+            case 'pending':
+                return <PendingActions sx={{ color: theme.palette.primary.main }} />;
+            case 'confirmed':
+                return <CheckCircleOutline sx={{ color: theme.palette.primary.main }} />;
             case 'processing':
                 return <Schedule sx={{ color: theme.palette.primary.main }} />;
+            case 'shipped':
+                return <LocalShipping sx={{ color: theme.palette.primary.main }} />;
+            case 'delivered':
+                return <CheckCircle sx={{ color: theme.palette.primary.main }} />;
             case 'cancelled':
                 return <Replay sx={{ color: theme.palette.primary.main }} />;
             default:
@@ -94,10 +74,14 @@ const OrdersPageSimple = () => {
 
     const getOrderProgress = (status) => {
         switch (status) {
+            case 'pending':
+                return 20;
+            case 'confirmed':
+                return 40;
             case 'processing':
-                return 25;
+                return 60;
             case 'shipped':
-                return 75;
+                return 80;
             case 'delivered':
                 return 100;
             default:
@@ -105,11 +89,27 @@ const OrdersPageSimple = () => {
         }
     };
 
+    const getAllOrderDetails = async () => {
+        try {
+            const response = await getOrderDetails();
+            if (response && response.success) {
+                setOrders(response.order);
+            } else {
+                throw new Error('Order creation failed');
+            }
+        } catch (err) {
+            console.error("Error inserting order:", err);
+        }
+    }
+
+    useEffect(() => {
+        getAllOrderDetails();
+    }, []);
+
     return (
         <Container maxWidth="xl" sx={{ py: 4 }}>
-            <CommonHeading title="My Orders" lineWidth={100} align="center" />
-
-            {orders.length === 0 ? (
+        <CommonHeading title="My Orders" lineWidth={100} align="center" />
+            {orders?.length === 0 ? (
                 <Paper sx={{ p: 4, textAlign: 'center' }}>
                     <Receipt sx={{ fontSize: 64, color: theme.palette.primary.main, mb: 2 }} />
                     <Typography sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }} variant="h6" gutterBottom>
@@ -124,54 +124,38 @@ const OrdersPageSimple = () => {
                 </Paper>
             ) : (
                 <Box>
-                    {orders.map((order) => (
-                        <Card key={order.id} sx={{ mb: 3 }}>
+                    {orders?.map((order) => (
+                        <Card key={order?.orderId} sx={{ mb: 3 }}>
                             <CardContent>
                                 <Box sx={{ display: 'flex', gap: 3, alignItems: 'center', flexWrap: 'wrap' }}>
                                     <Box sx={{ minWidth: 200 }}>
                                         <Typography sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }} variant="h6" gutterBottom>
-                                            Order #{order.id}
+                                            Order #{order?.orderId?.slice(6)}
                                         </Typography>
                                         <Typography sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }} variant="body2">
-                                            Placed on {new Date(order.date).toLocaleDateString()}
+                                            Placed on {new Date(order?.createdAt).toLocaleDateString()}
                                         </Typography>
                                     </Box>
 
                                     <Box sx={{ minWidth: 200 }}>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                                            {getStatusIcon(order.status)}
+                                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, }}>
+                                            {getStatusIcon(order?.status)}
                                             <Chip
-                                                label={order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-                                                color={getStatusColor(order.status)}
-                                                sx={{ ml: 1, fontFamily: theme.palette.typography.fontFamily }}
+                                                label={order?.status.charAt(0).toUpperCase() + order?.status.slice(1)}
+                                                color={getStatusColor(order?.status)}
+                                                sx={{ ml: 1, fontFamily: theme.palette.typography.fontFamily, backgroundColor: getStatusColor(order?.status), color: '#fff' }}
                                             />
                                         </Box>
-                                        <LinearProgress variant="determinate" value={getOrderProgress(order.status)} sx={{ height: 6, borderRadius: 3 }} />
+                                        <LinearProgress variant="determinate" value={getOrderProgress(order?.status)} sx={{ height: 6, borderRadius: 3 }} />
                                     </Box>
 
                                     <Box sx={{ minWidth: 100 }}>
                                         <Typography sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }} variant="h6">
-                                            ₹{order.total.toFixed(2)}
+                                            ₹{order?.total.toFixed(2)}
                                         </Typography>
                                         <Typography sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }} variant="body2">
-                                            {order.items.length} item{order.items.length > 1 ? 's' : ''}
+                                            {order?.orderItems?.length} item{order?.orderItems?.length > 1 ? 's' : ''}
                                         </Typography>
-                                    </Box>
-
-                                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                                        <Button variant="outlined" size="small" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
-                                            View Details
-                                        </Button>
-                                        {order.trackingNumber && (
-                                            <Button variant="outlined" size="small" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
-                                                Track Package
-                                            </Button>
-                                        )}
-                                        {order.status === 'delivered' && (
-                                            <Button variant="outlined" size="small" sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
-                                                Reorder
-                                            </Button>
-                                        )}
                                     </Box>
                                 </Box>
 
@@ -183,27 +167,27 @@ const OrdersPageSimple = () => {
                                     </AccordionSummary>
                                     <AccordionDetails>
                                         <Divider sx={{ mb: 2 }} />
-                                        {order.items.map((item, index) => (
+                                        {order?.orderItems?.map((item, index) => (
                                             <Box key={item.id}>
                                                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', py: 1, flexWrap: 'wrap' }}>
-                                                    <Avatar src={item.image} variant="rounded" sx={{ width: 60, height: 60 }} />
+                                                    <Avatar src={item?.images[0]?.url} variant="rounded" sx={{ width: 60, height: 60 }} />
                                                     <Box sx={{ flex: 1, minWidth: 200 }}>
                                                         <Typography sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }} variant="subtitle1">
-                                                            {item.name}
+                                                            {item?.productName}
                                                         </Typography>
                                                         <Typography sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }} variant="body2">
-                                                            Quantity: {item.quantity}
+                                                            Quantity: {item?.quantity}
                                                         </Typography>
                                                     </Box>
                                                     <Typography sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }} variant="subtitle1">
-                                                        ₹{(item.price * item.quantity).toFixed(2)}
+                                                        ₹{(item?.price * item?.quantity).toFixed(2)}
                                                     </Typography>
                                                 </Box>
-                                                {index < order.items.length - 1 && <Divider sx={{ my: 1 }} />}
+                                                {index < order?.orderItems?.length - 1 && <Divider sx={{ my: 1 }} />}
                                             </Box>
                                         ))}
 
-                                        {order.trackingNumber && (
+                                        {order?.trackingNumber && (
                                             <Box sx={{ mt: 3, p: 2, bgcolor: 'grey.50', borderRadius: 1 }}>
                                                 <Typography sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }} variant="subtitle2" gutterBottom>
                                                     Tracking Information

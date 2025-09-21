@@ -58,7 +58,6 @@ export default function Header() {
     const [cartProductPopover, setCartProductPopover] = useState(null);
     // const [cartProduct, setCartProduct] = useState(null);
     const cartProduct = useSelector((state) => state.cart.cartItems);
-    console.log("cartProductcartProduct", cartProduct);
 
     const likedProduct = useSelector((state) => state.liked.likedProducts);
 
@@ -101,7 +100,6 @@ export default function Header() {
     const open = Boolean(favProduct);
     const cartPopoverOpen = Boolean(cartProductPopover);
     const id = open ? "simple-popover" : undefined;
-    console.log("cartProductcartProduct", cartProduct);
 
     return (
         <>
@@ -249,9 +247,10 @@ export default function Header() {
                                                             {/* Product Image */}
                                                             <Box
                                                                 component="img"
-                                                                src={product.image}
-                                                                alt={product.name}
+                                                                src={product.images[0]?.url}
+                                                                alt={product.productName}
                                                                 sx={{ width: 60, height: 60, objectFit: "cover", borderRadius: 1 }}
+                                                                onClick={() => { handleClose(); navigate(`/product-details/${product.product_id}`) }}
                                                             />
 
                                                             {/* Product Details */}
@@ -262,8 +261,9 @@ export default function Header() {
                                                                         fontFamily: theme.palette.typography.fontFamily,
                                                                         fontWeight: 500,
                                                                     }}
+                                                                    onClick={() => { handleClose(); navigate(`/product-details/${product.product_id}`) }}
                                                                 >
-                                                                    {product.productname}
+                                                                    {product.productName}
                                                                 </Typography>
                                                                 <Typography
                                                                     variant="body2"
@@ -272,8 +272,9 @@ export default function Header() {
                                                                         fontWeight: 400,
                                                                         fontSize: 13,
                                                                     }}
+                                                                    onClick={() => { handleClose(); navigate(`/product-details/${product.product_id}`) }}
                                                                 >
-                                                                    ₹{product.price} &nbsp; <del>₹{product.discountprice}</del>
+                                                                    ₹{product.price} &nbsp; <del>₹{product.discountPrice}</del>
                                                                 </Typography>
                                                             </Box>
 

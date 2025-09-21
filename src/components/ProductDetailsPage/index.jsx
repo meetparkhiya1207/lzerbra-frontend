@@ -89,7 +89,7 @@ const ProductDetailsComponents = () => {
 
 
   useEffect(() => {
-    if (!product?.images?.length) return; 
+    if (!product?.images?.length) return;
 
     const interval = setInterval(() => {
       setFade(true);
@@ -278,7 +278,7 @@ const ProductDetailsComponents = () => {
                 e.stopPropagation();
                 dispatch(addToCart({ ...product, quantity }));
               }}
-              sx={{ width: { xs: '100%', sm: "32%", md: "43%", lg: "36%", xl: "30%" } }}
+              sx={{ width: { xs: '100%', sm: "32%", md: "43%", lg: "36%", xl: "30%" }, fontFamily: theme.palette.typography.fontFamily }}
             >
               Add to Cart
             </Button>
@@ -318,7 +318,13 @@ const ProductDetailsComponents = () => {
           <List sx={{ pl: 0, pr: 0 }}>
             {product?.features.map((feature, index) => (
               <ListItem key={index}>
-                <ListItemText primary={feature} sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.lightmain }} />
+                <ListItemText primary={feature} primaryTypographyProps={{
+                  sx: {
+                    fontFamily: theme.palette.typography.fontFamily,
+                    color: theme.palette.primary.lightmain,
+                  },
+                }}
+                />
               </ListItem>
             ))}
           </List>
@@ -376,19 +382,44 @@ const ProductDetailsComponents = () => {
           </Typography>
           <List>
             <ListItem>
-              <ListItemText sx={{ color: theme.palette.primary.lightmain, fontFamily: theme.palette.typography.fontFamily }} primary="Machine wash cold water (30°C max)" />
+              <ListItemText primaryTypographyProps={{
+                sx: {
+                  fontFamily: theme.palette.typography.fontFamily,
+                  color: theme.palette.primary.lightmain,
+                },
+              }} primary="Machine wash cold water (30°C max)" />
             </ListItem>
             <ListItem>
-              <ListItemText sx={{ color: theme.palette.primary.lightmain, fontFamily: theme.palette.typography.fontFamily }} primary="Use mild detergent, no bleach" />
+              <ListItemText primaryTypographyProps={{
+                sx: {
+                  fontFamily: theme.palette.typography.fontFamily,
+                  color: theme.palette.primary.lightmain,
+                },
+              }} primary="Use mild detergent, no bleach" />
             </ListItem>
             <ListItem>
-              <ListItemText sx={{ color: theme.palette.primary.lightmain, fontFamily: theme.palette.typography.fontFamily }} primary="Tumble dry low or hang to dry" />
+              <ListItemText primaryTypographyProps={{
+                sx: {
+                  fontFamily: theme.palette.typography.fontFamily,
+                  color: theme.palette.primary.lightmain,
+                },
+              }} primary="Tumble dry low or hang to dry" />
             </ListItem>
             <ListItem>
-              <ListItemText sx={{ color: theme.palette.primary.lightmain, fontFamily: theme.palette.typography.fontFamily }} primary="Iron on low heat if needed" />
+              <ListItemText primaryTypographyProps={{
+                sx: {
+                  fontFamily: theme.palette.typography.fontFamily,
+                  color: theme.palette.primary.lightmain,
+                },
+              }} primary="Iron on low heat if needed" />
             </ListItem>
             <ListItem>
-              <ListItemText sx={{ color: theme.palette.primary.lightmain, fontFamily: theme.palette.typography.fontFamily }} primary="Professional dry cleaning recommended for best results" />
+              <ListItemText primaryTypographyProps={{
+                sx: {
+                  fontFamily: theme.palette.typography.fontFamily,
+                  color: theme.palette.primary.lightmain,
+                },
+              }} primary="Professional dry cleaning recommended for best results" />
             </ListItem>
           </List>
         </TabPanel>

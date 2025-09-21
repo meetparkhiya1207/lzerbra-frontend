@@ -28,8 +28,6 @@ export const ProductImages = ({ images, productName }) => {
     ...img,
     filename: `${import.meta.env.VITE_BACKEND_API}/uploads/${img.filename}`,
   }));
-
-  console.log("fullImagesfullImages",fullImages);
   
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

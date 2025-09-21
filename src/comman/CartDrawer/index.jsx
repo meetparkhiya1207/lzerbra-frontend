@@ -31,7 +31,6 @@ export const CartDrawer = () => {
     const shipping = subtotal > 2000 ? 0 : 0.00;
     const tax = subtotal * 0.08;
     const total = subtotal + shipping + tax;
-    console.log("totalQuantitytotalQuantity", totalQuantity);
 
     useEffect(() => {
         if (isDrawerOpen) {

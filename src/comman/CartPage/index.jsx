@@ -31,7 +31,6 @@ const CartPageSimple = () => {
     const theme = useTheme();
     const dispatch = useDispatch();
     const cartProduct = useSelector((state) => state.cart.cartItems);
-    console.log("cartProductcartProduct", cartProduct);
 
     const navigate = useNavigate();
     const [cartItems, setCartItems] = useState([

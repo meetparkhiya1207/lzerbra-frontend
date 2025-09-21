@@ -29,7 +29,6 @@ export function ProductItem({ product }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  console.log("run::::>", selectedProduct);
   const openProductDetails = (product) => {
 
     setSelectedProduct(product);

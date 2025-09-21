@@ -120,7 +120,6 @@ const Shop = () => {
     const toggleFilterDrawer = () => {
         setFilterDrawerOpen(!filterDrawerOpen);
     };
-    console.log("filteredAndSortedProductsfilteredAndSortedProducts", filteredAndSortedProducts);
 
     return (
         <Box sx={{ minHeight: '100vh', backgroundColor: theme.palette.backgroundcolor.main }}>

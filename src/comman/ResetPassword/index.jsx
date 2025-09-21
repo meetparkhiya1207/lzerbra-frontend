@@ -63,8 +63,6 @@ const ResetPassword = () => {
                 toast.error(res?.message);
             }
         } catch (err) {
-            console.log("err.responseerr.response",err);
-            
             toast.error(err.response?.data?.message || "Something went wrong");
         }
     };
