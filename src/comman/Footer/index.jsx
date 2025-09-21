@@ -41,7 +41,7 @@ export default function Footer() {
     >
       <Container maxWidth="xl">
         {/* Main Content */}
-        <Box sx={{ px: { xs: 3, md: 6 } }}>
+        <Box sx={{ px: { xs: 0, md: 6 } }}>
           <Grid container spacing={6}>
             {/* Brand Section */}
             <Grid item xs={12} md={6} lg={3}>
@@ -190,12 +190,12 @@ export default function Footer() {
                   px: 2,
                   py: 1,
                   bgcolor: theme.palette.primary.main,
-                  color: theme.palette.background.paper,
+                  color: "#fff",
                   borderRadius: "12px",
                   fontWeight: 600,
                   fontSize: "0.9rem",
                   textTransform: "none",
-                  fontFamily: theme.typography.fontFamily,
+                  fontFamily: theme.palette.typography.fontFamily,
                   mx: 'auto'
                 }}
               >
@@ -293,7 +293,7 @@ export default function Footer() {
             © {new Date().getFullYear()} Lzebra. All rights reserved.
           </Typography>
           <Box sx={{ display: "flex", gap: 3 }}>
-            {["Privacy Policy", "Terms of Service", "Cookie Policy", "Accessibility"].map(
+            {["Privacy Policy", "Terms of Service"].map(
               (item, i) => (
                 <Typography
                   key={i}

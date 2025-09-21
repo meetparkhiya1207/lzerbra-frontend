@@ -68,7 +68,7 @@ const HeroSection = () => {
           sx={{ width: "100%" }}
         >
           {/* Left Side - Text */}
-          <Box sx={{ flex: 1, textAlign: { xs: "center", lg: "left" }, px: { xs: 0, lg: 4 } }} >
+          <Box sx={{ flex: 1, textAlign: { xs: "center", lg: "left" }, px: { xs: 0, lg: 4 }, py: { xs: 6, lg: 0 } }} >
             <Typography
               variant="h2"
               sx={{

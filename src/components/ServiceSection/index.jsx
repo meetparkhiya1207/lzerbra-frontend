@@ -104,6 +104,7 @@ export default function ServiceSection() {
                                             fontWeight: 600,
                                             mb: 1,
                                             fontSize: { xs: "1.5rem", md: "1.1rem", lg: "1.4rem" },
+                                            color: theme.palette.primary.main,
                                         }}
                                     >
                                         {service.title}
