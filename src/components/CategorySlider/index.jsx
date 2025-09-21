@@ -80,7 +80,8 @@ const CategorySlider = () => {
                         480: { slidesPerView: 3.5 },
                         580: { slidesPerView: 3 },
                         650: { slidesPerView: 3.5 },
-                        900: { slidesPerView: 4.5 },
+                        900: { slidesPerView: 3.5 },
+                        1080: { slidesPerView: 4.5 },
                         1320: { slidesPerView: 5 },
                     }}
                 >

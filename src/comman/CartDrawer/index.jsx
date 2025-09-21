@@ -28,7 +28,7 @@ export const CartDrawer = () => {
         (state) => state.cart
     );
     const subtotal = cartItems.reduce((sum, item) => sum + item?.price * item.quantity, 0);
-    const shipping = subtotal > 2000 ? 0 : 9.99;
+    const shipping = subtotal > 2000 ? 0 : 0.00;
     const tax = subtotal * 0.08;
     const total = subtotal + shipping + tax;
     console.log("totalQuantitytotalQuantity", totalQuantity);
@@ -99,7 +99,7 @@ export const CartDrawer = () => {
                                 <Typography sx={{ color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily }}>
                                     Your cart is empty
                                 </Typography>
-                                <Button variant="contained" onClick={() => dispatch(closeDrawer())}>
+                                <Button variant="contained" onClick={() => dispatch(closeDrawer())} sx={{ color: "#fff", fontFamily: theme.palette.typography.fontFamily }}>
                                     Continue Shopping
                                 </Button>
                             </Box>
@@ -160,7 +160,7 @@ export const CartDrawer = () => {
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                             <Typography sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>Shipping</Typography>
                             <Typography sx={{ fontFamily: theme.palette.typography.fontFamily, color: theme.palette.primary.main }}>
-                                {shipping === 0 ? 'Free' : `₹${shipping.toFixed(2)}`}
+                                {(shipping === 0 && subtotal !== 0) ? 'Free' : `₹${shipping.toFixed(2)}`}
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>

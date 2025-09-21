@@ -100,6 +100,7 @@ const HeroSection = () => {
                 fontSize: { xs: "0.8rem", md: "1.2rem" },
                 color: "#e0dcdc",
                 maxWidth: "500px",
+                mx: { xs: "auto", lg: 0 },
                 fontFamily: theme.palette.typography.fontFamily,
                 color: theme.palette.primary.lightmain
               }}
@@ -114,10 +115,12 @@ const HeroSection = () => {
                 color: "#e0dcdc",
                 maxWidth: "500px",
                 fontFamily: theme.palette.typography.fontFamily,
-                color: theme.palette.primary.lightmain
+                color: theme.palette.primary.lightmain,
+                mx: { xs: "auto", lg: 0 },
+
               }}
             >
-              Free shipping on orders above ₹999 | 100% Quality Guarantee
+              Free shipping on orders above ₹2000 | 100% Quality Guarantee
             </Typography>
 
             <Button
@@ -125,6 +128,7 @@ const HeroSection = () => {
               sx={{
                 mt: 2,
                 px: 4,
+                mx: { xs: "auto", lg: 0 },
                 py: 1.5,
                 bgcolor: theme.palette.primary.main,
                 color: theme.palette.background.default,

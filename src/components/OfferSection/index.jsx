@@ -52,12 +52,12 @@ const OfferSection = () => {
         <Box
           sx={{
             display: "flex",
-            flexDirection: { xs: "column", md: "row" },
+            flexDirection: { xs: "column", lg: "row" },
             alignItems: "center",
             justifyContent: "space-between",
-            textAlign: { xs: "center", md: "left" },
-            px: { xs: 0, sm: 4, md: 10 },
-            py: { xs: 8, md: 8 },
+            textAlign: { xs: "center", lg: "left" },
+            // px: { xs: 0, sm: 4, md: 0 },
+            py: { xs: 8, lg: 8 },
             fontFamily: theme.palette.typography.fontFamily,
             // overflow: "hidden",
           }}
