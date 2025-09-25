@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../../comman/Header'
 import HeroSection from '../../components/HeroSection'
 import OfferSection from '../../components/OfferSection'
@@ -10,19 +10,32 @@ import Testimonials from '../../components/Testimonials'
 import CategorySlider from '../../components/CategorySlider'
 import ProductDetailsComponents from '../../components/ProductDetailsPage'
 import CartPageSimple from '../../comman/CartPage'
+import socket from '../../socket'
 
 const Home = () => {
+  const [count, setCount] = useState(0);
+  console.log("👥 Current Visitors on Website:", count);
+
+  useEffect(() => {
+    socket.on("liveCount", (num) => {
+      setCount(num);
+    });
+
+    return () => {
+      socket.off("liveCount");
+    };
+  }, []);
   return (
     <div>
-      <HeroSection/>
+      <HeroSection />
       {/* <CartPageSimple/> */}
-      <OfferSection/>
-      <CategorySlider/>
-      <ProductListing/>
+      <OfferSection />
+      <CategorySlider />
+      <ProductListing />
       {/* <ProductDetailsComponents/> */}
       {/* <ProductDetails/> */}
-      <ServiceSection/>
-      <Testimonials/>
+      <ServiceSection />
+      <Testimonials />
     </div>
   )
 }

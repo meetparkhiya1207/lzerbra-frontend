@@ -30,6 +30,8 @@
     "react-tsparticles": "^2.12.2",
     "redux-persist": "^6.0.0",
     "slick-carousel": "^1.8.1",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "swiper": "^11.2.10",
     "swr": "^2.3.6"
   },
