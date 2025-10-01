@@ -117,7 +117,7 @@ const ProductCard = ({
                     onClick={(e) => {
                         e.stopPropagation();
                         setLiked(!liked);
-                        
+
                         if (!liked) {
                             confetti();
                             dispatch({ type: 'liked/addLiked', payload: product });
@@ -170,7 +170,7 @@ const ProductCard = ({
                     {product.productName}
                 </Typography>
 
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, justifyContent: 'space-between', flexWrap:'wrap' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1, justifyContent: 'space-between', flexWrap: 'wrap' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Rating value={product.rating || 4} readOnly size="small" precision={0.1} />
                         <Typography
@@ -192,9 +192,10 @@ const ProductCard = ({
                                 fontSize: 12,
                                 borderRadius: "6px",
                                 height: 22,
+                                display:{xs:'none',md:'block'},
                                 fontFamily: theme.typography.fontFamily,
                             }}
-                            />
+                        />
                     </Box>
                 </Box>
 
@@ -226,27 +227,52 @@ const ProductCard = ({
                     )}
                 </Box>
 
-                <Button
-                    variant="contained"
-                    fullWidth
-                    startIcon={<ShoppingCart />}
-                    disabled={product.inStock == "No"}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        dispatch(addToCart(product))
-                    }}
-                    sx={{
-                        mt: 'auto',
-                        textTransform: 'none',
-                        fontWeight: 600,
-                        py: { xs: 1, sm: 1.2 },
-                        fontSize: { xs: '0.8rem', sm: '0.875rem' },
-                        fontFamily: theme.palette.typography.fontFamily,
-                        backgroundColor: theme.palette.primary.main,
-                    }}
-                >
-                    {product.inStock == "Yes" ? 'Add to Cart' : 'Out of Stock'}
-                </Button>
+                <Box sx={{ display: 'flex', gap: 1, flexDirection: { xs: 'column', lg: 'row' } }}>
+
+                    <Button
+                        variant="contained"
+                        fullWidth
+                        startIcon={<ShoppingCart />}
+                        disabled={product.inStock == "No"}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            dispatch(addToCart(product))
+                        }}
+                        sx={{
+                            // mt: 'auto',
+                            textTransform: 'none',
+                            fontWeight: 600,
+                            py: { xs: 1, sm: 1.2 },
+                            fontSize: { xs: '0.8rem', sm: '0.875rem' },
+                            fontFamily: theme.palette.typography.fontFamily,
+                            backgroundColor: theme.palette.primary.main,
+                        }}
+                    >
+                        {product.inStock == "Yes" ? 'Add to Cart' : 'Out of Stock'}
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        fullWidth
+                        startIcon={<Visibility />}
+                        disabled={product.inStock == "No"}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/product-details/${product.product_id}`)
+                        }}
+                        sx={{
+                            // mt: 'auto',
+                            textTransform: 'none',
+                            fontWeight: 600,
+                            py: { xs: 1, sm: 1.2 },
+                            fontSize: { xs: '0.7rem', sm: '0.875rem' },
+                            fontFamily: theme.palette.typography.fontFamily,
+                            // backgroundColor: theme.palette.primary.main,
+                        }}
+                    >
+                        View Product
+                    </Button>
+                </Box>
+
             </CardContent>
         </Card>
     );

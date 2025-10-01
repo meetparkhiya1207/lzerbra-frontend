@@ -46,7 +46,7 @@ export default function Testimonials() {
     <Box
       sx={{
         py: { xs: 6, md: 10 },
-        background: theme.palette.primary.lightdark,
+        background: theme.palette.backgroundcolor.main,
       }}
     >
       <Container maxWidth="xl">

@@ -43,12 +43,12 @@ const CategorySlider = () => {
             sx={{
                 pt: { xs: 4, md: 10 },
                 pb: { xs: 0, md: 10 },
-                background: "#e6dcd33d",
+                background: theme.palette.backgroundcolor.main,
             }}
         >
             {/* <Container maxWidth="xl"> */}
-                {/* Section Title */}
-                {/* <Typography
+            {/* Section Title */}
+            {/* <Typography
           variant="h4"
           align="center"
           gutterBottom
@@ -61,65 +61,65 @@ const CategorySlider = () => {
         >
           Shop By Prints & Types
         </Typography> */}
-                <CommonHeading
-                    title="Fabric Types"
-                    lineWidth={140}
-                    align="center"
-                />
+            <CommonHeading
+                title="Fabric Types"
+                lineWidth={140}
+                align="center"
+            />
 
-                {/* Swiper Slider */}
-                <Swiper
-                    spaceBetween={10}
-                    slidesPerView={2.5}
-                    loop={true}
-                    autoplay={{ delay: 3000, disableOnInteraction: false, pauseOnMouseEnter: true }} 
-                    modules={[Autoplay]}
-                    breakpoints={{
-                        300: { slidesPerView: 2.5 },
-                        430: { slidesPerView: 2.5 },
-                        480: { slidesPerView: 3.5 },
-                        580: { slidesPerView: 3 },
-                        650: { slidesPerView: 3.5 },
-                        900: { slidesPerView: 3.5 },
-                        1080: { slidesPerView: 4.5 },
-                        1320: { slidesPerView: 5 },
-                    }}
-                >
-                    {testimonials.map((item, i) => (
-                        <SwiperSlide key={i}>
-                            <Box
+            {/* Swiper Slider */}
+            <Swiper
+                spaceBetween={10}
+                slidesPerView={2.5}
+                loop={true}
+                autoplay={{ delay: 3000, disableOnInteraction: false, pauseOnMouseEnter: true }}
+                modules={[Autoplay]}
+                breakpoints={{
+                    300: { slidesPerView: 2.5 },
+                    430: { slidesPerView: 2.5 },
+                    480: { slidesPerView: 3.5 },
+                    580: { slidesPerView: 3 },
+                    650: { slidesPerView: 3.5 },
+                    900: { slidesPerView: 3.5 },
+                    1080: { slidesPerView: 4.5 },
+                    1320: { slidesPerView: 5 },
+                }}
+            >
+                {testimonials.map((item, i) => (
+                    <SwiperSlide key={i}>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                textAlign: "center",
+                                p: 1,
+                            }}
+                        >
+                            {/* Avatar */}
+                            <Avatar
+                                src={item.img}
+                                alt={item.name}
                                 sx={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                    textAlign: "center",
-                                    p: 1,
+                                    width: { xs: 120, sm: 180, md: 220, lg: 250 },
+                                    height: { xs: 120, sm: 180, md: 220, lg: 250 },
+                                    mb: 2,
+                                    borderRadius: "50%",
+                                    boxShadow: "0px 6px 16px rgba(0,0,0,0.1)",
                                 }}
-                            >
-                                {/* Avatar */}
-                                <Avatar
-                                    src={item.img}
-                                    alt={item.name}
-                                    sx={{
-                                        width: { xs: 120, sm: 180, md: 220, lg: 250 },
-                                        height: { xs: 120, sm: 180, md: 220, lg: 250 },
-                                        mb: 2,
-                                        borderRadius: "50%",
-                                        boxShadow: "0px 6px 16px rgba(0,0,0,0.1)",
-                                    }}
-                                />
+                            />
 
-                                {/* Name */}
-                                <Typography
-                                    variant="subtitle1"
-                                    sx={{ color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily, fontSize: { xs: 16, sm: 22 } }}
-                                >
-                                    {item.name}
-                                </Typography>
-                            </Box>
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
+                            {/* Name */}
+                            <Typography
+                                variant="subtitle1"
+                                sx={{ color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily, fontSize: { xs: 16, sm: 22 } }}
+                            >
+                                {item.name}
+                            </Typography>
+                        </Box>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
             {/* </Container> */}
         </Box>
     );

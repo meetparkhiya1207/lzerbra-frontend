@@ -31,7 +31,7 @@ export default function ServiceSection() {
     const theme = useTheme();
 
     return (
-        <Box sx={{ background: "#e6dcd33d", }}>
+        <Box sx={{ background: theme.palette.backgroundcolor.main, }}>
             <Container maxWidth="xl">
                 <Box sx={{ pb: 6, pt: 4 }}>
                     {/* <Typography
@@ -68,7 +68,7 @@ export default function ServiceSection() {
                         {services.map((service, index) => (
                             <Grid
                                 item
-                                xs={12}
+                                xs={6}
                                 sm={6}
                                 md={3}
                                 key={index}
@@ -76,7 +76,7 @@ export default function ServiceSection() {
                                 <Paper
                                     elevation={3}
                                     sx={{
-                                        p: 3,
+                                        p: {xs: 2, sm: 4},
                                         backgroundColor: "transparent",
                                         textAlign: "center",
                                         borderRadius: "16px",

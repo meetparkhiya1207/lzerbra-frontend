@@ -34,7 +34,7 @@ const defaultFilters = {
 const PRODUCTS_PER_PAGE = 8;
 
 const ProductListing = () => {
-  const {productsList} = useSelector((state) => state.products);
+  const { productsList } = useSelector((state) => state.products);
   const { products, isLoading } = getAllProducts(productsList?.length === 0);
 
   const theme = useTheme();
@@ -106,17 +106,19 @@ const ProductListing = () => {
 
   return (
     <>
-      <Container maxWidth="xl" >
-        <Box sx={{ py: { xs: 4, sm: 10 } }}>
-          <CommonHeading
-            title="Our Products"
-            lineWidth={140}
-            align="center"
-          />
-          {/* <Typography variant="h4" sx={{ mb: 2, color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily, textAlign: 'center', }}>
+      <Box sx={{backgroundColor: theme.palette.backgroundcolor.main}}>
+
+        <Container maxWidth="xl" >
+          <Box sx={{ py: { xs: 4, sm: 10 } }}>
+            <CommonHeading
+              title="Our Products"
+              lineWidth={140}
+              align="center"
+            />
+            {/* <Typography variant="h4" sx={{ mb: 2, color: theme.palette.primary.main, fontFamily: theme.palette.typography.fontFamily, textAlign: 'center', }}>
             Our Products
           </Typography> */}
-          {/* <Box
+            {/* <Box
             sx={{
               width: 140,
               height: 3,
@@ -126,16 +128,16 @@ const ProductListing = () => {
               mb: 5
             }}
           /> */}
-          <Box
-            sx={{
-              mb: 5,
-              display: 'flex',
-              alignItems: 'center',
-              flexWrap: 'wrap-reverse',
-              justifyContent: 'flex-end',
-            }}
-          >
-            {/* <Box
+            <Box
+              sx={{
+                mb: 5,
+                display: 'flex',
+                alignItems: 'center',
+                flexWrap: 'wrap-reverse',
+                justifyContent: 'flex-end',
+              }}
+            >
+              {/* <Box
               sx={{
                 my: 1,
                 gap: 1,
@@ -169,69 +171,71 @@ const ProductListing = () => {
                 ]}
               />
             </Box> */}
-          </Box>
-
-          {isLoading ? (
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
-              <CircularProgress />
             </Box>
-          ) : paginatedProducts?.length === 0 ? (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                mt: 5,
-              }}
-            >
+
+            {isLoading ? (
+              <Box sx={{ display: "flex", justifyContent: "center", mt: 5 }}>
+                <CircularProgress />
+              </Box>
+            ) : paginatedProducts?.length === 0 ? (
               <Box
-                component="img"
-                src="/images/package.png"
-                alt="No Products"
-                sx={{ width: { xs: 100, sm: 200 }, height: "auto", mb: 2, opacity: 0.7 }}
-              />
-              <Typography
-                variant="h6"
-                sx={{ color: theme.palette.primary.lightmain, textAlign: "center", fontFamily: theme.palette.typography.fontFamily, }}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  mt: 5,
+                }}
               >
-                No Products Found
-              </Typography>
-            </Box>
-          ) : (
-            <Grid container spacing={3}>
-              {paginatedProducts?.map((product) => (
-                <Grid key={product?.id} item size={{ xs: 6, sm: 6, md: 3 }}>
-                  <ProductCard
-                    product={product}
-                  />
+                <Box
+                  component="img"
+                  src="/images/package.png"
+                  alt="No Products"
+                  sx={{ width: { xs: 100, sm: 200 }, height: "auto", mb: 2, opacity: 0.7 }}
+                />
+                <Typography
+                  variant="h6"
+                  sx={{ color: theme.palette.primary.lightmain, textAlign: "center", fontFamily: theme.palette.typography.fontFamily, }}
+                >
+                  No Products Found
+                </Typography>
+              </Box>
+            ) : (
+              <Grid container spacing={3}>
+                {paginatedProducts?.map((product) => (
+                  <Grid key={product?.id} item size={{ xs: 6, sm: 6, md: 3 }}>
+                    <ProductCard
+                      product={product}
+                    />
 
-                </Grid>
-              ))}
-            </Grid>
-          )}
+                  </Grid>
+                ))}
+              </Grid>
+            )}
 
 
-          < Pagination
-            count={pageCount}
-            page={page}
-            onChange={handlePageChange}
-            color="primary"
-            sx={{
-              mt: { xs: 4, sm: 6, md: 8 }, // spacing responsive
-              mx: "auto",
-              display: "flex",
-              justifyContent: "center",
-              "& .MuiPaginationItem-root": {
-                fontSize: { xs: "1rem", sm: "0.875rem", md: "1rem" },
-                minWidth: { xs: 30, sm: 32, md: 36 },
-                height: { xs: 30, sm: 32, md: 36 },
-                fontFamily: theme.palette.typography.fontFamily,
-              },
-            }}
-          />
-        </Box>
-      </Container>
+            < Pagination
+              count={pageCount}
+              page={page}
+              onChange={handlePageChange}
+              color="primary"
+              sx={{
+                mt: { xs: 4, sm: 6, md: 8 }, // spacing responsive
+                mx: "auto",
+                display: "flex",
+                justifyContent: "center",
+                "& .MuiPaginationItem-root": {
+                  fontSize: { xs: "1rem", sm: "0.875rem", md: "1rem" },
+                  minWidth: { xs: 30, sm: 32, md: 36 },
+                  height: { xs: 30, sm: 32, md: 36 },
+                  fontFamily: theme.palette.typography.fontFamily,
+                },
+              }}
+            />
+          </Box>
+        </Container>
+      </Box>
+
     </>
   );
 };

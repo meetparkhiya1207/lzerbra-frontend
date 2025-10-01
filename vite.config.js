@@ -7,7 +7,7 @@ export default defineConfig({
     host: '0.0.0.0',   // expose kare chhe
     port: 5173,         // tamne port fix karvo hoy to
     hmr: {
-      host: "192.168.1.9", 
+      host: "192.168.1.6", 
       protocol: "ws",
 
     },

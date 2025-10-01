@@ -46,7 +46,7 @@ const OfferSection = () => {
   `;
 
   return (
-    <Box className="offer-section" sx={{ position: "relative", bgcolor: theme.palette.background.maindark, overflow: "hidden" }}>
+    <Box className="offer-section" sx={{ position: "relative", bgcolor: theme.palette.backgroundcolor.main, overflow: "hidden" }}>
 
       <Container maxWidth="xl">
         <Box
@@ -145,7 +145,7 @@ const OfferSection = () => {
                 bgcolor: theme.palette.primary.main,
                 color: theme.palette.background.default,
                 fontFamily: theme.palette.typography.fontFamily,
-                borderRadius: "999px",
+                // borderRadius: "999px",
                 fontWeight: 600,
                 fontSize: { xs: "1rem", md: "1.125rem" },
                 textTransform: "none",
